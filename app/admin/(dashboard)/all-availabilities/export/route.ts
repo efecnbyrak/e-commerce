@@ -78,7 +78,7 @@ export async function GET(request: Request) {
                 { header: 'GÖREV', key: 'officialType', width: 20 },
                 { header: 'KLASMAN', key: 'class', width: 15 },
                 { header: 'TELEFON', key: 'phone', width: 15 },
-                { header: 'BÖLGELER', key: 'regions', width: 45 },
+                { header: 'BÖLGELER', key: 'regions', width: 30 },
                 ...dateHeaders.map((dh, i) => ({ header: dh.toUpperCase(), key: `day_${i}`, width: 24 }))
             ];
 
