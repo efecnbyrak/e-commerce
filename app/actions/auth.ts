@@ -568,10 +568,12 @@ export async function promoteToAdmin(userId: number) {
 
         const currentUser = await db.user.findUnique({
             where: { id: currentSession.userId },
-            select: { email: true }
+            include: { referee: true, official: true }
         });
 
-        if (currentSession.role !== "SUPER_ADMIN" && currentUser?.email !== "talatmustafaozdemir@gmail.com") {
+        const currentUserEmail = currentUser?.referee?.email || currentUser?.official?.email || currentUser?.username || "";
+
+        if (currentSession.role !== "SUPER_ADMIN" && currentUserEmail !== "talatmustafaozdemir@gmail.com") {
             return { error: "Yetkisiz işlem. Sadece Süper Admin bu işlemi yapabilir." };
         }
 
@@ -627,10 +629,12 @@ export async function demoteFromAdmin(userId: number) {
 
         const currentUser = await db.user.findUnique({
             where: { id: currentSession.userId },
-            select: { email: true }
+            include: { referee: true, official: true }
         });
 
-        if (currentSession.role !== "SUPER_ADMIN" && currentUser?.email !== "talatmustafaozdemir@gmail.com") {
+        const currentUserEmail = currentUser?.referee?.email || currentUser?.official?.email || currentUser?.username || "";
+
+        if (currentSession.role !== "SUPER_ADMIN" && currentUserEmail !== "talatmustafaozdemir@gmail.com") {
             return { error: "Yetkisiz işlem. Sadece Süper Admin bu işlemi yapabilir." };
         }
 
