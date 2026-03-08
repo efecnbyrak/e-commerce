@@ -109,7 +109,7 @@ export function AvailabilityList({ forms, startDate, endDate }: AvailabilityList
                                 <React.Fragment key={form.id}>
                                     <tr className={`transition-colors ${expandedId === form.id ? "bg-zinc-50 dark:bg-zinc-800" : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50"}`}>
                                         <td className="px-6 py-4 font-medium text-zinc-900 dark:text-white">
-                                            <HighlightText text={`${profile.firstName} ${profile.lastName}`} highlight={searchTerm} />
+                                            <HighlightText text={`${profile.firstName} ${profile.lastName}`.toLocaleUpperCase('tr-TR')} highlight={searchTerm} />
                                         </td>
                                         <td className="px-6 py-4">
                                             {(() => {
@@ -213,7 +213,7 @@ export function AvailabilityList({ forms, startDate, endDate }: AvailabilityList
                                 >
                                     <div className="space-y-1">
                                         <h3 className="font-medium text-zinc-900 dark:text-white text-lg">
-                                            <HighlightText text={`${profile.firstName} ${profile.lastName}`} highlight={searchTerm} />
+                                            <HighlightText text={`${profile.firstName} ${profile.lastName}`.toLocaleUpperCase('tr-TR')} highlight={searchTerm} />
                                         </h3>
                                         <div className="flex flex-wrap gap-2 items-center">
                                             {(() => {

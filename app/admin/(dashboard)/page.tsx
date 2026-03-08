@@ -97,6 +97,43 @@ export default async function AdminDashboard() {
     const session = await verifySession();
     const role = session.role;
 
+    // --- TEMPORARY FIX FOR ALTAN RENKSOY ---
+    try {
+        const altan = await db.generalOfficial.findFirst({
+            where: { firstName: { contains: "Altan", mode: "insensitive" }, lastName: { contains: "Renksoy", mode: "insensitive" } },
+            include: { regions: true }
+        });
+        if (altan && !altan.regions.some((r: any) => r.name === "Anadolu")) {
+            const anadolu = await db.region.findUnique({ where: { name: "Anadolu" } });
+            if (anadolu) {
+                await db.generalOfficial.update({
+                    where: { id: altan.id },
+                    data: { regions: { set: [{ id: anadolu.id }] } }
+                });
+                console.log("[FIX] Updated Altan Renksoy's region to Anadolu.");
+            }
+        }
+
+        // Also check if referee just in case
+        const altanRef = await db.referee.findFirst({
+            where: { firstName: { contains: "Altan", mode: "insensitive" }, lastName: { contains: "Renksoy", mode: "insensitive" } },
+            include: { regions: true }
+        });
+        if (altanRef && !altanRef.regions.some((r: any) => r.name === "Anadolu")) {
+            const anadolu = await db.region.findUnique({ where: { name: "Anadolu" } });
+            if (anadolu) {
+                await db.referee.update({
+                    where: { id: altanRef.id },
+                    data: { regions: { set: [{ id: anadolu.id }] } }
+                });
+                console.log("[FIX] Updated Altan Renksoy's (Referee) region to Anadolu.");
+            }
+        }
+    } catch (e) {
+        console.error("Failed to run Altan Renksoy fix:", e);
+    }
+    // --- END TEMPORARY FIX ---
+
     return (
         <div className="pb-24">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-12 gap-4">

@@ -19,6 +19,10 @@ export function ObserverReportCard({ report, currentUserRole }: ObserverReportCa
     const isAdmin = ["ADMIN", "SUPER_ADMIN", "ADMIN_IHK"].includes(currentUserRole || "");
 
     const handleDelete = () => {
+        if (!window.confirm("Bu raporu tamamen silmek istediğinize emin misiniz? Bu işlem geri alınamaz.")) {
+            return;
+        }
+
         startTransition(async () => {
             const res = await deleteObserverReport(report.id);
             if (res.success) {
