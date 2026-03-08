@@ -159,7 +159,7 @@ export function RefereeListClient({ initialReferees, refereeTypeMap, currentUser
                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400 group-focus-within:text-red-500 transition-colors" />
                     <input
                         type="text"
-                        placeholder="Hakemlerde ara (İsim, TCKN)..."
+                        placeholder="Hakemlerde ara (İsim)..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-14 pr-6 py-4 bg-white dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-3xl focus:border-red-600 outline-none transition-all font-bold text-zinc-900 dark:text-white shadow-sm hover:shadow-md"

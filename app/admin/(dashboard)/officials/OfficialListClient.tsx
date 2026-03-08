@@ -226,7 +226,7 @@ export function OfficialListClient({ initialOfficials, refereeTypeMap, currentUs
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
                     <input
                         type="text"
-                        placeholder="İsim veya TCKN ile ara..."
+                        placeholder="İsim ile ara..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-12 pr-6 py-3.5 bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl focus:border-red-600 outline-none transition-all font-medium text-zinc-900 dark:text-white"

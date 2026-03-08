@@ -112,7 +112,7 @@ export async function GET(request: Request) {
                 } as Record<string, string>)[oType] || oType;
 
                 const rowData: any = {
-                    name: `${ref.firstName} ${ref.lastName}`,
+                    name: `${ref.firstName} ${ref.lastName}`.toLocaleUpperCase('tr-TR'),
                     officialType: oTypeLabel,
                     class: !isOff ? formatClassification((ref as any).classification) : "GÖREVLİ",
                     phone: ref.phone,

@@ -80,8 +80,8 @@ export function ObserverReportCard({ report, currentUserRole }: ObserverReportCa
 
                         {isAdmin && (
                             <button
-                                onDoubleClick={handleDelete}
-                                title="Silmek için Çift Tıklayın"
+                                onClick={handleDelete}
+                                title="Sil"
                                 disabled={isPending}
                                 className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm group/delete disabled:opacity-50"
                             >
