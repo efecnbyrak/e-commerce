@@ -562,7 +562,16 @@ export async function promoteToAdmin(userId: number) {
         const session = await import("@/lib/session");
         const currentSession = await session.getSession();
 
-        if (currentSession?.role !== "SUPER_ADMIN" && currentSession?.email !== "talatmustafaozdemir@gmail.com") {
+        if (!currentSession) {
+            return { error: "Yetkisiz işlem. Oturum bulunamadı." };
+        }
+
+        const currentUser = await db.user.findUnique({
+            where: { id: currentSession.userId },
+            select: { email: true }
+        });
+
+        if (currentSession.role !== "SUPER_ADMIN" && currentUser?.email !== "talatmustafaozdemir@gmail.com") {
             return { error: "Yetkisiz işlem. Sadece Süper Admin bu işlemi yapabilir." };
         }
 
@@ -612,7 +621,16 @@ export async function demoteFromAdmin(userId: number) {
         const session = await import("@/lib/session");
         const currentSession = await session.getSession();
 
-        if (currentSession?.role !== "SUPER_ADMIN" && currentSession?.email !== "talatmustafaozdemir@gmail.com") {
+        if (!currentSession) {
+            return { error: "Yetkisiz işlem. Oturum bulunamadı." };
+        }
+
+        const currentUser = await db.user.findUnique({
+            where: { id: currentSession.userId },
+            select: { email: true }
+        });
+
+        if (currentSession.role !== "SUPER_ADMIN" && currentUser?.email !== "talatmustafaozdemir@gmail.com") {
             return { error: "Yetkisiz işlem. Sadece Süper Admin bu işlemi yapabilir." };
         }
 
