@@ -883,8 +883,16 @@ async function handleFailedLogin(ip: string, loginAttempt: any) {
     } else {
         const newAttempts = loginAttempt.attempts + 1;
         let blockedUntil = null;
-        if (newAttempts >= 5) {
-            blockedUntil = new Date(now.getTime() + 5 * 60 * 1000); // 5 minutes block
+
+        // Escalating block durations for bot protection
+        if (newAttempts >= 20) {
+            blockedUntil = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour
+        } else if (newAttempts >= 15) {
+            blockedUntil = new Date(now.getTime() + 30 * 60 * 1000); // 30 minutes
+        } else if (newAttempts >= 10) {
+            blockedUntil = new Date(now.getTime() + 15 * 60 * 1000); // 15 minutes
+        } else if (newAttempts >= 5) {
+            blockedUntil = new Date(now.getTime() + 5 * 60 * 1000); // 5 minutes
         }
 
         await db.loginAttempt.update({
