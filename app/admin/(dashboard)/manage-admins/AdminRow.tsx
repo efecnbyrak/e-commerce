@@ -21,7 +21,7 @@ export function AdminRow({ admin, isCurrentUser }: AdminRowProps) {
 
     // Full name support
     const profile = admin.referee || admin.official;
-    const displayName = profile ? `${profile.firstName} ${profile.lastName}` : admin.tckn;
+    const displayName = profile ? `${profile.firstName} ${profile.lastName}` : admin.email || admin.username;
     const officialType = admin.referee ? "REFEREE" : (admin.official?.officialType || "REFEREE");
 
     return (
@@ -62,7 +62,7 @@ export function AdminRow({ admin, isCurrentUser }: AdminRowProps) {
                             </div>
                             <div className="flex items-center gap-2 mt-0.5">
                                 <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-                                    {admin.tckn} • Kayıt: {new Date(admin.createdAt).toLocaleDateString('tr-TR')}
+                                    {admin.email || admin.username} • Kayıt: {new Date(admin.createdAt).toLocaleDateString('tr-TR')}
                                 </div>
                                 {profile && (
                                     <span className="text-[8px] font-black text-red-600 bg-red-50 dark:bg-red-900/20 px-1.5 py-0.5 rounded uppercase italic">Profil Düzenlenebilir</span>

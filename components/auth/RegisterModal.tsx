@@ -80,23 +80,7 @@ export function RegisterModal({ isOpen, onClose, onSwitchToLogin }: RegisterModa
                     </div>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                        TC Kimlik No
-                    </label>
-                    <input
-                        type="text"
-                        name="tckn"
-                        required
-                        maxLength={11}
-                        className={`w-full px-4 py-3 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all ${state.errors?.tckn ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
-                        placeholder="11111111111"
-                        onChange={(e) => {
-                            e.target.value = e.target.value.replace(/\D/g, '');
-                        }}
-                    />
-                    {state.errors?.tckn && <p className="text-red-500 text-[10px] font-bold mt-1 ml-1 uppercase">{state.errors.tckn}</p>}
-                </div>
+
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>

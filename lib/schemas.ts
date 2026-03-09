@@ -1,9 +1,8 @@
 import { z } from "zod";
-import { validateTCKN } from "@/lib/validation-utils";
 import { isValidTurkishIBAN } from "@/lib/iban-validator";
 
 export const LoginSchema = z.object({
-    identifier: z.string().min(1, "TCKN veya Kullanıcı Adı gereklidir."),
+    identifier: z.string().min(1, "E-posta Adresi gereklidir.").email("Geçerli bir E-posta adresi giriniz."),
     password: z.string().min(1, "Şifre gereklidir."),
     adminLogin: z.boolean().optional(),
 });
@@ -15,10 +14,6 @@ export const RegisterSchema = z.object({
     lastName: z.string()
         .min(2, "Soyad en az 2 karakter olmalıdır.")
         .regex(/^[a-zA-ZğüşıöçĞÜŞİÖÇ\s]+$/, "Soyad sadece harflerden oluşmalıdır."),
-    tckn: z.string()
-        .length(11, "TCKN 11 haneli olmalıdır.")
-        .regex(/^\d+$/, "TCKN sadece rakamlardan oluşmalıdır.")
-        .refine((val) => validateTCKN(val), "Geçersiz TC Kimlik Numarası."),
     email: z.string().email("Geçerli bir e-posta adresi giriniz."),
     phone: z.string().min(10, "Geçerli bir telefon numarası giriniz."),
     password: z.string()
@@ -40,7 +35,7 @@ export const RegisterSchema = z.object({
 });
 
 export const PasswordResetRequestSchema = z.object({
-    identifier: z.string().min(1, "TCKN veya Kullanıcı Adı gereklidir."),
+    identifier: z.string().min(1, "E-posta Adresi gereklidir.").email("Geçerli bir E-posta adresi giriniz."),
 });
 
 export const PasswordResetSchema = z.object({

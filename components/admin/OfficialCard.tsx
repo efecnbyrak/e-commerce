@@ -76,9 +76,7 @@ export function OfficialCard({ official }: OfficialCardProps) {
                     <DeleteRefereeButton refereeId={official.id} />
                     <SuspendRefereeButton userId={official.userId} suspendedUntil={official.user?.suspendedUntil} />
                 </div>
-                <span className="text-xs text-zinc-400 font-mono">
-                    {official.tckn ? `${official.tckn.substring(0, 2)}*******${official.tckn.substring(9, 11)}` : ''}
-                </span>
+
             </div>
         </div>
     );

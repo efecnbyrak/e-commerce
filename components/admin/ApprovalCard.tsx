@@ -83,10 +83,7 @@ export function ApprovalCard({ user }: ApprovalCardProps) {
                 </div>
 
                 <div className="space-y-2.5 text-sm p-4 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-100 dark:border-zinc-800">
-                    <div className="flex justify-between items-center">
-                        <span className="text-zinc-500 font-medium text-xs uppercase">TCKN:</span>
-                        <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100 tracking-tighter">{user.tckn}</span>
-                    </div>
+
                     <div className="flex justify-between items-center">
                         <span className="text-zinc-500 font-medium text-xs uppercase">Telefon:</span>
                         <span className="font-bold text-zinc-900 dark:text-zinc-100">{person?.phone}</span>

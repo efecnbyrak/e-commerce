@@ -1,31 +1,4 @@
-/**
- * Profesyonel TC Kimlik Numarası Doğrulama Algoritması
- * Kurallar:
- * 1. 11 haneli olmalıdır.
- * 2. Her hanesi rakam olmalıdır.
- * 3. İlk hanesi 0 olamaz.
- * 4. 1, 3, 5, 7 ve 9. hanelerin toplamının 7 katından, 2, 4, 6 ve 8. hanelerin toplamı çıkartıldığında,
- *    elde edilen sonucun 10'a bölümünden kalan, 10. haneyi vermelidir.
- * 5. 1, 2, 3, 4, 5, 6, 7, 8, 9 ve 10. hanelerin toplamının 10'a bölümünden kalan, 11. haneyi vermelidir.
- */
-export function validateTCKN(tckn: string): boolean {
-    if (!/^[1-9]\d{10}$/.test(tckn)) return false;
 
-    const digits = tckn.split('').map(Number);
-
-    // 10. hane kontrolü
-    const oddSum = digits[0] + digits[2] + digits[4] + digits[6] + digits[8];
-    const evenSum = digits[1] + digits[3] + digits[5] + digits[7];
-    const tenthDigit = ((oddSum * 7) - evenSum) % 10;
-
-    if (tenthDigit < 0 ? tenthDigit + 10 !== digits[9] : tenthDigit !== digits[9]) return false;
-
-    // 11. hane kontrolü
-    const totalSum = digits.slice(0, 10).reduce((a, b) => a + b, 0);
-    if (totalSum % 10 !== digits[10]) return false;
-
-    return true;
-}
 
 /**
  * Profesyonel Telefon Numarası Doğrulama

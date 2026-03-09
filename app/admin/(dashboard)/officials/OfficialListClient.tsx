@@ -43,8 +43,7 @@ export function OfficialListClient({ initialOfficials, refereeTypeMap, currentUs
         return initialOfficials.filter(off => {
             // 1. Search Query
             const fullName = `${off.firstName} ${off.lastName}`.toLowerCase();
-            const tckn = (off.tckn || "").toLowerCase();
-            const matchesQuery = fullName.includes(query) || tckn.includes(query);
+            const matchesQuery = fullName.includes(query);
             if (!matchesQuery) return false;
 
             // 2. Category / Type Filtering

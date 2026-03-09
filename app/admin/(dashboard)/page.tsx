@@ -29,10 +29,10 @@ async function StatsSection() {
 
 async function RegistrationsSection() {
     const latestRegistrations = await db.$queryRaw<Array<any>>`
-        (SELECT id::text, "firstName", "lastName", 'REFEREE' as "officialType", tckn, "createdAt" 
+        (SELECT id::text, "firstName", "lastName", 'REFEREE' as "officialType", email, "createdAt" 
         FROM referees)
         UNION ALL
-        (SELECT id::text, "firstName", "lastName", "officialType", tckn, "createdAt" 
+        (SELECT id::text, "firstName", "lastName", "officialType", email, "createdAt" 
         FROM general_officials)
         ORDER BY "createdAt" DESC 
         LIMIT 5

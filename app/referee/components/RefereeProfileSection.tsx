@@ -92,12 +92,7 @@ export async function RefereeProfileSection({ userId }: { userId: number }) {
             </div>
 
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-                <div>
-                    <label className="text-xs font-medium text-zinc-500 uppercase block mb-1">TC Kimlik No</label>
-                    <span className="font-mono text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-800/50 px-3 py-1.5 rounded-lg block w-full border border-zinc-100 dark:border-zinc-700/50">
-                        {sourceData.tckn.substring(0, 2)}*******{sourceData.tckn.substring(9)}
-                    </span>
-                </div>
+
 
                 <div>
                     <label className="text-xs font-medium text-zinc-500 uppercase block mb-1">E-posta</label>

@@ -11,7 +11,7 @@ import { formatPhone } from "@/lib/validation-utils";
  * Mobile-only REST endpoint for user registration.
  * Replicates the same validation and business logic as the web Server Action.
  * 
- * Body: { firstName, lastName, tckn, email, phone, password, roleType, job?, address?, city? }
+ * Body: { firstName, lastName, email, phone, password, roleType, job?, address?, city? }
  * 
  * Does NOT interfere with the existing web registration flow.
  */
@@ -43,21 +43,12 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const { firstName, lastName, tckn, email, phone, password, roleType, job, address } = validatedFields.data;
+        const { firstName, lastName, email, phone, password, roleType, job, address } = validatedFields.data;
 
         await ensureSchemaColumns();
 
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Check TCKN uniqueness
-        const existingTckn = await db.user.findFirst({ where: { tckn } });
-        if (existingTckn) {
-            return NextResponse.json(
-                { error: "Bu TCKN ile kayıtlı bir kullanıcı zaten var.", errors: { tckn: "Zaten kayıtlı." } },
-                { status: 409 }
-            );
-        }
 
         // Check email uniqueness
         const existingRefereeEmail = await db.referee.findUnique({ where: { email } });
@@ -82,8 +73,7 @@ export async function POST(request: NextRequest) {
         await db.$transaction(async (tx: any) => {
             const createdUser = await tx.user.create({
                 data: {
-                    username: tckn,
-                    tckn,
+                    username: email,
                     password: hashedPassword,
                     roleId: refereeRole!.id,
                     isApproved: false,
@@ -99,7 +89,7 @@ export async function POST(request: NextRequest) {
                 await tx.referee.create({
                     data: {
                         userId: createdUser.id,
-                        tckn,
+
                         firstName,
                         lastName,
                         email,
@@ -114,7 +104,7 @@ export async function POST(request: NextRequest) {
                 await tx.generalOfficial.create({
                     data: {
                         userId: createdUser.id,
-                        tckn,
+
                         firstName,
                         lastName,
                         email,

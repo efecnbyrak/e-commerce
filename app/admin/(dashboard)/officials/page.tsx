@@ -73,9 +73,6 @@ export default async function OfficialsPage({ searchParams }: PageProps) {
     const officials = allOfficials.filter((off: any) => {
         const type = off.officialType || "OBSERVER";
 
-        // Filter out specific test account "11111111111"
-        if (off.tckn === "11111111111") return false;
-
         // Status filter
         if (selectedStatus === "unapproved") {
             if (off.user?.isApproved) return false;

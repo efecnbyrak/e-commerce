@@ -64,8 +64,7 @@ export function RefereeListClient({ initialReferees, refereeTypeMap, currentUser
         const query = searchQuery.toLowerCase();
         return initialReferees.filter(ref => {
             const fullName = `${ref.firstName} ${ref.lastName}`.toLowerCase();
-            const tckn = (ref.tckn || "").toLowerCase();
-            const matchesQuery = fullName.includes(query) || tckn.includes(query);
+            const matchesQuery = fullName.includes(query);
             if (!matchesQuery) return false;
 
             if (selectedSide) {

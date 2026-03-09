@@ -149,7 +149,6 @@ export async function updateRefereeProfile(userId: number, data: {
                 const newOfficial = await tx.generalOfficial.create({
                     data: {
                         userId: userId,
-                        tckn: referee.tckn,
                         firstName: referee.firstName,
                         lastName: referee.lastName,
                         email: referee.email,
@@ -187,7 +186,6 @@ export async function updateRefereeProfile(userId: number, data: {
                 const newReferee = await tx.referee.create({
                     data: {
                         userId: userId,
-                        tckn: generalOfficial.tckn,
                         firstName: generalOfficial.firstName,
                         lastName: generalOfficial.lastName,
                         email: generalOfficial.email,

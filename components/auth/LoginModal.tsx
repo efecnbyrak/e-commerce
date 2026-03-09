@@ -93,7 +93,7 @@ export function LoginModal({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
                             <ShieldQuestion className="w-8 h-8 text-red-600" />
                         </div>
                         <h2 className="text-2xl font-black uppercase tracking-tighter">Şifre Sıfırlama</h2>
-                        <p className="text-zinc-500 text-xs mt-1">Lütfen hesabınıza bağlı TCKN veya kullanıcı adınızı girin.</p>
+                        <p className="text-zinc-500 text-xs mt-1">Lütfen E-posta adresinizi girin.</p>
                     </div>
 
                     {resetSuccess ? (
@@ -118,7 +118,7 @@ export function LoginModal({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
                                         name="identifier"
                                         required
                                         className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 rounded-2xl border-2 border-zinc-200 dark:border-transparent focus:border-red-600 outline-none transition-all text-sm font-bold placeholder:text-zinc-400 text-zinc-900 dark:text-white"
-                                        placeholder="TC Kimlik No"
+                                        placeholder="E-posta"
                                     />
                                 </div>
                             </div>
@@ -154,7 +154,7 @@ export function LoginModal({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
                     <form action={formAction} className="space-y-4">
                         <div className="space-y-1">
                             <label className="text-[10px] font-black text-zinc-600 dark:text-zinc-500 uppercase tracking-widest ml-1">
-                                TC Kimlik No
+                                E-posta
                             </label>
                             <div className="relative">
                                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
@@ -163,7 +163,7 @@ export function LoginModal({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
                                     name="identifier"
                                     required
                                     className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 rounded-2xl border-2 border-zinc-200 dark:border-transparent focus:border-red-600 outline-none transition-all text-sm font-bold placeholder:text-zinc-400 text-zinc-900 dark:text-white"
-                                    placeholder="TC Kimlik No"
+                                    placeholder="ornek@mail.com"
                                 />
                             </div>
                         </div>

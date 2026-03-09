@@ -21,7 +21,7 @@ interface ExamAttempt {
     referee: {
         firstName: string;
         lastName: string;
-        tckn: string;
+        email: string | null;
         classification: string;
     };
     answers: UserAnswer[];
@@ -128,7 +128,7 @@ export default function ExamResultsPage() {
                                                         {attempt.referee.firstName} {attempt.referee.lastName}
                                                     </div>
                                                     <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                                                        TCKN: {attempt.referee.tckn}
+                                                        {attempt.referee.email || "E-posta yok"}
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">

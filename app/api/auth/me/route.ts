@@ -64,7 +64,6 @@ export async function GET(request: NextRequest) {
             user: {
                 id: user.id,
                 username: user.username,
-                tckn: user.tckn,
                 role: user.role.name,
                 firstName: profile?.firstName || null,
                 lastName: profile?.lastName || null,

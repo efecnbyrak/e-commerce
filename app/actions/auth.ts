@@ -10,7 +10,7 @@ import { revalidatePath } from "next/cache";
 import { TURKEY_CITIES } from "@/lib/constants";
 import { logAction, ensureAuditLogTable } from "@/lib/logger";
 import { LoginSchema, RegisterSchema, PasswordResetRequestSchema } from "@/lib/schemas";
-import { validateTCKN, validatePhone, formatPhone } from "@/lib/validation-utils";
+import { validatePhone, formatPhone } from "@/lib/validation-utils";
 import { z } from "zod";
 
 // Cache to prevent redundant schema checks in the same execution context
@@ -65,7 +65,6 @@ export async function ensureSchemaColumns() {
                 await db.user.create({
                     data: {
                         username: adminUsername,
-                        tckn: '11111111111',
                         password: hashedPassword,
                         roleId: adminRole.id,
                         isApproved: true,
@@ -96,7 +95,6 @@ export interface ActionState {
     errors?: {
         firstName?: string;
         lastName?: string;
-        tckn?: string;
         email?: string;
         phone?: string;
         password?: string;
@@ -145,13 +143,10 @@ export async function login(prevState: ActionState, formData: FormData): Promise
     await ensureAuditLogTable();
 
     try {
-        // 1. Find user (TCKN must be exact, Username is case-insensitive)
+        // 1. Find user by email
         const user = await db.user.findFirst({
             where: {
-                OR: [
-                    { username: { equals: identifier, mode: 'insensitive' } },
-                    { tckn: identifier },
-                ],
+                username: { equals: identifier, mode: 'insensitive' }
             },
             include: {
                 role: true,
@@ -160,8 +155,7 @@ export async function login(prevState: ActionState, formData: FormData): Promise
             }
         }) as any;
 
-        // SECURITY: Common error message for both "User Not Found" and "Wrong Password" 
-        // to prevent account enumeration (guessing registered TCKNs).
+        // to prevent account enumeration
         const genericError = "Giriş bilgileri hatalı. Lütfen kontrol ederek tekrar deneyiniz.";
 
         if (!user) {
@@ -223,7 +217,7 @@ export async function login(prevState: ActionState, formData: FormData): Promise
         }
 
         // Special test account handling - ensure it goes to the correct dashboard based on its CURRENT role
-        const isTestAccount = identifier === "22225555666";
+        const isTestAccount = identifier === "test@example.com";
         const is2FA_Disabled_Temporarily = true; // Temporary disable
 
         if (isTestAccount || is2FA_Disabled_Temporarily) {
@@ -342,7 +336,7 @@ export async function register(prevState: ActionState, formData: FormData): Prom
         return { error: "Lütfen işaretli alanları kontrol edin.", errors: mappedErrors, success: false };
     }
 
-    const { firstName, lastName, tckn, email, phone, password, roleType, job, address, iban } = validatedFields.data;
+    const { firstName, lastName, email, phone, password, roleType, job, address, iban } = validatedFields.data;
 
     await ensureSchemaColumns();
 
@@ -357,11 +351,7 @@ export async function register(prevState: ActionState, formData: FormData): Prom
         // 1. Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // 2. Check existing user (TCKN/Email)
-        const existingTckn = await db.user.findFirst({ where: { tckn } });
-        if (existingTckn) {
-            return { error: "Bu TCKN ile kayıtlı bir kullanıcı zaten var.", errors: { tckn: "Zaten kayıtlı." }, success: false };
-        }
+        // 2. Check existing user (Email)
 
         const existingRefereeEmail = await db.referee.findUnique({ where: { email: sanitizedEmail } });
         const existingOfficialEmail = await db.generalOfficial.findUnique({ where: { email: sanitizedEmail } });
@@ -385,8 +375,7 @@ export async function register(prevState: ActionState, formData: FormData): Prom
         await db.$transaction(async (tx: any) => {
             const createdUser = await tx.user.create({
                 data: {
-                    username: tckn,
-                    tckn: tckn,
+                    username: sanitizedEmail,
                     password: hashedPassword,
                     roleId: refereeRole!.id,
                     isApproved: false,
@@ -405,7 +394,6 @@ export async function register(prevState: ActionState, formData: FormData): Prom
                 await tx.referee.create({
                     data: {
                         userId: createdUser.id,
-                        tckn: tckn,
                         firstName,
                         lastName,
                         email: sanitizedEmail,
@@ -421,7 +409,6 @@ export async function register(prevState: ActionState, formData: FormData): Prom
                 await tx.generalOfficial.create({
                     data: {
                         userId: createdUser.id,
-                        tckn: tckn,
                         firstName,
                         lastName,
                         email: sanitizedEmail,
@@ -452,7 +439,7 @@ export async function register(prevState: ActionState, formData: FormData): Prom
 
         return {
             success: true,
-            username: tckn,
+            username: sanitizedEmail,
             message: "Kayıt başarılı! E-posta adresinize bir doğrulama bağlantısı gönderildi. Lütfen gelen kutunuzu kontrol edin ve e-postanızı doğrulayın."
         };
 
@@ -463,16 +450,12 @@ export async function register(prevState: ActionState, formData: FormData): Prom
 }
 
 export async function createAdmin(prevState: ActionState, formData: FormData): Promise<ActionState> {
-    const tckn = formData.get("tckn") as string;
+    const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const roleName = (formData.get("role") as string) || "ADMIN";
 
-    if (!tckn || !password) {
-        return { error: "Lütfen TCKN ve şifre giriniz.", success: false };
-    }
-
-    if (tckn.length !== 11) {
-        return { error: "TCKN 11 haneli olmalıdır.", success: false };
+    if (!email || !password) {
+        return { error: "Lütfen E-posta ve şifre giriniz.", success: false };
     }
 
     try {
@@ -482,9 +465,9 @@ export async function createAdmin(prevState: ActionState, formData: FormData): P
             return { error: "Yetkisiz işlem.", success: false };
         }
 
-        const existingUser = await db.user.findUnique({ where: { tckn } });
+        const existingUser = await db.user.findUnique({ where: { username: email } });
         if (existingUser) {
-            return { error: "Bu TCKN ile kayıtlı bir kullanıcı zaten var.", success: false };
+            return { error: "Bu E-posta ile kayıtlı bir kullanıcı zaten var.", success: false };
         }
 
         // Validate role selection
@@ -501,8 +484,7 @@ export async function createAdmin(prevState: ActionState, formData: FormData): P
 
         await db.user.create({
             data: {
-                username: tckn,
-                tckn: tckn,
+                username: email,
                 password: hashedPassword,
                 roleId: targetRole.id,
                 isApproved: true,
@@ -703,7 +685,7 @@ export async function logout() {
 
 export async function requestPasswordReset(prevState: ActionState, formData: FormData): Promise<ActionState> {
     const identifier = (formData.get("identifier") as string || "").trim();
-    if (!identifier) return { error: "Lütfen TCKN veya kullanıcı adı giriniz.", success: false };
+    if (!identifier) return { error: "Lütfen E-posta adresinizi giriniz.", success: false };
 
     // Ensure database columns exist before proceeding
     await ensureSchemaColumns();
@@ -711,21 +693,18 @@ export async function requestPasswordReset(prevState: ActionState, formData: For
     try {
         const user = await db.user.findFirst({
             where: {
-                OR: [
-                    { username: { equals: identifier, mode: 'insensitive' } },
-                    { tckn: identifier }
-                ]
+                username: { equals: identifier, mode: 'insensitive' }
             },
-            include: { referee: true }
+            include: { referee: true, official: true }
         });
 
         // Security: Direct feedback requested by user
         if (!user) {
             // Log attempt nonetheless for security monitoring
-            return { error: "Bu TCKN veya kullanıcı adı ile kayıtlı bir hesap bulunamadı.", success: false };
+            return { error: "Bu e-posta adresi ile kayıtlı bir hesap bulunamadı.", success: false };
         }
 
-        const email = user.referee?.email;
+        const email = user.referee?.email || user.official?.email || user.username;
         if (!email) {
             return { error: "Hesabınıza tanımlı bir e-posta adresi bulunamadı. Lütfen yönetici ile iletişime geçin.", success: false };
         }

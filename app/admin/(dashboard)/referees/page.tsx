@@ -22,11 +22,7 @@ export default async function RefereesPage() {
 
     // Fetch all referees (table now only contains actual referees)
     const referees = await db.referee.findMany({
-        where: {
-            tckn: {
-                not: "11111111111"
-            }
-        },
+
         include: {
             user: {
                 include: {

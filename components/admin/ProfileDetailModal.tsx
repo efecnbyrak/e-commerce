@@ -73,10 +73,7 @@ export function ProfileDetailModal({ official, onClose, onToggleActive, onPromot
         editData.email !== (official.email || "") ||
         editData.phone !== (official.phone || "");
 
-    const maskTCKN = (tckn: string) => {
-        if (!tckn || tckn.length < 11) return tckn;
-        return `${tckn.substring(0, 2)}******** ${tckn.substring(10, 11)} `;
-    };
+
 
     useEffect(() => {
         // Prevent background scrolling when modal is open
@@ -311,10 +308,7 @@ export function ProfileDetailModal({ official, onClose, onToggleActive, onPromot
                                     </div>
                                 )}
                             </div>
-                            <div className="flex items-center justify-center gap-2 text-zinc-400 font-bold text-[10px] tracking-widest uppercase">
-                                <Hash className="w-3 h-3" />
-                                {maskTCKN(official.tckn)}
-                            </div>
+
                         </div>
 
                         <div className="w-full space-y-3">

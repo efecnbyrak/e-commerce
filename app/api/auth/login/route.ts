@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 
         if (!identifier || !password) {
             return NextResponse.json(
-                { error: "TCKN/Kullanıcı adı ve şifre gereklidir." },
+                { error: "E-posta ve şifre gereklidir." },
                 { status: 400 }
             );
         }
@@ -72,10 +72,7 @@ export async function POST(request: NextRequest) {
         // Find user
         const user = await db.user.findFirst({
             where: {
-                OR: [
-                    { username: { equals: identifier, mode: "insensitive" } },
-                    { tckn: identifier },
-                ],
+                username: { equals: identifier, mode: "insensitive" }
             },
             include: {
                 role: true,
@@ -145,7 +142,6 @@ export async function POST(request: NextRequest) {
         const userResponse = {
             id: user.id,
             username: user.username,
-            tckn: user.tckn,
             role: user.role.name,
             firstName: profile?.firstName || null,
             lastName: profile?.lastName || null,

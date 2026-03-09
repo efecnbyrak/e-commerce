@@ -24,7 +24,7 @@ export function RecentRegistrations({ latestRegistrations }: RecentRegistrations
                         <tr>
                             <th className="px-6 py-4">Ad Soyad</th>
                             <th className="px-6 py-4">Görev/Klasman</th>
-                            <th className="px-6 py-4">TCKN</th>
+                            <th className="px-6 py-4">E-posta</th>
                             <th className="px-6 py-4">Kayıt Tarihi</th>
                         </tr>
                     </thead>
@@ -37,9 +37,7 @@ export function RecentRegistrations({ latestRegistrations }: RecentRegistrations
                             </tr>
                         ) : (
                             latestRegistrations.map((user: any) => {
-                                const maskedTckn = user.tckn
-                                    ? `${user.tckn.substring(0, 2)}*******${user.tckn.substring(9)}`
-                                    : '***********';
+                                const email = user.email || 'Belirtilmemiş';
 
                                 const roleLabels: Record<string, string> = {
                                     "REFEREE": "Hakem",
@@ -54,7 +52,7 @@ export function RecentRegistrations({ latestRegistrations }: RecentRegistrations
                                 const roleLabel = roleLabels[user.officialType || ""] || user.officialType || "Belirsiz";
 
                                 const targetPage = user.officialType === "REFEREE" ? "/admin/referees" : "/admin/officials";
-                                const searchUrl = `${targetPage}?search=${user.tckn}`;
+                                const searchUrl = `${targetPage}?search=${user.email || ""}`;
 
                                 return (
                                     <tr
@@ -74,7 +72,7 @@ export function RecentRegistrations({ latestRegistrations }: RecentRegistrations
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 font-mono text-zinc-600 dark:text-zinc-400">
-                                            {maskedTckn}
+                                            {email}
                                         </td>
                                         <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400 font-medium">
                                             {new Date(user.createdAt).toLocaleDateString('tr-TR', {
@@ -98,10 +96,8 @@ export function RecentRegistrations({ latestRegistrations }: RecentRegistrations
                         Henüz kayıtlı kullanıcı yok.
                     </div>
                 ) : (
-                    latestRegistrations.map((user) => {
-                        const maskedTckn = user.tckn
-                            ? `${user.tckn.substring(0, 2)}*******${user.tckn.substring(9)}`
-                            : '***********';
+                    latestRegistrations.map((user: any) => {
+                        const email = user.email || 'Belirtilmemiş';
 
                         const roleLabels: Record<string, string> = {
                             "REFEREE": "Hakem",
@@ -116,7 +112,7 @@ export function RecentRegistrations({ latestRegistrations }: RecentRegistrations
                         const roleLabel = roleLabels[user.officialType || ""] || user.officialType || "Belirsiz";
 
                         const targetPage = user.officialType === "REFEREE" ? "/admin/referees" : "/admin/officials";
-                        const searchUrl = `${targetPage}?search=${user.tckn}`;
+                        const searchUrl = `${targetPage}?search=${user.email || ""}`;
 
                         return (
                             <div
@@ -136,7 +132,7 @@ export function RecentRegistrations({ latestRegistrations }: RecentRegistrations
                                     </span>
                                 </div>
                                 <div className="flex justify-between text-xs text-zinc-500">
-                                    <span className="font-mono">{maskedTckn}</span>
+                                    <span className="font-mono truncate pr-2">{email}</span>
                                     <span>
                                         {new Date(user.createdAt).toLocaleDateString('tr-TR', {
                                             day: '2-digit',

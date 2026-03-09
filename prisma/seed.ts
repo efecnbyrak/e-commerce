@@ -46,7 +46,6 @@ async function main() {
         },
         create: {
             username: adminUsername,
-            tckn: '11111111111',
             password: hashedAdminPassword,
             roleId: adminRole.id,
             isApproved: true,
@@ -66,7 +65,6 @@ async function main() {
         },
         create: {
             username: 'admin',
-            tckn: '22222222222',
             password: simpleAdminPass,
             roleId: adminRole.id,
             isApproved: true,

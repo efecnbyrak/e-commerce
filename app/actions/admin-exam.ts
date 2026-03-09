@@ -128,7 +128,7 @@ export async function getAllExamResults() {
                     select: {
                         firstName: true,
                         lastName: true,
-                        tckn: true,
+                        email: true,
                         classification: true,
                     },
                 },
