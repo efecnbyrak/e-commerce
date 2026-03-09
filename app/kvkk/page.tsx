@@ -32,7 +32,7 @@ export default function KVKKPage() {
                         </p>
 
                         <p className="leading-relaxed">
-                            BKS kapsamında işlenen kişisel veriler; ad-soyad, T.C. kimlik numarası (gerektiğinde), doğum tarihi, iletişim bilgileri (telefon numarası, e-posta adresi), okul/kurum bilgileri, takım bilgileri, lisans bilgileri, sporcu performans verileri, antrenman ve müsabaka kayıtları, görsel ve işitsel kayıtlar (fotoğraf ve video), sistem kullanım bilgileri (IP adresi, cihaz bilgisi, log kayıtları) gibi verilerden oluşabilir. Özel nitelikli kişisel veriler (örneğin sağlık bilgileri) yalnızca açık rıza alınması ve mevzuata uygun güvenlik önlemlerinin sağlanması halinde işlenir.
+                            BKS kapsamında işlenen kişisel veriler; ad-soyad, doğum tarihi, iletişim bilgileri (telefon numarası, e-posta adresi), okul/kurum bilgileri, takım bilgileri, lisans bilgileri, sporcu performans verileri, antrenman ve müsabaka kayıtları, görsel ve işitsel kayıtlar (fotoğraf ve video), sistem kullanım bilgileri (IP adresi, cihaz bilgisi, log kayıtları) gibi verilerden oluşabilir. Özel nitelikli kişisel veriler (örneğin sağlık bilgileri) yalnızca açık rıza alınması ve mevzuata uygun güvenlik önlemlerinin sağlanması halinde işlenir.
                         </p>
 
                         <p className="leading-relaxed">

@@ -143,10 +143,14 @@ export async function login(prevState: ActionState, formData: FormData): Promise
     await ensureAuditLogTable();
 
     try {
-        // 1. Find user by email
+        // 1. Find user by email (or username as fallback for old accounts)
         const user = await db.user.findFirst({
             where: {
-                username: { equals: identifier, mode: 'insensitive' }
+                OR: [
+                    { username: { equals: identifier, mode: 'insensitive' } },
+                    { referee: { email: { equals: identifier, mode: 'insensitive' } } },
+                    { official: { email: { equals: identifier, mode: 'insensitive' } } }
+                ]
             },
             include: {
                 role: true,
