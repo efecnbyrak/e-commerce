@@ -709,7 +709,11 @@ export async function requestPasswordReset(prevState: ActionState, formData: For
     try {
         const user = await db.user.findFirst({
             where: {
-                username: { equals: identifier, mode: 'insensitive' }
+                OR: [
+                    { username: { equals: identifier, mode: 'insensitive' } },
+                    { referee: { email: { equals: identifier, mode: 'insensitive' } } },
+                    { official: { email: { equals: identifier, mode: 'insensitive' } } }
+                ]
             },
             include: { referee: true, official: true }
         });

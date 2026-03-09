@@ -80,7 +80,7 @@ export default function AdminLoginPage() {
                             <input type="hidden" name="adminLogin" value="true" />
                             <div>
                                 <label className="block text-sm font-medium text-zinc-400 mb-2">
-                                    TC Kimlik No
+                                    Kullanıcı Adı / E-posta
                                 </label>
                                 <input
                                     type="text"
