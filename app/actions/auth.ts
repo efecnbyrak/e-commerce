@@ -88,6 +88,59 @@ export async function ensureSchemaColumns() {
                 console.log("[DB-FIX] Super Admin password reset successfully to the required one.");
             }
         }
+
+        // =====================================================
+        // AUTO-MIGRATE: Replace TCKN usernames with emails
+        // This runs once at startup. It finds all users whose
+        // username is an 11-digit number (TCKN) and replaces it
+        // with their email from referees or general_officials.
+        // =====================================================
+        try {
+            // Update users who have a referee with an email
+            await db.$executeRawUnsafe(`
+                UPDATE users
+                SET "username" = r."email"
+                FROM referees r
+                WHERE users.id = r."userId"
+                AND users."username" ~ '^[0-9]{11}$'
+                AND r."email" IS NOT NULL
+                AND r."email" != ''
+            `);
+
+            // Update users who have an official with an email
+            await db.$executeRawUnsafe(`
+                UPDATE users
+                SET "username" = g."email"
+                FROM general_officials g
+                WHERE users.id = g."userId"
+                AND users."username" ~ '^[0-9]{11}$'
+                AND g."email" IS NOT NULL
+                AND g."email" != ''
+            `);
+
+            // For any remaining 11-digit usernames with no email, give them a placeholder
+            await db.$executeRawUnsafe(`
+                UPDATE users
+                SET "username" = CONCAT('kullanici_', id::text, '@bks.local')
+                WHERE "username" ~ '^[0-9]{11}$'
+            `);
+
+            // Also fix any empty or NULL usernames (if user manually cleared them)
+            await db.$executeRawUnsafe(`
+                UPDATE users
+                SET "username" = COALESCE(
+                    (SELECT r."email" FROM referees r WHERE r."userId" = users.id AND r."email" IS NOT NULL AND r."email" != '' LIMIT 1),
+                    (SELECT g."email" FROM general_officials g WHERE g."userId" = users.id AND g."email" IS NOT NULL AND g."email" != '' LIMIT 1),
+                    CONCAT('kullanici_', id::text, '@bks.local')
+                )
+                WHERE "username" IS NULL OR "username" = ''
+            `);
+
+            console.log("[DB-FIX] TCKN username migration completed.");
+        } catch (migrationError) {
+            console.warn("[DB-FIX] TCKN migration warning:", (migrationError as any)?.message);
+        }
+
     } catch (e) {
         // Silently fail if columns exist or other DB issues
         console.warn("[DB-FIX] Self-healing attempt finished with warning:", (e as any)?.message);
