@@ -16,6 +16,7 @@ export async function GET(request: Request) {
         let results = {
             updatedReferees: 0,
             updatedOfficials: 0,
+            updatedFallbacks: 0,
             failed: 0,
             errors: [] as string[]
         };
@@ -67,6 +68,19 @@ export async function GET(request: Request) {
 
                 } catch (e: any) {
                     results.errors.push(`Failed to update user ID ${user.id}: ${e.message}`);
+                    results.failed++;
+                }
+            } else if (!expectedEmail && /^\d{11}$/.test(user.username)) {
+                // It's a TCKN but no email is found. Replace it with a fake email or skip.
+                const fakeEmail = `silinmis_tc_${user.id}@bks.local`;
+                try {
+                    await prisma.user.update({
+                        where: { id: user.id },
+                        data: { username: fakeEmail }
+                    });
+                    results.updatedFallbacks++;
+                } catch (e: any) {
+                    results.errors.push(`Failed to fallback update user ID ${user.id}: ${e.message}`);
                     results.failed++;
                 }
             }
