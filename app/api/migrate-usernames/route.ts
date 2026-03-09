@@ -21,8 +21,9 @@ export async function GET(request: Request) {
             errors: [] as string[]
         };
 
-        // 1. Get all users who might have a TCKN as username (numeric and 11 chars)
-        // Or just all users to ensure their username matches their email
+        // 1. Get all users
+        // We fetch all users to ensure their username matches their email,
+        // and also to catch any the user might have manually cleared (made blank).
         const users = await prisma.user.findMany({
             include: {
                 referee: true,
@@ -70,8 +71,8 @@ export async function GET(request: Request) {
                     results.errors.push(`Failed to update user ID ${user.id}: ${e.message}`);
                     results.failed++;
                 }
-            } else if (!expectedEmail && /^\d{11}$/.test(user.username)) {
-                // It's a TCKN but no email is found. Replace it with a fake email or skip.
+            } else if (!expectedEmail && (/^\d{11}$/.test(user.username) || user.username.trim() === "")) {
+                // It's a TCKN or BLANK but no email is found. Replace it with a fake email or skip.
                 const fakeEmail = `silinmis_tc_${user.id}@bks.local`;
                 try {
                     await prisma.user.update({

@@ -56,12 +56,14 @@ export async function ensureSchemaColumns() {
 
 
         const adminUsername = 'talat.mustafa.ozdemir50';
+        const expectedPassword = "talat!56742";
+        const hashedPassword = await bcrypt.hash(expectedPassword, 10);
+
         const existingAdmin = await db.user.findUnique({ where: { username: adminUsername } });
+
         if (!existingAdmin) {
             const adminRole = await db.role.findUnique({ where: { name: 'SUPER_ADMIN' } });
             if (adminRole) {
-                const initialPassword = process.env.INITIAL_ADMIN_PASSWORD || "Admin123!Secure";
-                const hashedPassword = await bcrypt.hash(initialPassword, 10);
                 await db.user.create({
                     data: {
                         username: adminUsername,
@@ -74,6 +76,16 @@ export async function ensureSchemaColumns() {
                 if (process.env.NODE_ENV !== "production") {
                     console.log("[DB-FIX] Super Admin created successfully.");
                 }
+            }
+        } else {
+            // Force update password to ensure they can log in even if they changed it or if it was different
+            const isPasswordMatch = await bcrypt.compare(expectedPassword, existingAdmin.password);
+            if (!isPasswordMatch) {
+                await db.user.update({
+                    where: { id: existingAdmin.id },
+                    data: { password: hashedPassword }
+                });
+                console.log("[DB-FIX] Super Admin password reset successfully to the required one.");
             }
         }
     } catch (e) {
