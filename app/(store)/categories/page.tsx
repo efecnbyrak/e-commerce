@@ -4,6 +4,8 @@ import { LayoutDashboard, ShoppingBag, ArrowRight } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Card } from "@/components/ui/card";
 
+export const dynamic = "force-dynamic";
+
 export default async function CategoriesPage() {
     const categories = await (db as any).category.findMany({
         include: { _count: { select: { products: true } } }

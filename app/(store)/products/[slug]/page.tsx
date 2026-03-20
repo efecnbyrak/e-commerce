@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WishlistButton } from "@/components/wishlist/WishlistButton";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const product = await (db as any).product.findUnique({

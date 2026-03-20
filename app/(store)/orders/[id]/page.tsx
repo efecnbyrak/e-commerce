@@ -9,6 +9,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
+export const dynamic = "force-dynamic";
+
 export default async function OrderDetailPage({ params }: { params: { id: string } }) {
     const session = await getSession();
     if (!session) redirect("/login");

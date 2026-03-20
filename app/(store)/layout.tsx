@@ -12,6 +12,8 @@ import { Navbar } from "@/components/layout/Navbar";
 
 import { SearchBar } from "@/components/layout/SearchBar";
 
+export const dynamic = "force-dynamic";
+
 interface StoreLayoutProps {
     children: React.ReactNode;
 }

@@ -5,6 +5,8 @@ import { User, Mail, Shield, Calendar, LogOut } from "lucide-react";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { EmptyState } from "@/components/ui/empty-state";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProfilePage() {
     const session = await getSession();
     if (!session) redirect("/login");

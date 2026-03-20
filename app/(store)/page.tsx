@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
+export const dynamic = "force-dynamic";
+
 export default async function StoreHomePage() {
     const featuredProducts = await (db as any).product.findMany({
         where: { isFeatured: true, isActive: true },
