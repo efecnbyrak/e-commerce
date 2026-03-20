@@ -26,8 +26,8 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                 </div>
             )}
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                <div className="space-y-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+                <div className="space-y-6 md:space-y-10">
                     <div className="space-y-3">
                         <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] ml-1">Ürün Adı</label>
                         <Input 
@@ -59,7 +59,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                         <div className="space-y-3">
                             <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] ml-1">Normal Fiyat (TL)</label>
                             <Input 
@@ -100,7 +100,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                     </div>
                 </div>
 
-                <div className="space-y-10">
+                <div className="space-y-6 md:space-y-10">
                     <div className="space-y-3">
                         <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] ml-1">Ürün Açıklaması</label>
                         <div className="relative group">
@@ -130,7 +130,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-12 p-8 bg-white/5 border border-white/5 rounded-[1.5rem] shadow-inner">
+                    <div className="flex flex-wrap items-center gap-6 md:gap-12 p-6 md:p-8 bg-white/5 border border-white/5 rounded-[1.5rem] shadow-inner">
                         <label className="flex items-center gap-4 cursor-pointer group">
                             <div className="relative flex items-center">
                                 <input 

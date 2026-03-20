@@ -18,7 +18,7 @@ export function CategoryForm({ category, categories }: CategoryFormProps) {
     const [state, formAction, isPending] = useActionState(action, initialState);
 
     return (
-        <form action={formAction} className="space-y-12">
+        <form action={formAction} className="space-y-8 md:space-y-12">
             {state?.error && (
                 <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-3xl flex items-center gap-4 text-red-500 text-sm font-bold animate-in fade-in slide-in-from-top-3">
                     <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -26,7 +26,7 @@ export function CategoryForm({ category, categories }: CategoryFormProps) {
                 </div>
             )}
             
-            <div className="space-y-10">
+            <div className="space-y-6 md:space-y-10">
                 <div className="space-y-3">
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] ml-1">Kategori Adı</label>
                     <Input 

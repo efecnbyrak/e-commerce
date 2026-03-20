@@ -157,13 +157,13 @@ export function AdminLayoutClient({ children, role, imageUrl, fullName = "Yönet
                     </div>
                 </header>
 
-                <div className="flex-1 p-10 lg:p-14 w-full max-w-[1600px] mx-auto bg-[#09090b] animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                <div className="flex-1 p-6 md:p-10 lg:p-14 w-full max-w-[1600px] mx-auto bg-[#09090b] animate-in fade-in slide-in-from-bottom-4 duration-1000">
                     {children}
                 </div>
 
                 {/* Dashboard Footer */}
-                <footer className="py-12 px-10 border-t border-white/5 text-center bg-zinc-950/40">
-                    <p className="font-bold uppercase tracking-[0.4em] text-[10px] text-zinc-700">
+                <footer className="py-12 px-6 md:px-10 border-t border-white/5 text-center bg-zinc-950/40">
+                    <p className="font-bold uppercase tracking-[0.4em] text-[9px] md:text-[10px] text-zinc-700 leading-relaxed">
                         © 2026 {siteConfig.name} CORE v4.2 - PROFESSIONAL E-COMMERCE ENGINE
                     </p>
                 </footer>

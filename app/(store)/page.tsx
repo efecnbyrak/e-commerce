@@ -32,7 +32,7 @@ export default async function StoreHomePage() {
     return (
         <div className="space-y-32 pb-32">
             {/* Hero Section - Premium & Clean */}
-            <section className="relative h-[650px] rounded-card overflow-hidden group">
+            <section className="relative h-[500px] md:h-[650px] rounded-card overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/40 to-transparent z-10" />
                 <Image 
                     src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop" 
@@ -41,11 +41,11 @@ export default async function StoreHomePage() {
                     className="object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
                     priority
                 />
-                <div className="relative z-20 h-full flex flex-col justify-center px-8 md:px-24 max-w-4xl space-y-8">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 backdrop-blur-md rounded-full text-xs font-bold text-white border border-white/10 w-fit">
-                        <Zap className="w-4 h-4 text-primary fill-primary" /> Yeni Sezon Koleksiyonu
+                <div className="relative z-20 h-full flex flex-col justify-center px-6 md:px-24 max-w-4xl space-y-6 md:space-y-8">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 backdrop-blur-md rounded-full text-[10px] md:text-xs font-bold text-white border border-white/10 w-fit">
+                        <Zap className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary fill-primary" /> Yeni Sezon Koleksiyonu
                     </div>
-                    <h1 className="text-6xl md:text-8xl font-bold text-white tracking-tight leading-[0.95]">
+                    <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold text-white tracking-tight leading-[1] md:leading-[0.95]">
                         Stilini <br /> <span className="text-primary">Yeniden</span> Tanımla
                     </h1>
                     <p className="text-zinc-300 text-lg md:text-xl font-medium max-w-lg leading-relaxed">
@@ -98,7 +98,7 @@ export default async function StoreHomePage() {
                         </Button>
                     </Link>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8">
                     {categories.map((category) => (
                         <Link key={category.id} href={`/products?category=${category.slug}`} className="group block text-center space-y-4">
                             <div className="aspect-square rounded-card bg-zinc-100 dark:bg-zinc-900 border border-border-subtle flex items-center justify-center group-hover:scale-105 group-hover:shadow-xl transition-all duration-500 overflow-hidden relative">
@@ -119,7 +119,7 @@ export default async function StoreHomePage() {
                         <p className="text-sm text-muted-foreground font-medium mt-1">Haftanın en çok tercih edilenleri</p>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
                     {featuredProducts.map((product) => (
                         <Link key={product.id} href={`/products/${product.slug}`} className="group h-full">
                             <Card className="h-full bg-surface border border-border-subtle rounded-[2rem] p-4 group-hover:shadow-shadow-card-hover group-hover:-translate-y-2 transition-all duration-500 overflow-hidden relative">

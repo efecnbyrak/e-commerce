@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { logout } from "@/app/actions/auth";
 
 import { Navbar } from "@/components/layout/Navbar";
-
 import { SearchBar } from "@/components/layout/SearchBar";
+import { MobileMenu } from "@/components/layout/MobileMenu";
 
 export const dynamic = "force-dynamic";
 
@@ -36,28 +36,35 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
             <header className="sticky top-0 z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-border-subtle shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 lg:px-8">
                     {/* Top Row */}
-                    <div className="h-20 flex items-center justify-between gap-8">
+                    <div className="h-20 flex items-center justify-between gap-4 md:gap-8">
+                        {/* Mobile Menu Trigger - NEW */}
+                        <div className="md:hidden">
+                            <MobileMenu categories={categories} session={session} />
+                        </div>
+
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
-                            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
-                                <Package className="w-6 h-6 text-white" />
+                            <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
+                                <Package className="w-5 h-5 md:w-6 md:h-6 text-white" />
                             </div>
-                            <span className="font-bold text-xl tracking-tight text-foreground">{siteConfig.name}</span>
+                            <span className="font-bold text-lg md:text-xl tracking-tight text-foreground">{siteConfig.name}</span>
                         </Link>
 
-                        {/* Search Bar - Functional */}
-                        <SearchBar />
+                        {/* Search Bar - Make it visible on md+ and special on mobile */}
+                        <div className="hidden md:flex flex-1 max-w-2xl px-4">
+                            <SearchBar />
+                        </div>
 
                         {/* Actions */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 md:gap-2">
                             {session ? (
                                 <div className="group relative">
-                                    <Button variant="ghost" size="md" className="gap-2 px-3">
+                                    <Button variant="ghost" size="md" className="gap-2 px-2 md:px-3">
                                         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                                             <User className="w-4 h-4 text-primary" />
                                         </div>
-                                        <span className="hidden sm:block text-xs font-semibold">{(session as any).firstName || 'Hesabım'}</span>
-                                        <ChevronDown className="w-4 h-4 text-muted-foreground transition-transform group-hover:rotate-180" />
+                                        <span className="hidden lg:block text-xs font-semibold">{(session as any).firstName || 'Hesabım'}</span>
+                                        <ChevronDown className="hidden md:block w-4 h-4 text-muted-foreground transition-transform group-hover:rotate-180" />
                                     </Button>
                                     
                                     {/* Dropdown Meta Menu */}
@@ -78,7 +85,7 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
                                         )}
                                         <div className="h-px bg-border-subtle my-2" />
                                         <form action={logout}>
-                                            <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-danger/5 text-danger rounded-xl transition-colors">
+                                            <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-danger/5 text-danger rounded-xl transition-colors text-left">
                                                 <LogOut className="w-4 h-4" />
                                                 <span className="text-sm font-bold">Çıkış Yap</span>
                                             </button>
@@ -87,23 +94,23 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
                                 </div>
                             ) : (
                                 <Link href="/login">
-                                    <Button variant="primary" size="md" className="hidden sm:flex">
+                                    <Button variant="primary" size="md" className="hidden md:flex">
                                         Giriş Yap
                                     </Button>
-                                    <Button variant="ghost" size="md" className="sm:hidden">
+                                    <Button variant="ghost" size="md" className="md:hidden p-2">
                                         <User className="w-5 h-5 text-foreground" />
                                     </Button>
                                 </Link>
                             )}
 
-                            <Link href="/favorites">
-                                <Button variant="ghost" size="md" className="px-3">
+                            <Link href="/favorites" className="hidden sm:block">
+                                <Button variant="ghost" size="md" className="px-2 md:px-3">
                                     <Heart className="w-5 h-5 text-foreground" />
                                 </Button>
                             </Link>
 
                             <Link href="/cart">
-                                <Button variant="ghost" size="md" className="relative px-3">
+                                <Button variant="ghost" size="md" className="relative px-2 md:px-3">
                                     <ShoppingCart className="w-5 h-5 text-foreground" />
                                     <CartCount />
                                 </Button>
@@ -111,8 +118,10 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
                         </div>
                     </div>
 
-                    {/* Navigation Row */}
-                    <Navbar categories={categories} />
+                    {/* Navigation Row - Hidden on small screens */}
+                    <div className="hidden md:block">
+                        <Navbar categories={categories} />
+                    </div>
                 </div>
             </header>
 

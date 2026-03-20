@@ -60,7 +60,7 @@ export default function LoginPage() {
             </div>
 
             {/* Right Side - Login Form */}
-            <div className="flex-1 flex items-center justify-center p-8 md:p-16 lg:p-24 bg-zinc-50 dark:bg-zinc-950 relative overflow-hidden">
+            <div className="flex-1 flex items-center justify-center p-6 sm:p-12 md:p-16 lg:p-24 bg-zinc-50 dark:bg-zinc-950 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
 
@@ -69,8 +69,8 @@ export default function LoginPage() {
                         <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest mb-8">
                             <ArrowLeft className="w-4 h-4" /> Geri Dön
                         </Link>
-                        <h1 className="text-5xl font-bold text-foreground tracking-tighter leading-none">Hoş Gelmişsiniz.</h1>
-                        <p className="text-muted-foreground font-medium text-lg italic">Hesabınıza giriş yaparak ayrıcalıklı dünyaya adım atın.</p>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-tighter leading-none">Hoş Gelmişsiniz.</h1>
+                        <p className="text-muted-foreground font-medium text-base md:text-lg italic">Hesabınıza giriş yaparak ayrıcalıklı dünyaya adım atın.</p>
                     </div>
 
                     <form action={formAction} className="space-y-8">

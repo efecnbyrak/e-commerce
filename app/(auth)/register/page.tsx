@@ -59,7 +59,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Right Side - Register Form */}
-            <div className="flex-1 flex items-center justify-center p-8 md:p-16 lg:p-24 bg-zinc-50 dark:bg-zinc-950 relative overflow-hidden">
+            <div className="flex-1 flex items-center justify-center p-6 sm:p-12 md:p-16 lg:p-24 bg-zinc-50 dark:bg-zinc-950 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
 
@@ -68,13 +68,13 @@ export default function RegisterPage() {
                         <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest mb-8">
                             <ArrowLeft className="w-4 h-4" /> Geri Dön
                         </Link>
-                        <h1 className="text-5xl font-bold text-foreground tracking-tighter leading-none">Yeni Hesap.</h1>
-                        <p className="text-muted-foreground font-medium text-lg italic">Birkaç adımda kaydınızı tamamlayın ve hemen alışverişe başlayın.</p>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-tighter leading-none">Yeni Hesap.</h1>
+                        <p className="text-muted-foreground font-medium text-base md:text-lg italic">Birkaç adımda kaydınızı tamamlayın ve hemen alışverişe başlayın.</p>
                     </div>
 
                     <form action={formAction} className="space-y-8">
                         <div className="space-y-6">
-                            <div className="grid grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em] ml-1">Adınız</label>
                                     <input

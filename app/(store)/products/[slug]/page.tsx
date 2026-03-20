@@ -48,7 +48,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 <span className="text-foreground font-bold truncate max-w-[200px]">{product.name}</span>
             </nav>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
                 {/* Image Gallery - Premium Feel */}
                 <div className="space-y-6">
                     <div className="relative aspect-square rounded-card overflow-hidden bg-zinc-100 border border-border-subtle shadow-sm group">
@@ -95,7 +95,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                                     <Share2 className="w-5 h-5" />
                                 </button>
                             </div>
-                            <h1 className="text-5xl md:text-6xl font-bold text-foreground tracking-tight leading-[1.1]">
+                            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-foreground tracking-tight leading-[1.2] md:leading-[1.1]">
                                 {product.name}
                             </h1>
                         </div>
@@ -113,10 +113,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                     </div>
 
                     <div className="space-y-8">
-                        <div className="flex items-baseline gap-6">
-                            <span className="text-6xl font-bold text-foreground tracking-tight">₺{product.price.toLocaleString()}</span>
+                        <div className="flex items-baseline gap-4 md:gap-6">
+                            <span className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground tracking-tight">₺{product.price.toLocaleString()}</span>
                             {product.salePrice && (
-                                <span className="text-2xl font-medium text-muted-foreground line-through">₺{product.salePrice.toLocaleString()}</span>
+                                <span className="text-xl md:text-2xl font-medium text-muted-foreground line-through">₺{product.salePrice.toLocaleString()}</span>
                             )}
                         </div>
                         

@@ -42,7 +42,7 @@ async function StatsSection() {
     ];
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {stats.map((stat) => (
                 <Link key={stat.title} href={stat.href}>
                     <Card className={`p-8 bg-zinc-900/40 border-white/5 backdrop-blur-xl hover:bg-zinc-900/60 transition-all group overflow-hidden relative cursor-pointer active:scale-95`}>
@@ -78,7 +78,7 @@ async function RecentOrdersSection() {
 
     return (
         <Card className="overflow-hidden border-white/5 bg-zinc-900/40 backdrop-blur-xl shadow-2xl">
-            <div className="p-10 border-b border-white/5 flex items-center justify-between bg-white/5">
+            <div className="p-6 md:p-10 border-b border-white/5 flex items-center justify-between bg-white/5">
                 <div className="space-y-1">
                     <h2 className="text-2xl font-bold text-white tracking-tight">Son Siparişler</h2>
                     <p className="text-sm text-zinc-500 font-medium">Mağazanızdaki en son aktivitelerin özeti.</p>
@@ -91,7 +91,7 @@ async function RecentOrdersSection() {
                 <Table>
                     <TableHeader>
                         <TableRow className="border-white/5 bg-zinc-950/20 hover:bg-zinc-950/20">
-                            <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em] pl-10 text-zinc-600">Sipariş No</TableHead>
+                            <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em] pl-6 md:pl-10 text-zinc-600">Sipariş No</TableHead>
                             <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em] text-zinc-600">Müşteri</TableHead>
                             <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em] text-zinc-600">Tutar</TableHead>
                             <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em] pr-10 text-right text-zinc-600">Durum</TableHead>
@@ -100,7 +100,7 @@ async function RecentOrdersSection() {
                     <TableBody>
                         {latestOrders.map((order: any) => (
                             <TableRow key={order.id} className="border-white/5 hover:bg-white/5 transition-colors group">
-                                <TableCell className="font-bold text-white pl-10 h-20">
+                                <TableCell className="font-bold text-white pl-6 md:pl-10 h-20">
                                     <span className="opacity-40 font-medium mr-1">#</span>{order.id}
                                 </TableCell>
                                 <TableCell className="text-zinc-400 font-medium">
@@ -109,7 +109,7 @@ async function RecentOrdersSection() {
                                 <TableCell className="font-bold text-primary text-lg tracking-tight">
                                     ₺{order.totalAmount.toLocaleString()}
                                 </TableCell>
-                                <TableCell className="pr-10 text-right">
+                                <TableCell className="pr-6 md:pr-10 text-right">
                                     <Badge variant={order.status === "PAID" ? "secondary" : order.status === "PENDING" ? "warning" : "danger"} className="rounded-xl px-4 py-1.5 font-bold uppercase tracking-widest text-[10px]">
                                         {order.status === "PAID" ? "ÖDENDİ" : order.status === "PENDING" ? "BEKLİYOR" : "İPTAL"}
                                     </Badge>
@@ -139,7 +139,7 @@ export default async function AdminDashboard() {
             {/* Page Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-10">
                 <div className="space-y-3">
-                    <h1 className="text-6xl font-bold text-white tracking-tighter">Panel Verileri</h1>
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tighter">Panel Verileri</h1>
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2">
                              <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse shadow-lg shadow-emerald-500/50" />
@@ -173,7 +173,7 @@ export default async function AdminDashboard() {
 
                 {/* Sidebar Management */}
                 <div className="space-y-8">
-                    <div className="bg-gradient-to-br from-primary to-indigo-600 p-12 rounded-[2.5rem] text-white shadow-3xl shadow-primary/20 relative overflow-hidden group border border-white/10">
+                    <div className="bg-gradient-to-br from-primary to-indigo-600 p-8 md:p-12 rounded-[2.5rem] text-white shadow-3xl shadow-primary/20 relative overflow-hidden group border border-white/10">
                         <div className="relative z-10 space-y-10">
                             <div className="space-y-4">
                                 <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
@@ -204,7 +204,7 @@ export default async function AdminDashboard() {
                         <Zap className="absolute -right-10 -bottom-10 w-72 h-72 text-white/10 rotate-[20deg] transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-0" />
                     </div>
 
-                    <Card className="p-10 border-white/5 bg-zinc-900/40 backdrop-blur-xl space-y-8">
+                    <Card className="p-6 md:p-10 border-white/5 bg-zinc-900/40 backdrop-blur-xl space-y-8">
                         <div className="flex items-center gap-4">
                             <BarChart3 className="w-6 h-6 text-primary" />
                             <h4 className="text-xl font-bold text-white tracking-tight">Performans</h4>

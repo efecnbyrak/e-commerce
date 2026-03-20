@@ -23,12 +23,12 @@ export default async function CategoriesPage() {
                 <p className="text-sm text-muted-foreground font-medium uppercase tracking-[0.2em]">Sizin için özenle seçilmiş ürün grupları</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                 {categories.map((category: any) => (
                     <Link 
                         key={category.id} 
                         href={`/products?category=${category.slug}`}
-                        className="group relative h-96 rounded-card overflow-hidden bg-white border border-border-subtle shadow-card transition-all hover:shadow-2xl hover:-translate-y-2"
+                        className="group relative h-64 sm:h-80 md:h-96 rounded-card overflow-hidden bg-white border border-border-subtle shadow-card transition-all hover:shadow-2xl hover:-translate-y-2"
                     >
                         {/* Background Ornament */}
                         <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-primary/10 transition-colors" />

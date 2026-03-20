@@ -38,8 +38,8 @@ export default function ProductsClient({ products, categories }: ProductsClientP
                          <ChevronRight className="w-3.5 h-3.5 opacity-30" />
                          <span className="text-white">Tüm Ürünler</span>
                     </div>
-                    <h1 className="text-6xl font-bold text-white tracking-tighter">Ürün Yönetimi</h1>
-                    <p className="text-zinc-500 font-medium text-lg max-w-xl">Mağazanızdaki tüm ürünleri, stok durumlarını ve satış performanslarını buradan yönetin.</p>
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tighter">Ürün Yönetimi</h1>
+                    <p className="text-zinc-500 font-medium text-base md:text-lg max-w-xl">Mağazanızdaki tüm ürünleri, stok durumlarını ve satış performanslarını buradan yönetin.</p>
                 </div>
                 <Link href="/admin/products/new">
                     <Button size="lg" className="rounded-2xl px-10 h-16 gap-3 shadow-2xl shadow-primary/30 text-[15px] font-bold">
@@ -96,12 +96,12 @@ export default function ProductsClient({ products, categories }: ProductsClientP
                         <Table>
                             <TableHeader>
                                 <TableRow className="border-white/5 bg-zinc-950/30 hover:bg-zinc-950/30 h-16">
-                                    <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] pl-10 text-zinc-600">Ürün Bilgisi</TableHead>
+                                    <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] pl-6 md:pl-10 text-zinc-600">Ürün Bilgisi</TableHead>
                                     <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] text-zinc-600">Kategori</TableHead>
                                     <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] text-zinc-600">Fiyat</TableHead>
                                     <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] text-zinc-600 text-center">Stok</TableHead>
                                     <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] text-zinc-600 text-center">Yayın</TableHead>
-                                    <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] pr-10 text-right text-zinc-600">İşlemler</TableHead>
+                                    <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] pr-6 md:pr-10 text-right text-zinc-600">İşlemler</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -115,7 +115,7 @@ export default function ProductsClient({ products, categories }: ProductsClientP
                                     
                                     return (
                                         <TableRow key={product.id} className="border-white/5 hover:bg-white/5 transition-all duration-300 group">
-                                            <TableCell className="pl-10 h-28">
+                                            <TableCell className="pl-6 md:pl-10 h-28">
                                                 <div className="flex items-center gap-6">
                                                     <div className="w-20 h-20 rounded-2xl bg-zinc-950 flex-shrink-0 flex items-center justify-center overflow-hidden border border-white/5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-xl">
                                                         {productImages[0] ? (
@@ -156,7 +156,7 @@ export default function ProductsClient({ products, categories }: ProductsClientP
                                                     {product.isActive ? 'AKTİF' : 'PASİF'}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell className="pr-10 text-right">
+                                            <TableCell className="pr-6 md:pr-10 text-right">
                                                 <div className="flex items-center justify-end gap-3 transition-all duration-300">
                                                     <Link href={`/admin/products/${product.id}`}>
                                                         <Button variant="outline" size="sm" className="w-12 h-12 p-0 rounded-2xl bg-white/5 border-white/5 text-zinc-400 hover:text-primary hover:bg-primary/10 hover:border-primary/30 transition-all">

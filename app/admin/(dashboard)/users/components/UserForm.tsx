@@ -29,7 +29,7 @@ export function UserForm() {
                 </div>
             )}
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                 <div className="space-y-3">
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] ml-1">Ad</label>
                     <Input 
@@ -86,7 +86,7 @@ export function UserForm() {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-12 p-8 bg-white/5 border border-white/5 rounded-[1.5rem] shadow-inner mt-auto h-16">
+                <div className="flex items-center gap-6 md:gap-12 p-6 md:p-8 bg-white/5 border border-white/5 rounded-[1.5rem] shadow-inner mt-auto h-auto min-h-[4rem]">
                     <label className="flex items-center gap-4 cursor-pointer group w-full">
                         <div className="relative flex items-center">
                             <input 
