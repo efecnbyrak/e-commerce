@@ -27,7 +27,7 @@ export default async function ProductListingPage({ searchParams }: { searchParam
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
                 <div className="space-y-4">
                     <h1 className="text-5xl md:text-6xl font-bold text-foreground tracking-tight">Tüm Ürünler</h1>
-                    <p className="text-zinc-500 font-medium text-lg max-w-lg">
+                    <p className="text-muted-foreground font-medium text-lg max-w-lg">
                         {categorySlug 
                             ? `${categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1)} kategorimizdeki en seçkin parçaları keşfedin.` 
                             : 'Modern ve stil sahibi koleksiyonumuzla tarzınızı yeniden tanımlayın.'}
@@ -68,10 +68,10 @@ export default async function ProductListingPage({ searchParams }: { searchParam
                     />
                 </div>
                 <div className="flex gap-3 w-full md:w-auto">
-                    <Button variant="outline" className="h-14 px-8 gap-3 flex-1 md:flex-none border-border-subtle rounded-2xl font-bold bg-white">
+                    <Button variant="outline" className="h-14 px-8 gap-3 flex-1 md:flex-none border-border-subtle rounded-2xl font-bold bg-surface">
                         <Filter className="w-5 h-5" /> Filtrele
                     </Button>
-                    <select className="h-14 px-8 bg-white border border-border-subtle rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-primary transition-all cursor-pointer min-w-[180px]">
+                    <select className="h-14 px-8 bg-surface border border-border-subtle rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-primary transition-all cursor-pointer min-w-[180px] text-foreground">
                         <option>En Yeniler</option>
                         <option>Fiyat: Düşükten Yükseğe</option>
                         <option>Fiyat: Yüksekten Düşüğe</option>
@@ -113,11 +113,11 @@ export default async function ProductListingPage({ searchParams }: { searchParam
                                         <span className="text-xs font-bold text-muted-foreground">4.8</span>
                                     </div>
                                 </div>
-                                <h3 className="font-bold text-zinc-900 text-lg truncate group-hover:text-primary transition-colors tracking-tight">{product.name}</h3>
+                                <h3 className="font-bold text-foreground text-lg truncate group-hover:text-primary transition-colors tracking-tight">{product.name}</h3>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-xl font-bold text-zinc-900">₺{product.price.toLocaleString()}</span>
+                                    <span className="text-xl font-bold text-foreground">₺{product.price.toLocaleString()}</span>
                                     {product.salePrice && (
-                                        <span className="text-sm font-medium text-zinc-400 line-through">₺{product.salePrice.toLocaleString()}</span>
+                                        <span className="text-sm font-medium text-muted-foreground line-through">₺{product.salePrice.toLocaleString()}</span>
                                     )}
                                 </div>
                             </div>

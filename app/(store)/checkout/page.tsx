@@ -106,7 +106,7 @@ export default function CheckoutPage() {
                                 <p className="text-sm text-muted-foreground font-medium">Ödemenizi güvenle yapın.</p>
                             </div>
                         </div>
-                        <div className="p-10 md:p-12 rounded-card bg-white border-2 border-primary/20 shadow-sm space-y-10 relative overflow-hidden">
+                        <div className="p-10 md:p-12 rounded-card bg-surface border-2 border-primary/20 shadow-sm space-y-10 relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
                             
                             <div className="flex items-center justify-between relative">
@@ -171,7 +171,7 @@ export default function CheckoutPage() {
                     </div>
                     
                     {/* Cart Items Compact Recall */}
-                    <div className="bg-white border border-border-subtle rounded-card p-8 space-y-6 shadow-sm">
+                    <div className="bg-surface border border-border-subtle rounded-card p-8 space-y-6 shadow-sm">
                         <h3 className="font-bold text-foreground text-sm uppercase tracking-widest opacity-60">Sepetinizdeki Ürünler</h3>
                         <div className="space-y-6">
                             {cartItems.map((item) => (

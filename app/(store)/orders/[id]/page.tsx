@@ -64,7 +64,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                 <div className="flex items-center gap-6">
                     <Link href="/orders">
-                        <Button variant="outline" size="md" className="h-14 w-14 p-0 rounded-2xl border-border-subtle bg-white shadow-sm">
+                        <Button variant="outline" size="md" className="h-14 w-14 p-0 rounded-2xl border-border-subtle bg-surface shadow-sm">
                             <ChevronLeft className="w-6 h-6" />
                         </Button>
                     </Link>
@@ -80,7 +80,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div className="lg:col-span-2 space-y-8">
-                    <Card className="overflow-hidden border-border-subtle shadow-sm bg-white">
+                    <Card className="overflow-hidden border-border-subtle shadow-sm bg-surface">
                         <div className="p-8 border-b border-border-subtle bg-surface/50">
                             <h2 className="text-lg font-bold text-foreground tracking-tight">Ürünler</h2>
                         </div>
@@ -114,7 +114,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
                 </div>
 
                 <div className="space-y-8">
-                    <Card className="p-10 border-border-subtle shadow-sm bg-white space-y-12">
+                    <Card className="p-10 border-border-subtle shadow-sm bg-surface space-y-12">
                         <div className="space-y-6">
                             <div className="flex items-center gap-4">
                                 <MapPin className="w-5 h-5 text-primary" />

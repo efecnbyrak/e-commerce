@@ -26,7 +26,7 @@ export default function CartPage() {
                     </div>
                     
                     <div className="space-y-6">
-                        <div className="bg-white border border-border-subtle rounded-card p-10 shadow-sm space-y-10 sticky top-32">
+                        <div className="bg-surface border border-border-subtle rounded-card p-10 shadow-sm space-y-10 sticky top-32">
                             <h2 className="text-2xl font-bold text-foreground tracking-tight">Sipariş Özeti</h2>
                             
                             <div className="space-y-6 border-b border-border-subtle pb-10">
@@ -36,7 +36,7 @@ export default function CartPage() {
                                 </div>
                                 <div className="flex justify-between items-center text-muted-foreground">
                                     <span className="text-sm font-bold uppercase tracking-wider">Kargo</span>
-                                    <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs bg-emerald-50 px-3 py-1 rounded-full">Ücretsiz</span>
+                                    <span className="text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-widest text-xs bg-emerald-500/10 px-3 py-1 rounded-full">Ücretsiz</span>
                                 </div>
                             </div>
                             

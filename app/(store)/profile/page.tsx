@@ -33,8 +33,8 @@ export default async function ProfilePage() {
     return (
         <div className="space-y-12 pb-24 max-w-4xl mx-auto">
             <div className="space-y-2 text-center">
-                <h1 className="text-5xl font-black text-zinc-900 dark:text-white tracking-tighter uppercase italic">Profilim</h1>
-                <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">Hesap bilgilerinizi yönetin</p>
+                <h1 className="text-5xl font-black text-foreground tracking-tighter uppercase italic">Profilim</h1>
+                <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Hesap bilgilerinizi yönetin</p>
             </div>
 
             <div className="bg-white dark:bg-zinc-900 rounded-[3rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden">
@@ -49,8 +49,8 @@ export default async function ProfilePage() {
                                 <User className="w-12 h-12 text-zinc-300" />
                             )}
                         </div>
-                        <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter uppercase italic mt-4">{fullName}</h2>
-                        <span className="px-4 py-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-500 mt-2">
+                        <h2 className="text-3xl font-black text-foreground tracking-tighter uppercase italic mt-4">{fullName}</h2>
+                        <span className="px-4 py-1.5 bg-muted dark:bg-zinc-800 rounded-full text-[10px] font-black uppercase tracking-widest text-muted-foreground mt-2">
                             {u.role}
                         </span>
                     </div>

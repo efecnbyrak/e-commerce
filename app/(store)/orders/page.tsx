@@ -51,7 +51,7 @@ export default async function OrdersPage() {
                                 href={`/orders/${order.id}`}
                                 className="group block"
                             >
-                                <Card className="p-8 border-border-subtle hover:border-primary/20 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 bg-white">
+                                <Card className="p-8 border-border-subtle hover:border-primary/20 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 bg-surface">
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                                         <div className="flex items-center gap-6">
                                             <div className="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">

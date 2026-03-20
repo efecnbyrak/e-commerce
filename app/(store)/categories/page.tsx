@@ -35,9 +35,9 @@ export default async function CategoriesPage() {
                                 <div className="w-12 h-1 bg-primary/20 rounded-full group-hover:w-20 group-hover:bg-primary transition-all duration-500" />
                                 <div className="space-y-1">
                                     <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">{category._count.products} ÜRÜN MEVCUT</span>
-                                    <h3 className="text-3xl font-bold text-zinc-900 leading-tight tracking-tight">{category.name}</h3>
+                                    <h3 className="text-3xl font-bold text-foreground leading-tight tracking-tight">{category.name}</h3>
                                 </div>
-                                <div className="flex items-center gap-2 text-zinc-500 text-[10px] font-bold uppercase tracking-widest pt-2 group-hover:text-primary transition-colors">
+                                <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-bold uppercase tracking-widest pt-2 group-hover:text-primary transition-colors">
                                     ŞİMDİ İNCELE <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
                                 </div>
                             </div>
