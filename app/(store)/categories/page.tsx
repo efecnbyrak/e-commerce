@@ -28,27 +28,32 @@ export default async function CategoriesPage() {
                     <Link 
                         key={category.id} 
                         href={`/products?category=${category.slug}`}
-                        className="group relative h-64 sm:h-80 md:h-96 rounded-card overflow-hidden bg-white border border-border-subtle shadow-card transition-all hover:shadow-2xl hover:-translate-y-2"
+                        className="group relative h-64 sm:h-80 md:h-96 rounded-[2.5rem] overflow-hidden bg-zinc-900/40 backdrop-blur-xl border border-white/5 shadow-2xl transition-all hover:border-primary/30 hover:-translate-y-2"
                     >
                         {/* Background Ornament */}
-                        <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-primary/10 transition-colors" />
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-[80px] group-hover:bg-primary/20 transition-all duration-700" />
                         
-                        <div className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-700 opacity-[0.03] group-hover:opacity-10">
-                            <ShoppingBag className="w-48 h-48" />
+                        <div className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-1000 opacity-[0.05] group-hover:opacity-10">
+                            <ShoppingBag className="w-64 h-64 text-primary" />
                         </div>
                         
-                        <div className="absolute inset-0 p-12 flex flex-col justify-end">
-                            <div className="space-y-4">
-                                <div className="w-12 h-1 bg-primary/20 rounded-full group-hover:w-20 group-hover:bg-primary transition-all duration-500" />
-                                <div className="space-y-1">
-                                    <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">{category._count.products} ÜRÜN MEVCUT</span>
-                                    <h3 className="text-3xl font-bold text-foreground leading-tight tracking-tight">{category.name}</h3>
+                        <div className="absolute inset-0 p-10 md:p-14 flex flex-col justify-end">
+                            <div className="space-y-6 relative z-10">
+                                <div className="w-12 h-1.5 bg-primary/30 rounded-full group-hover:w-24 group-hover:bg-primary transition-all duration-700" />
+                                <div className="space-y-2">
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
+                                        <span className="text-[9px] font-bold text-primary uppercase tracking-[0.2em]">{category._count.products} ÜRÜN</span>
+                                    </div>
+                                    <h3 className="text-3xl md:text-5xl font-bold text-white tracking-tighter leading-[0.8]">{category.name}</h3>
                                 </div>
-                                <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-bold uppercase tracking-widest pt-2 group-hover:text-primary transition-colors">
-                                    ŞİMDİ İNCELE <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                                <div className="flex items-center gap-3 text-zinc-500 text-[10px] font-bold uppercase tracking-[0.2em] pt-4 group-hover:text-primary transition-colors">
+                                    KOLEKSİYONU KEŞFET <ArrowRight className="w-4 h-4 group-hover:translate-x-3 transition-transform duration-500" />
                                 </div>
                             </div>
                         </div>
+                        
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                     </Link>
                 ))}
             </div>

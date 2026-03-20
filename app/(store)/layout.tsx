@@ -147,12 +147,12 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
                                 modern alışveriş deneyimini premium tasarımla buluşturuyoruz. En kaliteli ürünler, en uygun fiyatlarla burada.
                             </p>
                             <div className="flex gap-4">
-                                <a href="#" className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all">
+                                <Link href="/" className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all">
                                     <Bell className="w-4 h-4" />
-                                </a>
-                                <a href="#" className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all">
+                                </Link>
+                                <Link href="/favorites" className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all">
                                     <Heart className="w-4 h-4" />
-                                </a>
+                                </Link>
                             </div>
                         </div>
                         
@@ -163,6 +163,7 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
                                 <li><Link href="/info/iletisim" className="hover:text-primary transition-colors">İletişim</Link></li>
                                 <li><Link href="/info/magazalarimiz" className="hover:text-primary transition-colors">Mağazalarımız</Link></li>
                                 <li><Link href="/info/kariyer" className="hover:text-primary transition-colors">Kariyer</Link></li>
+                                <li><Link href="/favorites" className="hover:text-primary transition-colors">Favorilerim</Link></li>
                             </ul>
                         </div>
 
