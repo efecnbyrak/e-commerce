@@ -149,6 +149,25 @@ model SystemSetting {
   updatedAt   DateTime @updatedAt
 }
 
+model Notification {
+  id          Int      @id @default(autoincrement())
+  title       String
+  message     String
+  type        String   // INFO, SUCCESS, WARNING, ERROR
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model ContactMessage {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  subject     String?
+  message     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
 model LoginAttempt {
   id           Int       @id @default(autoincrement())
   ipAddress    String    @unique

@@ -40,18 +40,18 @@ export default async function CategoriesPage() {
                         <Table>
                             <TableHeader>
                                 <TableRow className="border-white/5 bg-zinc-950/30 hover:bg-zinc-950/30 h-16">
-                                    <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] pl-10 text-zinc-600">Kategori Bilgisi</TableHead>
-                                    <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] text-center text-zinc-600">Ürün Sayısı</TableHead>
-                                    <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] pr-10 text-right text-zinc-600">İşlemler</TableHead>
+                                    <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] pl-6 md:pl-10 text-zinc-600">Kategori Bilgisi</TableHead>
+                                    <TableHead className="hidden sm:table-cell font-bold text-[11px] uppercase tracking-[0.2em] text-center text-zinc-600">Ürün Sayısı</TableHead>
+                                    <TableHead className="font-bold text-[11px] uppercase tracking-[0.2em] pr-6 md:pr-10 text-right text-zinc-600">İşlemler</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {categories.map((category: any) => (
                                     <TableRow key={category.id} className="border-white/5 hover:bg-white/5 transition-all duration-300 group">
-                                        <TableCell className="pl-10 h-28">
+                                        <TableCell className="pl-6 md:pl-10 h-24 md:h-28">
                                             <div className="flex items-center gap-6">
-                                                <div className="w-16 h-16 rounded-2xl bg-zinc-950 flex-shrink-0 flex items-center justify-center border border-white/5 shadow-xl">
-                                                    <ListTree className="w-7 h-7 text-primary" />
+                                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-zinc-950 flex-shrink-0 flex items-center justify-center border border-white/5 shadow-xl">
+                                                    <ListTree className="w-6 h-6 md:w-7 md:h-7 text-primary" />
                                                 </div>
                                                 <div className="flex flex-col min-w-0 space-y-1.5">
                                                     <div className="flex items-center gap-2">
@@ -61,25 +61,25 @@ export default async function CategoriesPage() {
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <span className="font-bold text-[17px] text-white truncate leading-tight group-hover:text-primary transition-colors duration-300">{category.name}</span>
+                                                    <span className="font-bold text-sm md:text-[17px] text-white truncate leading-tight group-hover:text-primary transition-colors duration-300">{category.name}</span>
                                                     <span className="text-[10px] font-bold text-zinc-700 uppercase tracking-widest">ID: #{category.id}</span>
                                                 </div>
                                             </div>
                                         </TableCell>
-                                        <TableCell className="text-center">
+                                        <TableCell className="hidden sm:table-cell text-center">
                                             <Badge variant="outline" className="rounded-xl px-5 py-2 text-[11px] font-bold border-white/5 text-zinc-400 bg-white/5 uppercase tracking-widest">
                                                 {category._count.products} ÜRÜN
                                             </Badge>
                                         </TableCell>
-                                        <TableCell className="pr-10 text-right">
-                                            <div className="flex items-center justify-end gap-3 transition-all duration-300">
+                                        <TableCell className="pr-6 md:pr-10 text-right">
+                                            <div className="flex items-center justify-end gap-2 md:gap-3 transition-all duration-300">
                                                 <Link href={`/admin/categories/${category.id}`}>
-                                                    <Button variant="outline" size="sm" className="w-12 h-12 p-0 rounded-2xl bg-white/5 border-white/5 text-zinc-400 hover:text-primary hover:bg-primary/10 hover:border-primary/30 transition-all">
-                                                        <Edit className="w-5 h-5" />
+                                                    <Button variant="outline" size="sm" className="w-10 h-10 md:w-12 md:h-12 p-0 rounded-xl md:rounded-2xl bg-white/5 border-white/5 text-zinc-400 hover:text-primary hover:bg-primary/10 hover:border-primary/30 transition-all">
+                                                        <Edit className="w-4 h-4 md:w-5 md:h-5" />
                                                     </Button>
                                                 </Link>
-                                                <Button variant="outline" size="sm" className="w-12 h-12 p-0 rounded-2xl bg-white/5 border-white/5 text-zinc-400 hover:text-danger hover:bg-danger/10 hover:border-danger/30 transition-all">
-                                                    <Trash2 className="w-5 h-5" />
+                                                <Button variant="outline" size="sm" className="w-10 h-10 md:w-12 md:h-12 p-0 rounded-xl md:rounded-2xl bg-white/5 border-white/5 text-zinc-400 hover:text-danger hover:bg-danger/10 hover:border-danger/30 transition-all">
+                                                    <Trash2 className="w-4 h-4 md:w-5 md:h-5" />
                                                 </Button>
                                             </div>
                                         </TableCell>

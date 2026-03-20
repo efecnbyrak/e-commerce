@@ -3,7 +3,7 @@
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { login, ActionState } from "@/app/actions/auth";
-import { Loader2, Lock, User, ChevronRight, AlertCircle, ShoppingBag, ArrowLeft } from "lucide-react";
+import { Loader2, Lock, User, ChevronRight, AlertCircle, ShoppingBag, ArrowLeft, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -103,6 +103,19 @@ export default function LoginPage() {
                                         className="w-full pl-16 pr-6 py-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-border-subtle focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all text-sm font-semibold placeholder:text-zinc-300 shadow-sm"
                                         placeholder="••••••••"
                                     />
+                                </div>
+                                <div className="flex items-center justify-between px-1 pt-4">
+                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                        <div className="relative flex items-center">
+                                            <input 
+                                                type="checkbox" 
+                                                name="rememberMe" 
+                                                className="peer w-6 h-6 rounded-lg border-2 border-border-subtle bg-white dark:bg-zinc-900 checked:bg-primary checked:border-primary transition-all appearance-none cursor-pointer" 
+                                            />
+                                            <CheckCircle2 className="absolute left-1 top-1 w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                                        </div>
+                                        <span className="text-[11px] font-bold text-muted-foreground group-hover:text-primary transition-colors uppercase tracking-widest">Beni Hatırla</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>

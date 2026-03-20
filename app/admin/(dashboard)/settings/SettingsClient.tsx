@@ -1,21 +1,48 @@
 "use client"
 
 import { useState } from "react";
-import { Settings, Shield, Bell, Globe, Mail, Save, ChevronRight, Lock, Database, Eye, CreditCard, Terminal, Zap } from "lucide-react";
+import { Settings, Shield, Bell, Globe, Mail, Save, ChevronRight, Lock, Database, Eye, CreditCard, Terminal, Zap, MessageSquare } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
+import { updateSystemSetting, getSystemSettings } from "@/app/actions/settings";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SettingsClient() {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState("general");
     const [twoFactor, setTwoFactor] = useState(false);
     const [maintenanceMode, setMaintenanceMode] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const settings = await getSystemSettings();
+            setMaintenanceMode(settings["MAINTENANCE_MODE"] === "true");
+            // Diğer ayarlar eklenebilir
+            setIsLoading(false);
+        };
+        fetchSettings();
+    }, []);
+
+    const toggleMaintenance = async () => {
+        const newValue = !maintenanceMode;
+        setMaintenanceMode(newValue);
+        try {
+            await updateSystemSetting("MAINTENANCE_MODE", newValue.toString());
+            toast.success(newValue ? "Bakım modu AKTİF edildi." : "Bakım modu KAPATILDI.");
+        } catch (error) {
+            setMaintenanceMode(!newValue);
+            toast.error("Ayar güncellenirken hata oluştu.");
+        }
+    };
 
     const tabs = [
         { id: "general", label: "Genel Yapılandırma", icon: Settings },
         { id: "security", label: "Güvenlik & Erişim", icon: Shield },
-        { id: "smtp", label: "E-Posta (SMTP)", icon: Mail },
+        { id: "inbox", label: "İletişim Kutusu (Inbox)", icon: Mail },
         { id: "region", label: "Dil & Bölge", icon: Globe },
         { id: "notifications", label: "Bildirimler", icon: Bell },
         { id: "database", label: "Veritabanı", icon: Database },
@@ -122,10 +149,10 @@ export default function SettingsClient() {
                                     </div>
 
                                     <div 
-                                        onClick={() => setMaintenanceMode(!maintenanceMode)}
+                                        onClick={toggleMaintenance}
                                         className={`p-8 rounded-[2rem] border transition-all cursor-pointer group ${maintenanceMode ? 'bg-red-500/10 border-red-500/30' : 'bg-white/5 border-white/5 hover:border-primary/20'}`}
                                     >
-                                         <div className="flex justify-between items-start mb-6">
+                                         <div className="flex justify-between items-start mb-6 text-zinc-950">
                                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${maintenanceMode ? 'bg-red-500 text-white' : 'bg-zinc-800 text-zinc-500 group-hover:text-primary'}`}>
                                                  <Terminal className="w-6 h-6" />
                                              </div>
@@ -140,31 +167,29 @@ export default function SettingsClient() {
                             </section>
                         )}
 
-                        {activeTab === "smtp" && (
+                        {activeTab === "inbox" && (
                             <section className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <div className="flex items-center gap-6 border-b border-white/5 pb-8">
                                     <div className="w-14 h-14 rounded-[1.25rem] bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
                                         <Mail className="w-7 h-7" />
                                     </div>
                                     <div>
-                                        <h2 className="text-3xl font-bold text-white tracking-tight">E-Posta (SMTP) Ayarları</h2>
-                                        <p className="text-sm text-zinc-500 font-medium">Sistemin mail gönderimi için kullanacağı sunucu bilgileri.</p>
+                                        <h2 className="text-3xl font-bold text-white tracking-tight">İletişim Kutusu</h2>
+                                        <p className="text-sm text-zinc-500 font-medium">Müşteri mesajlarını yönetmek için gelen kutusuna gidin.</p>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="space-y-3">
-                                        <label className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest ml-1">SMTP Host</label>
-                                        <Input placeholder="smtp.gmail.com" className="h-16 bg-zinc-950/50 border-white/5 rounded-2xl font-bold text-white" />
+                                <div className="p-12 rounded-[2.5rem] border border-white/5 bg-zinc-950/50 flex flex-col items-center text-center gap-6">
+                                    <div className="w-20 h-20 rounded-3xl bg-primary/20 flex items-center justify-center text-primary">
+                                        <MessageSquare className="w-10 h-10" />
                                     </div>
-                                    <div className="space-y-3">
-                                        <label className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest ml-1">SMTP Port</label>
-                                        <Input placeholder="587" className="h-16 bg-zinc-950/50 border-white/5 rounded-2xl font-bold text-white" />
+                                    <div className="space-y-2">
+                                        <h3 className="text-xl font-bold text-white">Mesaj Yönetimi</h3>
+                                        <p className="text-zinc-500 max-w-sm">Tüm iletişim formlarını tek bir yerden görüntüleyebilir, yanıtlayabilir veya silebilirsiniz.</p>
                                     </div>
-                                    <div className="space-y-3 md:col-span-2">
-                                        <label className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest ml-1">SMTP Kullanıcı</label>
-                                        <Input placeholder="merhaba@phyberk.com" className="h-16 bg-zinc-950/50 border-white/5 rounded-2xl font-bold text-white" />
-                                    </div>
+                                    <Button onClick={() => router.push("/admin/inbox")} className="h-14 px-8 rounded-2xl gap-3">
+                                        Gelen Kutusuna Git <ChevronRight className="w-4 h-4" />
+                                    </Button>
                                 </div>
                             </section>
                         )}

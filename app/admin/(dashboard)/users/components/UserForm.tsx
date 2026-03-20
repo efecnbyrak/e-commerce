@@ -34,7 +34,7 @@ export function UserForm() {
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] ml-1">Ad</label>
                     <Input 
                         name="firstName"
-                        placeholder="Örn: Ahmet"
+                        placeholder="Kullanıcının adını giriniz..."
                         icon={<User className="w-5 h-5 text-zinc-700" />}
                         required 
                         className="h-16 rounded-[1.25rem] bg-zinc-950/50 border-white/5 focus:ring-primary shadow-xl text-white placeholder:text-zinc-800"
@@ -44,7 +44,7 @@ export function UserForm() {
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] ml-1">Soyad</label>
                     <Input 
                         name="lastName"
-                        placeholder="Örn: Yılmaz"
+                        placeholder="Kullanıcının soyadını giriniz..."
                         icon={<UserCircle2 className="w-5 h-5 text-zinc-700" />}
                         className="h-16 rounded-[1.25rem] bg-zinc-950/50 border-white/5 focus:ring-primary shadow-xl text-white placeholder:text-zinc-800"
                     />
@@ -54,7 +54,7 @@ export function UserForm() {
                     <Input 
                         type="email"
                         name="email"
-                        placeholder="ahmet@example.com"
+                        placeholder="E-Posta adresi (örn. murat@sirket.com)"
                         icon={<Mail className="w-5 h-5 text-zinc-700" />}
                         required
                         className="h-16 rounded-[1.25rem] bg-zinc-950/50 border-white/5 focus:ring-primary shadow-xl text-white placeholder:text-zinc-800"
@@ -65,7 +65,7 @@ export function UserForm() {
                     <Input 
                         type="password"
                         name="password"
-                        placeholder="••••••••"
+                        placeholder="Güçlü bir şifre belirleyin..."
                         icon={<Lock className="w-5 h-5 text-zinc-700" />}
                         required
                         className="h-16 rounded-[1.25rem] bg-zinc-950/50 border-white/5 focus:ring-primary shadow-xl text-white placeholder:text-zinc-800"

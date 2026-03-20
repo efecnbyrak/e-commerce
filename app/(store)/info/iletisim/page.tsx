@@ -1,8 +1,9 @@
 import { Mail, Phone, MapPin, Clock, Send, MessageSquare, Instagram, Twitter, Facebook } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "../../../../components/ui/textarea";
 import { Card } from "@/components/ui/card";
+import ContactClient from "./ContactClient";
 
 export default function ContactPage() {
     return (
@@ -86,29 +87,7 @@ export default function ContactPage() {
                             <h2 className="text-3xl font-bold tracking-tight">Hızlı Mesaj Gönder</h2>
                             <p className="text-muted-foreground font-medium">Formu doldurun, uzman ekibimiz size ulaşsın.</p>
                         </div>
-                        <form className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Adınız</label>
-                                    <Input placeholder="John Doe" className="h-14 rounded-2xl border-border-subtle bg-surface focus:ring-primary focus:border-primary transition-all" />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">E-posta</label>
-                                    <Input placeholder="john@example.com" type="email" className="h-14 rounded-2xl border-border-subtle bg-surface focus:ring-primary focus:border-primary transition-all" />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Konu</label>
-                                <Input placeholder="Hangi konuda konuşmak istiyorsunuz?" className="h-14 rounded-2xl border-border-subtle bg-surface focus:ring-primary focus:border-primary transition-all" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Mesajınız</label>
-                                <Textarea placeholder="Mesajınızı detaylandırın..." className="min-h-[160px] rounded-3xl border-border-subtle bg-surface focus:ring-primary focus:border-primary transition-all py-6" />
-                            </div>
-                            <Button className="w-full h-16 rounded-2xl text-lg font-bold gap-3 shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                                Gönder <Send className="w-5 h-5" />
-                            </Button>
-                        </form>
+                        <ContactClient />
                     </Card>
                 </div>
             </div>

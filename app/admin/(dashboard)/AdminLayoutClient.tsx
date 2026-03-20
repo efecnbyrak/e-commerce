@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logout } from "@/app/actions/auth";
-import { Users, ShoppingBag, LayoutDashboard, Settings, LogOut, Menu, X, Package, ListTree, User, Bell, ChevronRight } from "lucide-react";
+import { Users, ShoppingBag, LayoutDashboard, Settings, LogOut, Menu, X, Package, ListTree, User, Bell, ChevronRight, Mail } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getNotifications, markNotificationAsRead } from "@/app/actions/notifications";
 import { siteConfig } from "@/config/site";
 import { Button } from "@/components/ui/button";
 
@@ -32,9 +33,38 @@ export function AdminLayoutClient({ children, role, imageUrl, fullName = "Yönet
         { title: "Ürünler", href: "/admin/products", icon: Package },
         { title: "Kategoriler", href: "/admin/categories", icon: ListTree },
         { title: "Siparişler", href: "/admin/orders", icon: ShoppingBag },
+        { title: "Mesajlar", href: "/admin/inbox", icon: Mail },
         { title: "Kullanıcılar", href: "/admin/users", icon: Users },
         { title: "Ayarlar", href: "/admin/settings", icon: Settings },
     ];
+
+    const [notifications, setNotifications] = useState<any[]>([]);
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    const fetchNotifications = async () => {
+        const data = await getNotifications();
+        setNotifications(data);
+        setUnreadCount(data.filter(n => !n.isRead).length);
+    };
+
+    useEffect(() => {
+        fetchNotifications();
+        const interval = setInterval(fetchNotifications, 60000); // 1 dk bir kontrol et
+        return () => clearInterval(interval);
+    }, []);
+
+    const handleNotificationClick = async (n: any) => {
+        if (!n.isRead) {
+            await markNotificationAsRead(n.id);
+            fetchNotifications();
+        }
+        import("react-hot-toast").then(({ toast }) => {
+            toast(n.message, {
+                icon: n.type === "SUCCESS" ? "✅" : n.type === "WARNING" ? "⚠️" : n.type === "ERROR" ? "🚫" : "ℹ️",
+                style: { background: "#18181b", color: "#fff", border: "1px solid rgba(255,255,255,0.1)" }
+            });
+        });
+    };
 
     return (
         <div className="min-h-screen bg-[#09090b] flex flex-col md:flex-row font-sans text-zinc-400">
@@ -142,17 +172,23 @@ export function AdminLayoutClient({ children, role, imageUrl, fullName = "Yönet
                             variant="ghost" 
                             size="md" 
                             onClick={() => {
-                                import("react-hot-toast").then(({ toast }) => {
-                                    toast.success("Tüm sistemler çalışıyor. Henüz yeni bildirim yok.", {
-                                        icon: "🔔",
-                                        style: { background: "#18181b", color: "#fff", border: "1px solid rgba(255,255,255,0.1)" }
+                                if (notifications.length > 0) {
+                                    handleNotificationClick(notifications[0]);
+                                } else {
+                                    import("react-hot-toast").then(({ toast }) => {
+                                        toast.success("Henüz yeni bildirim yok.", {
+                                            icon: "🔔",
+                                            style: { background: "#18181b", color: "#fff", border: "1px solid rgba(255,255,255,0.1)" }
+                                        });
                                     });
-                                });
+                                }
                             }}
                             className="relative p-3 h-12 w-12 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all active:scale-95"
                         >
                             <Bell className="w-5 h-5 text-zinc-400" />
-                            <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-primary rounded-full ring-4 ring-[#09090b]" />
+                            {unreadCount > 0 && (
+                                <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-primary rounded-full ring-4 ring-[#09090b]" />
+                            )}
                         </Button>
                     </div>
                 </header>

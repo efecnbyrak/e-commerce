@@ -91,6 +91,15 @@ export async function register(prevState: ActionState, formData: FormData): Prom
             }
         });
 
+        // Trigger notification for admin
+        await (db as any).notification.create({
+            data: {
+                title: "Yeni Üye Kaydı",
+                message: `${firstName} ${lastName} sisteme yeni üye olarak katıldı.`,
+                type: "SUCCESS"
+            }
+        });
+
         return { success: true, message: "Kayıt başarıyla tamamlandı. Giriş yapabilirsiniz.", id: newUser.id };
     } catch (error) {
         console.error("Register error:", error);
