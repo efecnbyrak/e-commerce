@@ -15,6 +15,9 @@ export interface ActionState {
 }
 
 export async function login(prevState: ActionState, formData: FormData): Promise<ActionState> {
+    // Ensure admin user exists
+    await seedAdmin();
+
     const rawData = Object.fromEntries(formData.entries());
     const validatedFields = LoginSchema.safeParse({
         ...rawData,
@@ -25,15 +28,15 @@ export async function login(prevState: ActionState, formData: FormData): Promise
         return { error: "Geçersiz giriş bilgileri.", success: false };
     }
 
-    const { email, password, rememberMe } = validatedFields.data;
+    const { email: identifier, password, rememberMe } = validatedFields.data;
 
     try {
         const user = await (db.user as any).findUnique({
-            where: { email }
+            where: identifier === "phyberk" ? { email: "phyberk@eshop.com" } : { email: identifier }
         });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            return { error: "E-posta veya şifre hatalı.", success: false };
+            return { error: "E-posta/kullanıcı adı veya şifre hatalı.", success: false };
         }
 
         if (!user.isActive) {
@@ -101,21 +104,21 @@ export async function logout() {
 }
 
 export async function seedAdmin() {
-    const adminEmail = "admin@example.com";
+    const adminEmail = "phyberk@eshop.com";
     const existingAdmin = await (db.user as any).findUnique({ where: { email: adminEmail } });
 
     if (!existingAdmin) {
-        const hashedPassword = await bcrypt.hash("admin123", 10);
+        const hashedPassword = await bcrypt.hash("phyberk123", 10);
         await (db.user as any).create({
             data: {
                 email: adminEmail,
                 password: hashedPassword,
                 role: "ADMIN",
-                firstName: "System",
-                lastName: "Admin",
+                firstName: "Phy",
+                lastName: "Berk",
                 isActive: true
             }
         });
-        console.log("Admin seeded: admin@example.com / admin123");
+        console.log("Admin seeded: phyberk@eshop.com / phyberk123");
     }
 }

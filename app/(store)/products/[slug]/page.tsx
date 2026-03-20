@@ -54,7 +54,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                             src={images[0]} 
                             alt={product.name} 
                             fill 
-                            className="object-cover group-hover:scale-105 transition-transform duration-1000"
+                            className="object-cover transition-transform duration-1000"
                             priority
                         />
                         {product.salePrice && (
