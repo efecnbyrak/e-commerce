@@ -25,9 +25,11 @@ export default async function UsersPage() {
                     <p className="text-zinc-500 font-medium text-lg max-w-xl">Platformdaki tüm üyeleri, rollerini ve erişim izinlerini buradan kontrol edin.</p>
                 </div>
                 <div className="flex gap-4">
-                    <Button size="lg" className="rounded-2xl px-10 h-16 gap-3 shadow-2xl shadow-primary/30 text-[15px] font-bold">
-                        <UserPlus className="w-5 h-5" /> Yeni Kullanıcı Ekle
-                    </Button>
+                    <Link href="/admin/users/new">
+                        <Button size="lg" className="rounded-2xl px-10 h-16 gap-3 shadow-2xl shadow-primary/30 text-[15px] font-bold">
+                            <UserPlus className="w-5 h-5" /> Yeni Kullanıcı Ekle
+                        </Button>
+                    </Link>
                 </div>
             </div>
 
