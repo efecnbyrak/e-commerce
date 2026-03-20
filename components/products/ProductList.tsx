@@ -43,56 +43,47 @@ export async function ProductList({ categorySlug, searchQuery, sort, isSale, tit
 
     return (
         <div className="space-y-16 pb-32">
-            {/* Header Section */}
-            <div className="relative overflow-hidden rounded-[4rem] bg-zinc-950 p-12 md:p-20 border border-white/5 group">
-                {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-[120px] group-hover:bg-primary/20 transition-all duration-[2s]" />
-                <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-500/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-[100px]" />
+            {/* Header Section (Hero) */}
+            <div className="relative h-[400px] md:h-[500px] rounded-[3.5rem] overflow-hidden group border border-white/5">
+                {/* Background Image */}
+                <Image 
+                    src={categorySlug === 'erkek-giyim' 
+                        ? "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?q=80&w=2071&auto=format&fit=crop" 
+                        : categorySlug === 'kadin-giyim'
+                        ? "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop"
+                        : "https://images.unsplash.com/photo-1441984904996-e0b6ba687e12?q=80&w=2070&auto=format&fit=crop"}
+                    alt="Header Background"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-[3s]"
+                    priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/60 to-transparent z-10" />
                 
-                <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-12">
-                    <div className="space-y-6 max-w-2xl">
-                        <div className="flex items-center gap-3">
-                            <div className="h-[1px] w-12 bg-primary/50" />
-                            <span className="text-[10px] font-bold text-primary uppercase tracking-[0.4em]">Premium Koleksiyon</span>
-                        </div>
-                        <h1 className="text-6xl md:text-8xl font-bold text-white tracking-tighter leading-[0.85]">
-                            {title || (categorySlug 
-                                ? currentCategory?.name 
-                                : searchQuery 
-                                ? `"${searchQuery}"` 
-                                : isSale ? "Büyük <br/> İndirim" : "Geleceğin <br/> Modası")}
-                        </h1>
-                        <p className="text-zinc-400 font-medium text-lg leading-relaxed max-w-xl italic">
-                            {categorySlug 
-                                ? `${currentCategory?.name} dünyasindeki en yeni trendleri ve seçkin parçaları keşfedin.` 
-                                : searchQuery 
-                                ? `"${searchQuery}" için ${products.length} adet özel ürün listeleniyor.`
-                                : isSale ? "En çok tercih edilen markalarda %50'ye varan dev indirimleri kaçırmayın." : 'Sınırları zorlayan tasarımlarımızla stilinizi bir üst seviyeye taşıyın.'}
-                        </p>
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-[120px] z-20" />
+                
+                <div className="relative z-30 h-full flex flex-col justify-center p-12 md:p-24 space-y-6">
+                    <div className="flex items-center gap-3">
+                        <div className="h-[1px] w-12 bg-primary" />
+                        <span className="text-[10px] font-bold text-primary uppercase tracking-[0.4em]">Özel Koleksiyon</span>
                     </div>
-
-                    {/* Category Quick Filters */}
-                    <div className="flex flex-wrap gap-3 bg-white/5 backdrop-blur-md p-4 rounded-3xl border border-white/10 relative z-20">
-                        <Link href="/products">
-                            <Badge 
-                                variant={!categorySlug && !isSale ? "primary" : "outline"} 
-                                className="px-8 py-3 text-sm cursor-pointer hover:bg-primary hover:text-white transition-all rounded-2xl border-white/5 font-bold tracking-tight"
-                            >
-                                Tüm Ürünler
-                            </Badge>
-                        </Link>
-                        {categories.slice(0, 5).map((c: any) => (
-                            <Link key={c.id} href={`/products?category=${c.slug}${searchQuery ? `&q=${searchQuery}` : ""}`}>
-                                <Badge 
-                                    variant={categorySlug === c.slug ? "primary" : "outline"} 
-                                    className="px-8 py-3 text-sm cursor-pointer hover:bg-primary hover:text-white transition-all rounded-2xl border-white/5 font-bold tracking-tight"
-                                >
-                                    {c.name}
-                                </Badge>
-                            </Link>
-                        ))}
-                    </div>
+                    <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9] max-w-2xl">
+                        {title || (categorySlug 
+                            ? currentCategory?.name 
+                            : searchQuery 
+                            ? `"${searchQuery}"` 
+                            : isSale ? "Büyük İndirim" : "Geleceğin Modası")}
+                    </h1>
+                    <p className="text-zinc-300 font-medium text-lg leading-relaxed max-w-xl">
+                        {categorySlug 
+                            ? `${currentCategory?.name} dünyasındaki en yeni trendleri ve seçkin parçaları keşfedin.` 
+                            : searchQuery 
+                            ? `"${searchQuery}" araması için en iyi sonuçları listeliyoruz.`
+                            : isSale ? "En çok tercih edilen markalarda dev indirimleri kaçırmayın." : 'Sınırları zorlayan tasarımlarımızla stilinizi bir üst seviyeye taşıyın.'}
+                    </p>
                 </div>
+            </div>
+     </div>
             </div>
 
             {/* Filter & Search Bar - Replaced with Client Component */}
