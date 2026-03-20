@@ -14,8 +14,9 @@ const INFO_PAGES = {
     "odeme-secenekleri": { title: "Ödeme Seçenekleri", subtitle: "Güvenli ve esnek ödeme yöntemleri." }
 };
 
-export default function InfoPage({ params }: { params: { slug: string } }) {
-    const page = (INFO_PAGES as any)[params.slug];
+export default async function InfoPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const page = (INFO_PAGES as any)[slug];
     
     if (!page) notFound();
 

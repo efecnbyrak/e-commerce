@@ -24,7 +24,7 @@ export default function RegisterPage() {
     }, [registerState.success, router]);
 
     return (
-        <div className="min-h-screen bg-white flex flex-col lg:flex-row">
+        <div className="min-h-screen w-full bg-white flex flex-col lg:flex-row">
             {/* Left Side - Luxury Image & Brand (Mirrored from Login) */}
             <div className="relative hidden lg:flex lg:w-1/2 bg-zinc-900 overflow-hidden">
                 <Image 

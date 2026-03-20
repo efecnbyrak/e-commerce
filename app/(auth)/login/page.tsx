@@ -25,7 +25,7 @@ export default function LoginPage() {
     }, [loginState.success, router]);
 
     return (
-        <div className="min-h-screen bg-white flex flex-col lg:flex-row">
+        <div className="min-h-screen w-full bg-white flex flex-col lg:flex-row">
             {/* Left Side - Luxury Image & Brand */}
             <div className="relative hidden lg:flex lg:w-1/2 bg-zinc-900 overflow-hidden">
                 <Image 
