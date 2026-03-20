@@ -83,7 +83,7 @@ export default async function ProductsPage() {
                                         </div>
                                         <div className="flex flex-col min-w-0 space-y-1">
                                             <span className="font-bold text-foreground truncate text-base hover:text-primary cursor-pointer transition-colors">{product.name}</span>
-                                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">#{product.id.slice(0, 8)}...</span>
+                                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">ID: #{product.id}</span>
                                         </div>
                                     </div>
                                 </TableCell>

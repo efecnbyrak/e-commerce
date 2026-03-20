@@ -53,7 +53,7 @@ export default async function UsersPage() {
                                         </div>
                                         <div className="flex flex-col space-y-0.5">
                                             <span className="font-bold text-foreground text-base tracking-tight">{user.firstName} {user.lastName}</span>
-                                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60">ID: {user.id.slice(0, 8)}...</span>
+                                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60">ID: #{user.id}</span>
                                         </div>
                                     </div>
                                 </TableCell>

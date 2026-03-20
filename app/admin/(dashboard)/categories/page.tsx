@@ -57,7 +57,7 @@ export default async function CategoriesPage() {
                                                     )}
                                                 </div>
                                                 <span className="font-bold text-foreground text-lg hover:text-indigo-600 cursor-pointer transition-colors">{category.name}</span>
-                                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60">ID: {category.id.slice(0, 8)}...</span>
+                                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60">ID: #{category.id}</span>
                                             </div>
                                         </div>
                                     </TableCell>

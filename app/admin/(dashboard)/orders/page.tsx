@@ -69,7 +69,7 @@ export default async function OrdersPage() {
                                         <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center border border-border-subtle group-hover:bg-primary/5 group-hover:border-primary/20 transition-colors">
                                             <ShoppingBag className="w-4.5 h-4.5 text-muted-foreground group-hover:text-primary transition-colors" />
                                         </div>
-                                        <span className="font-bold text-base tracking-tight">#{order.id.slice(0, 8)}...</span>
+                                        <span className="font-bold text-base tracking-tight">ID: #{order.id}</span>
                                     </div>
                                 </TableCell>
                                 <TableCell>

@@ -78,7 +78,7 @@ async function RecentOrdersSection() {
                 <TableBody>
                     {latestOrders.map((order: any) => (
                         <TableRow key={order.id} className="hover:bg-muted/20 transition-colors">
-                            <TableCell className="font-bold text-foreground pl-8">#{order.id.slice(0, 8)}...</TableCell>
+                            <TableCell className="font-bold text-foreground pl-8">ID: #{order.id}</TableCell>
                             <TableCell className="text-muted-foreground font-medium">{order.user?.email || "Misafir"}</TableCell>
                             <TableCell className="font-bold text-foreground text-lg">₺{order.totalAmount.toLocaleString()}</TableCell>
                             <TableCell className="pr-8 text-right">
