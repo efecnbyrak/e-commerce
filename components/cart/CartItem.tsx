@@ -13,29 +13,29 @@ export function CartItem({ item }: CartItemProps) {
     const { updateQuantity, removeFromCart } = useCart();
 
     return (
-        <div className="flex items-center gap-6 p-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm hover:shadow-xl transition-all group">
-            <div className="w-24 h-24 rounded-2xl bg-zinc-100 dark:bg-zinc-800 flex-shrink-0 flex items-center justify-center overflow-hidden border border-zinc-200 dark:border-zinc-800 group-hover:scale-105 transition-transform">
-                <Image src={item.image} alt={item.name} width={96} height={96} className="object-cover w-full h-full" />
+        <div className="flex items-center gap-8 p-8 bg-white rounded-card border border-border-subtle shadow-sm hover:shadow-card-hover transition-all group">
+            <div className="w-28 h-28 rounded-2xl bg-zinc-100 flex-shrink-0 flex items-center justify-center overflow-hidden border border-border-subtle group-hover:scale-105 transition-transform">
+                <Image src={item.image} alt={item.name} width={112} height={112} className="object-cover w-full h-full" />
             </div>
             
-            <div className="flex-1 min-w-0">
-                <Link href={`/products/${item.slug}`} className="font-black text-zinc-900 dark:text-white text-lg truncate hover:text-blue-600 transition-colors uppercase italic tracking-tight">
+            <div className="flex-1 min-w-0 space-y-2">
+                <Link href={`/products/${item.slug}`} className="font-bold text-foreground text-xl truncate hover:text-primary transition-colors tracking-tight">
                     {item.name}
                 </Link>
-                <p className="text-xl font-black text-blue-600 mt-1">₺{item.price.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-primary">₺{item.price.toLocaleString()}</p>
             </div>
 
-            <div className="flex items-center gap-3 bg-zinc-50 dark:bg-zinc-800 p-2 rounded-2xl">
+            <div className="flex items-center gap-4 bg-muted/50 p-2 rounded-2xl border border-border-subtle">
                 <button 
                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                    className="p-2 hover:bg-white dark:hover:bg-zinc-700 rounded-xl transition-colors text-zinc-500"
+                    className="p-3 hover:bg-white rounded-xl transition-all text-muted-foreground hover:text-foreground hover:shadow-sm"
                 >
                     <Minus className="w-4 h-4" />
                 </button>
-                <span className="w-8 text-center font-black text-sm">{item.quantity}</span>
+                <span className="w-8 text-center font-bold text-lg">{item.quantity}</span>
                 <button 
                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    className="p-2 hover:bg-white dark:hover:bg-zinc-700 rounded-xl transition-colors text-zinc-500"
+                    className="p-3 hover:bg-white rounded-xl transition-all text-muted-foreground hover:text-foreground hover:shadow-sm"
                 >
                     <Plus className="w-4 h-4" />
                 </button>
@@ -43,9 +43,9 @@ export function CartItem({ item }: CartItemProps) {
 
             <button 
                 onClick={() => removeFromCart(item.id)}
-                className="p-4 text-zinc-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-2xl transition-all"
+                className="p-5 text-muted-foreground hover:text-danger hover:bg-danger/5 rounded-2xl transition-all"
             >
-                <Trash2 className="w-5 h-5" />
+                <Trash2 className="w-6 h-6" />
             </button>
         </div>
     );

@@ -1,19 +1,20 @@
 import { db } from "@/lib/db";
 import { ProductForm } from "../components/ProductForm";
+import { Card } from "@/components/ui/card";
 
 export default async function NewProductPage() {
-    const categories = await db.category.findMany();
+    const categories = await (db as any).category.findMany();
 
     return (
-        <div className="space-y-8 pb-24 max-w-4xl">
-            <div>
-                <h1 className="text-4xl font-black text-zinc-900 dark:text-white tracking-tighter uppercase italic">Yeni Ürün</h1>
-                <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">Envantere yeni bir ürün ekleyin</p>
+        <div className="space-y-12 pb-32">
+            <div className="space-y-1">
+                <h1 className="text-4xl font-bold text-foreground tracking-tight">Yeni Ürün</h1>
+                <p className="text-sm text-muted-foreground font-medium">Envanterinize yeni bir premium ürün ekleyerek satışa başlayın.</p>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-xl p-8 md:p-12">
+            <Card className="p-8 md:p-12 border-border-subtle shadow-sm bg-white overflow-hidden">
                 <ProductForm categories={categories} />
-            </div>
+            </Card>
         </div>
     );
 }

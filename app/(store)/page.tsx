@@ -1,68 +1,99 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ShoppingBag, Star, Zap } from "lucide-react";
+import { ArrowRight, ShoppingBag, Star, Zap, ShieldCheck, Truck, Headphones } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default async function StoreHomePage() {
-    const featuredProducts = await db.product.findMany({
+    const featuredProducts = await (db as any).product.findMany({
         where: { isFeatured: true, isActive: true },
         take: 4,
         include: { category: true }
     });
 
-    const categories = await db.category.findMany({
+    const categories = await (db as any).category.findMany({
         take: 6
     });
 
     return (
-        <div className="space-y-24 pb-24">
-            {/* Hero Section */}
-            <section className="relative h-[600px] rounded-[3rem] overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-r from-zinc-900 to-zinc-900/40 z-10" />
+        <div className="space-y-32 pb-32">
+            {/* Hero Section - Premium & Clean */}
+            <section className="relative h-[650px] rounded-card overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/40 to-transparent z-10" />
                 <Image 
                     src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop" 
                     alt="Hero" 
                     fill 
-                    className="object-cover group-hover:scale-105 transition-transform duration-1000"
+                    className="object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
                     priority
                 />
-                <div className="relative z-20 h-full flex flex-col justify-center px-12 md:px-20 max-w-3xl space-y-6">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-white">
-                        <Zap className="w-3 h-3" /> Yeni Sezon Koleksiyonu
+                <div className="relative z-20 h-full flex flex-col justify-center px-8 md:px-24 max-w-4xl space-y-8">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 backdrop-blur-md rounded-full text-xs font-bold text-white border border-white/10 w-fit">
+                        <Zap className="w-4 h-4 text-primary fill-primary" /> Yeni Sezon Koleksiyonu
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase italic leading-[0.9]">
-                        Stilini <br /> <span className="text-blue-500 underline decoration-8 underline-offset-8">Yeniden</span> Tanımla
+                    <h1 className="text-6xl md:text-8xl font-bold text-white tracking-tight leading-[0.95]">
+                        Stilini <br /> <span className="text-primary">Yeniden</span> Tanımla
                     </h1>
-                    <p className="text-zinc-300 text-lg font-medium max-w-md">
-                        En yeni trendler ve premium kalitedeki ürünlerimizle tarzınızı bir üst seviyeye taşıyın.
+                    <p className="text-zinc-300 text-lg md:text-xl font-medium max-w-lg leading-relaxed">
+                        En yeni trendler ve premium kalitedeki ürünlerimizle tarzınızı bir üst seviyeye taşıyın. Modern alışverişin adresi.
                     </p>
-                    <div className="flex gap-4 pt-4">
-                        <Link href="/products" className="bg-white text-zinc-900 px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl hover:bg-blue-600 hover:text-white transition-all">
-                            Hemen Keşfet
+                    <div className="flex flex-wrap gap-4 pt-4">
+                        <Link href="/products">
+                            <Button size="lg" className="px-12 h-16 text-lg rounded-2xl">
+                                Hemen Keşfet
+                            </Button>
+                        </Link>
+                        <Link href="/categories">
+                            <Button variant="outline" size="lg" className="px-12 h-16 text-lg rounded-2xl bg-white/5 border-white/10 text-white hover:bg-white/10">
+                                Kategoriler
+                            </Button>
                         </Link>
                     </div>
                 </div>
+            </section>
+
+            {/* Features Bar */}
+            <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[
+                    { icon: Truck, title: "Hızlı Teslimat", desc: "24 saat içinde kargoya teslim." },
+                    { icon: ShieldCheck, title: "Güvenli Ödeme", desc: "256-bit SSL korumalı ödeme altyapısı." },
+                    { icon: Headphones, title: "7/24 Destek", desc: "Müşteri hizmetlerimiz her zaman yanınızda." }
+                ].map((feature, i) => (
+                    <div key={i} className="flex items-center gap-6 p-8 rounded-card border border-border-subtle bg-surface shadow-sm hover:shadow-card-hover transition-all group">
+                        <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                            <feature.icon className="w-7 h-7" />
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-foreground">{feature.title}</h4>
+                            <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                        </div>
+                    </div>
+                ))}
             </section>
 
             {/* Categories Grid */}
             <section className="space-y-12">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-4xl font-black text-zinc-900 dark:text-white tracking-tighter uppercase italic">Kategoriler</h2>
-                        <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">İhtiyacın olan her şey burada</p>
+                        <h2 className="text-4xl font-bold text-foreground tracking-tight">Trend Kategoriler</h2>
+                        <p className="text-sm text-muted-foreground font-medium mt-1">İhtiyacın olan her şey burada</p>
                     </div>
-                    <Link href="/categories" className="group flex items-center gap-2 text-sm font-black uppercase tracking-widest text-zinc-400 hover:text-blue-600 transition-colors">
-                        Tümünü Gör <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <Link href="/categories">
+                        <Button variant="ghost" size="md" className="gap-2 group">
+                            Tümünü Gör <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Button>
                     </Link>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
                     {categories.map((category) => (
-                        <Link key={category.id} href={`/products?category=${category.slug}`} className="group space-y-4">
-                            <div className="aspect-square rounded-[2rem] bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center group-hover:scale-105 group-hover:shadow-xl transition-all duration-500 overflow-hidden relative">
-                                <div className="absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-10 transition-opacity" />
-                                <span className="text-4xl">🏷️</span>
+                        <Link key={category.id} href={`/products?category=${category.slug}`} className="group block text-center space-y-4">
+                            <div className="aspect-square rounded-card bg-zinc-100 dark:bg-zinc-900 border border-border-subtle flex items-center justify-center group-hover:scale-105 group-hover:shadow-xl transition-all duration-500 overflow-hidden relative">
+                                <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-5 transition-opacity" />
+                                <span className="text-5xl group-hover:scale-110 transition-transform duration-500">🏷️</span>
                             </div>
-                            <h3 className="text-center font-black text-xs uppercase tracking-widest text-zinc-600 dark:text-zinc-400 group-hover:text-blue-600 transition-colors">{category.name}</h3>
+                            <h3 className="font-bold text-sm text-muted-foreground group-hover:text-primary transition-colors">{category.name}</h3>
                         </Link>
                     ))}
                 </div>
@@ -72,81 +103,94 @@ export default async function StoreHomePage() {
             <section className="space-y-12">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-4xl font-black text-zinc-900 dark:text-white tracking-tighter uppercase italic">Öne Çıkanlar</h2>
-                        <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">Haftanın en çok tercih edilenleri</p>
+                        <h2 className="text-4xl font-bold text-foreground tracking-tight">Öne Çıkan Ürünler</h2>
+                        <p className="text-sm text-muted-foreground font-medium mt-1">Haftanın en çok tercih edilenleri</p>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {featuredProducts.map((product) => (
-                        <Link key={product.id} href={`/products/${product.slug}`} className="group">
-                            <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm group-hover:shadow-2xl transition-all duration-500">
-                                {product.images && (
-                                    <Image 
-                                        src={JSON.parse(product.images)[0] || "/placeholder.png"} 
-                                        alt={product.name} 
-                                        fill 
-                                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                    />
-                                )}
-                                <div className="absolute top-6 right-6">
-                                    <button className="w-12 h-12 rounded-2xl bg-white/80 backdrop-blur-md text-zinc-900 flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-xl hover:bg-blue-600 hover:text-white">
-                                        <ShoppingBag className="w-5 h-5" />
-                                    </button>
-                                </div>
-                                {product.salePrice && (
-                                    <div className="absolute top-6 left-6 px-4 py-1.5 bg-red-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
-                                        İNDİRİM
+                        <Link key={product.id} href={`/products/${product.slug}`} className="group block h-full">
+                            <Card className="h-full border-none shadow-none group-hover:shadow-none bg-transparent">
+                                <div className="relative aspect-[4/5] rounded-card overflow-hidden bg-zinc-100 border border-border-subtle shadow-sm group-hover:shadow-xl transition-all duration-500">
+                                    {product.images && (
+                                        <Image 
+                                            src={JSON.parse(product.images)[0] || "/placeholder.png"} 
+                                            alt={product.name} 
+                                            fill 
+                                            className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                        />
+                                    )}
+                                    <div className="absolute top-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+                                        <Button variant="primary" size="md" className="h-12 w-12 p-0 rounded-xl shadow-xl">
+                                            <ShoppingBag className="w-5 h-5" />
+                                        </Button>
                                     </div>
-                                )}
-                            </div>
-                            <div className="mt-6 space-y-2 px-2">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{product.category.name}</span>
-                                    <div className="flex items-center gap-1">
-                                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                                        <span className="text-[10px] font-bold text-zinc-400">4.9</span>
-                                    </div>
-                                </div>
-                                <h3 className="font-bold text-zinc-900 dark:text-white text-lg truncate group-hover:text-blue-600 transition-colors uppercase italic tracking-tight">{product.name}</h3>
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-xl font-black text-zinc-900 dark:text-white">₺{product.price.toLocaleString()}</span>
                                     {product.salePrice && (
-                                        <span className="text-sm font-bold text-zinc-400 line-through">₺{product.salePrice.toLocaleString()}</span>
+                                        <div className="absolute top-4 left-4">
+                                            <Badge variant="danger">İNDİRİM</Badge>
+                                        </div>
                                     )}
                                 </div>
-                            </div>
+                                <div className="mt-6 space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xs font-bold text-primary uppercase tracking-wider">{product.category.name}</span>
+                                        <div className="flex items-center gap-1">
+                                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                                            <span className="text-xs font-bold text-muted-foreground">4.9</span>
+                                        </div>
+                                    </div>
+                                    <h3 className="font-bold text-foreground text-lg truncate group-hover:text-primary transition-colors tracking-tight">{product.name}</h3>
+                                    <div className="flex items-baseline gap-2">
+                                        <span className="text-xl font-bold text-foreground">₺{product.price.toLocaleString()}</span>
+                                        {product.salePrice && (
+                                            <span className="text-sm font-medium text-muted-foreground line-through">₺{product.salePrice.toLocaleString()}</span>
+                                        )}
+                                    </div>
+                                </div>
+                            </Card>
                         </Link>
                     ))}
                     {featuredProducts.length === 0 && (
-                        <div className="col-span-full py-20 text-center bg-zinc-50 dark:bg-zinc-900 rounded-[3rem] border-2 border-dashed border-zinc-200 dark:border-zinc-800">
-                            <p className="text-zinc-500 font-bold uppercase tracking-widest">Henüz öne çıkan ürün eklenmemiş.</p>
+                        <div className="col-span-full py-32 text-center bg-zinc-50 dark:bg-zinc-900 rounded-card border-2 border-dashed border-border-subtle">
+                            <p className="text-muted-foreground font-bold">Henüz öne çıkan ürün eklenmemiş.</p>
                         </div>
                     )}
                 </div>
             </section>
 
-            {/* Banner Section */}
-            <section className="bg-zinc-900 rounded-[3rem] p-12 md:p-20 relative overflow-hidden group">
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
-                    <div className="max-w-xl space-y-6">
-                        <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase italic leading-tight">
-                            Bültenimize <br /> <span className="text-blue-500">Abone</span> Olun
-                        </h2>
-                        <p className="text-zinc-400 text-lg font-medium leading-relaxed">
-                            Özel indirimler, yeni gelenler ve stil önerilerinden ilk siz haberdar olun.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                            <input type="email" placeholder="E-posta adresiniz" className="flex-1 bg-zinc-800 border-none rounded-2xl px-8 py-5 text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium" />
-                            <button className="bg-blue-600 text-white px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl hover:bg-blue-700 transition-all">
+            {/* Newsletter Banner */}
+            <section className="bg-zinc-950 rounded-card p-12 md:p-24 relative overflow-hidden">
+                <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
+                    <div className="space-y-8">
+                        <div className="space-y-4">
+                            <h2 className="text-5xl md:text-6xl font-bold text-white tracking-tight leading-tight">
+                                Özel Fırsatları <br /> <span className="text-primary italic">Kaçırmayın</span>
+                            </h2>
+                            <p className="text-zinc-400 text-lg md:text-xl font-medium leading-relaxed max-w-sm">
+                                Bültenimize abone olun, en yeni koleksiyon ve indirimlerden ilk siz haberdar olun.
+                            </p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <input 
+                                type="email" 
+                                placeholder="E-posta adresiniz" 
+                                className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white outline-none focus:ring-2 focus:ring-primary transition-all font-medium h-16" 
+                            />
+                            <Button size="lg" className="h-16 px-12 text-md rounded-2xl">
                                 Abone Ol
-                            </button>
+                            </Button>
+                        </div>
+                        <p className="text-xs text-zinc-500 font-medium">
+                            Verileriniz KVKK kapsamında korunmaktadır. Dilediğiniz zaman ayrılabilirsiniz.
+                        </p>
+                    </div>
+                    <div className="hidden lg:flex justify-center relative group">
+                        <div className="absolute inset-0 bg-primary/20 blur-[120px] rounded-full" />
+                        <div className="relative w-96 h-96 group-hover:scale-110 transition-transform duration-700">
+                             <ShoppingBag className="w-full h-full text-primary" />
                         </div>
                     </div>
-                    <div className="relative w-64 h-64 md:w-80 md:h-80 opacity-20 md:opacity-100 group-hover:scale-110 group-hover:rotate-12 transition-all duration-700">
-                        <ShoppingBag className="w-full h-full text-blue-500" />
-                    </div>
                 </div>
-                <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             </section>
         </div>
     );

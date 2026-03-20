@@ -33,22 +33,22 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/40 backdrop-blur-[2px] p-4 animate-in fade-in duration-200">
       <div
         ref={overlayRef}
-        className="bg-white dark:bg-zinc-900 rounded-[2rem] shadow-2xl w-full max-w-xl overflow-hidden animate-in zoom-in-95 duration-200 m-2"
+        className="bg-surface dark:bg-zinc-900 rounded-card shadow-2xl w-full max-w-xl overflow-hidden animate-in zoom-in-95 duration-200 m-2 border border-border-subtle dark:border-zinc-800"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-4 border-b dark:border-zinc-800">
-          <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border-subtle dark:border-zinc-800">
+          <h2 className="text-xl font-semibold text-foreground tracking-tight">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           >
-            <X className="w-5 h-5 text-zinc-500" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
-        <div className="p-6 max-h-[80vh] overflow-y-auto">
+        <div className="p-8 max-h-[80vh] overflow-y-auto">
           {children}
         </div>
       </div>

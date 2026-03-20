@@ -1,6 +1,11 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
-import { Search, Filter, ShoppingBag, Eye, Printer, MoreVertical } from "lucide-react";
+import { Search, Filter, ShoppingBag, Eye, Printer, MoreVertical, Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export default async function OrdersPage() {
     const orders = await (db as any).order.findMany({
@@ -9,91 +14,101 @@ export default async function OrdersPage() {
     });
 
     return (
-        <div className="space-y-8 pb-24">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                    <h1 className="text-4xl font-black text-zinc-900 dark:text-white tracking-tighter uppercase italic">Siparişler</h1>
-                    <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">Gelen tüm siparişleri ve ödemeleri yönetin</p>
+        <div className="space-y-12 pb-32">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <div className="space-y-1">
+                    <h1 className="text-4xl font-bold text-foreground tracking-tight">Sipariş Yönetimi</h1>
+                    <p className="text-sm text-muted-foreground font-medium">Tüm gelen siparişleri ve ödeme durumlarını buradan takip edin.</p>
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-xl overflow-hidden">
-                <div className="p-8 border-b border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row gap-4 justify-between bg-zinc-50/50 dark:bg-zinc-800/20">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+            <Card className="overflow-hidden border-border-subtle shadow-sm">
+                <div className="p-8 border-b border-border-subtle flex flex-col md:flex-row gap-6 justify-between bg-surface/50">
+                    <div className="relative flex-1 group w-full">
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                         <input 
                             type="text" 
                             placeholder="Sipariş no, müşteri e-posta ara..." 
-                            className="w-full pl-12 pr-4 py-4 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full pl-14 pr-6 h-14 bg-white border border-border-subtle rounded-2xl text-sm font-medium focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none shadow-sm"
                         />
                     </div>
-                    <div className="flex gap-2">
-                        <button className="px-6 py-4 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl flex items-center gap-2 font-bold text-xs uppercase tracking-widest hover:bg-zinc-50 transition-colors">
-                            <Filter className="w-4 h-4" /> Filtrele
-                        </button>
+                    <div className="flex gap-3">
+                        <Button variant="outline" className="h-14 px-8 gap-3 border-border-subtle rounded-2xl font-bold bg-white">
+                            <Filter className="w-5 h-5" /> Filtrele
+                        </Button>
                     </div>
                 </div>
 
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="bg-zinc-50 dark:bg-zinc-800/40">
-                                <th className="px-8 py-6 text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Sipariş Bilgisi</th>
-                                <th className="px-8 py-6 text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Müşteri</th>
-                                <th className="px-8 py-6 text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Tarih</th>
-                                <th className="px-8 py-6 text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Tutar</th>
-                                <th className="px-8 py-6 text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Durum</th>
-                                <th className="px-8 py-6 text-right text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">İşlemler</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/50 text-sm">
-                            {orders.map((order) => (
-                                <tr key={order.id} className="group hover:bg-zinc-50/80 dark:hover:bg-zinc-800/30 transition-all">
-                                    <td className="px-8 py-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
-                                                <ShoppingBag className="w-4 h-4 text-zinc-500" />
-                                            </div>
-                                            <span className="font-bold text-zinc-900 dark:text-white">#{order.id}</span>
+                <Table>
+                    <TableHeader>
+                        <TableRow className="bg-muted/30">
+                            <TableHead className="font-bold text-xs uppercase tracking-widest pl-8">Sipariş No</TableHead>
+                            <TableHead className="font-bold text-xs uppercase tracking-widest">Müşteri</TableHead>
+                            <TableHead className="font-bold text-xs uppercase tracking-widest">Tarih</TableHead>
+                            <TableHead className="font-bold text-xs uppercase tracking-widest">Tutar</TableHead>
+                            <TableHead className="font-bold text-xs uppercase tracking-widest">Durum</TableHead>
+                            <TableHead className="font-bold text-xs uppercase tracking-widest pr-8 text-right">İşlemler</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {orders.length === 0 && (
+                            <TableRow>
+                                <TableCell colSpan={6} className="py-24">
+                                    <EmptyState 
+                                        title="Sipariş Bulunamadı"
+                                        description="Henüz hiçbir sipariş alınmamış veya arama kriterlerine uygun bir sipariş bulunmuyor."
+                                        icon={ShoppingBag}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        )}
+                        {orders.map((order: any) => (
+                            <TableRow key={order.id} className="hover:bg-muted/20 transition-colors group">
+                                <TableCell className="pl-8 py-6">
+                                    <div className="flex items-center gap-4 text-foreground">
+                                        <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center border border-border-subtle group-hover:bg-primary/5 group-hover:border-primary/20 transition-colors">
+                                            <ShoppingBag className="w-4.5 h-4.5 text-muted-foreground group-hover:text-primary transition-colors" />
                                         </div>
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <div className="flex flex-col">
-                                            <span className="font-bold text-zinc-900 dark:text-white">{(order as any).user?.firstName} {(order as any).user?.lastName}</span>
-                                            <span className="text-[10px] text-zinc-500 uppercase tracking-widest">{(order as any).user?.email || "Misafir"}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-8 py-6 text-zinc-500">
-                                        {new Date(order.createdAt).toLocaleDateString('tr-TR')}
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <span className="font-black text-lg text-zinc-900 dark:text-white">₺{order.totalAmount.toLocaleString()}</span>
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                                            order.status === "PAID" ? "bg-emerald-100 text-emerald-700" :
-                                            order.status === "PENDING" ? "bg-amber-100 text-amber-700" :
-                                            "bg-red-100 text-red-700"
-                                        }`}>
-                                            {order.status}
-                                        </span>
-                                    </td>
-                                    <td className="px-8 py-6 text-right">
-                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <Link href={`/admin/orders/${order.id}`} className="p-3 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl hover:text-blue-600 transition-all">
+                                        <span className="font-bold text-base tracking-tight">#{order.id.slice(0, 8)}...</span>
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex flex-col space-y-0.5">
+                                        <span className="font-bold text-foreground">{order.user?.firstName} {order.user?.lastName}</span>
+                                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60">{order.user?.email || "Misafir"}</span>
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex items-center gap-2 text-muted-foreground font-medium">
+                                        <Calendar className="w-3.5 h-3.5 opacity-40" />
+                                        <span className="text-sm">{new Date(order.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    <span className="font-bold text-foreground text-lg">₺{order.totalAmount.toLocaleString()}</span>
+                                </TableCell>
+                                <TableCell>
+                                    <Badge variant={order.status === "PAID" ? "secondary" : order.status === "PENDING" ? "warning" : "danger"} className="rounded-lg px-3 py-1 text-xs font-bold">
+                                        {order.status === "PAID" ? "Ödendi" : order.status === "PENDING" ? "Bekliyor" : "İptal"}
+                                    </Badge>
+                                </TableCell>
+                                <TableCell className="pr-8 text-right">
+                                    <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
+                                        <Link href={`/admin/orders/${order.id}`}>
+                                            <Button variant="outline" size="sm" className="w-10 h-10 p-0 rounded-xl hover:text-primary hover:border-primary/40 shadow-sm bg-white">
                                                 <Eye className="w-4 h-4" />
-                                            </Link>
-                                            <button className="p-3 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl hover:text-zinc-600 transition-all">
-                                                <Printer className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                            </Button>
+                                        </Link>
+                                        <Button variant="outline" size="sm" className="w-10 h-10 p-0 rounded-xl hover:text-zinc-600 hover:border-zinc-300 shadow-sm bg-white">
+                                            <Printer className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </Card>
         </div>
     );
 }

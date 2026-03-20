@@ -1,9 +1,12 @@
 import Link from "next/link";
-import { ShoppingCart, User, Search, Menu, Package, ChevronDown, Heart, Bell } from "lucide-react";
+import { ShoppingCart, User, Search, Menu, Package, ChevronDown, Heart, Bell, LayoutDashboard, LogOut } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { getSession } from "@/lib/session";
 import { db } from "@/lib/db";
 import { CartCount } from "@/components/cart/CartCount";
+import { Button } from "@/components/ui/button";
+
+import { logout } from "@/app/actions/auth";
 
 interface StoreLayoutProps {
     children: React.ReactNode;
@@ -12,98 +15,110 @@ interface StoreLayoutProps {
 export default async function StoreLayout({ children }: StoreLayoutProps) {
     const session = await getSession();
     const categories = await (db as any).category.findMany({
-        take: 10,
+        take: 8,
         orderBy: { name: 'asc' }
     });
 
     return (
-        <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col">
+        <div className="min-h-screen bg-background flex flex-col font-sans">
             {/* Header */}
-            <header className="sticky top-0 z-50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md border-b border-zinc-100 dark:border-zinc-800 shadow-sm">
-                {/* Top Bar */}
-                <div className="border-b border-zinc-50 dark:border-zinc-900">
-                    <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
+            <header className="sticky top-0 z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-border-subtle shadow-sm">
+                <div className="max-w-7xl mx-auto px-4 lg:px-8">
+                    {/* Top Row */}
+                    <div className="h-20 flex items-center justify-between gap-8">
                         {/* Logo */}
-                        <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
-                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform italic">E</div>
-                            <span className="font-black text-2xl tracking-tighter text-zinc-900 dark:text-white uppercase italic">{siteConfig.name}</span>
+                        <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
+                            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
+                                <Package className="w-6 h-6 text-white" />
+                            </div>
+                            <span className="font-bold text-xl tracking-tight text-foreground">{siteConfig.name}</span>
                         </Link>
 
-                        {/* Search Bar - Trendyol Style Center */}
-                        <div className="flex-1 max-w-2xl group">
-                            <div className="relative">
-                                <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-blue-600 transition-colors" />
+                        {/* Search Bar - Centered & Modern */}
+                        <div className="flex-1 max-w-2xl hidden md:block">
+                            <div className="relative group">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                                 <input 
                                     type="text" 
-                                    placeholder="Aradığınız ürün, kategori veya markayı yazınız..." 
-                                    className="w-full pl-14 pr-6 py-3.5 bg-zinc-100/50 dark:bg-zinc-900 border-2 border-transparent focus:border-blue-600 focus:bg-white dark:focus:bg-zinc-800/50 rounded-2xl text-sm font-bold placeholder:text-zinc-500 transition-all outline-none shadow-sm"
+                                    placeholder="Ürün, kategori veya marka ara..." 
+                                    className="w-full pl-12 pr-4 h-12 bg-zinc-100 dark:bg-zinc-900 border-transparent focus:border-primary focus:bg-white dark:focus:bg-zinc-800 rounded-xl text-sm font-medium transition-all outline-none border-2"
                                 />
-                                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-colors">
-                                    <Search className="w-4 h-4" />
-                                </button>
                             </div>
                         </div>
 
                         {/* Actions */}
-                        <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="flex items-center gap-2">
                             {session ? (
-                                <div className="flex items-center gap-1 group relative">
-                                    <Link href={session.role === 'ADMIN' ? '/admin' : '/profile'} className="flex items-center gap-3 px-4 py-2.5 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-2xl transition-all group/acc">
-                                        <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center overflow-hidden">
-                                            <User className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover/acc:scale-110 transition-transform" />
+                                <div className="group relative">
+                                    <Button variant="ghost" size="md" className="gap-2 px-3">
+                                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                            <User className="w-4 h-4 text-primary" />
                                         </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Hesabım</span>
-                                            <span className="text-xs font-black text-zinc-900 dark:text-white truncate max-w-[80px]">{(session as any).firstName || 'Profil'}</span>
-                                        </div>
-                                        <ChevronDown className="w-3 h-3 text-zinc-400 group-hover/acc:text-blue-600 transition-colors" />
-                                    </Link>
+                                        <span className="hidden sm:block text-xs font-semibold">{(session as any).firstName || 'Hesabım'}</span>
+                                        <ChevronDown className="w-4 h-4 text-muted-foreground transition-transform group-hover:rotate-180" />
+                                    </Button>
                                     
-                                    {/* Dropdown Menu (Simplified) */}
-                                    <div className="absolute top-full right-0 mt-1 w-48 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-100 dark:border-zinc-800 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all translate-y-2 group-hover:translate-y-0 z-50">
-                                        <Link href="/orders" className="flex items-center gap-3 px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-colors">
-                                            <Package className="w-4 h-4 text-zinc-500" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest">Siparişlerim</span>
-                                        </Link>
+                                    {/* Dropdown Meta Menu */}
+                                    <div className="absolute top-full right-0 mt-2 w-56 bg-surface dark:bg-zinc-900 rounded-card shadow-2xl border border-border-subtle p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all translate-y-2 group-hover:translate-y-0 z-[60]">
                                         <Link href="/profile" className="flex items-center gap-3 px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-colors">
-                                            <User className="w-4 h-4 text-zinc-500" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest">Profilim</span>
+                                            <User className="w-4 h-4 text-muted-foreground" />
+                                            <span className="text-sm font-medium">Profilim</span>
                                         </Link>
+                                        <Link href="/orders" className="flex items-center gap-3 px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-colors">
+                                            <Package className="w-4 h-4 text-muted-foreground" />
+                                            <span className="text-sm font-medium">Siparişlerim</span>
+                                        </Link>
+                                        {session.role === 'ADMIN' && (
+                                            <Link href="/admin" className="flex items-center gap-3 px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-colors text-primary">
+                                                <LayoutDashboard className="w-4 h-4" />
+                                                <span className="text-sm font-bold">Yönetim Paneli</span>
+                                            </Link>
+                                        )}
+                                        <div className="h-px bg-border-subtle my-2" />
+                                        <form action={logout}>
+                                            <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-danger/5 text-danger rounded-xl transition-colors">
+                                                <LogOut className="w-4 h-4" />
+                                                <span className="text-sm font-bold">Çıkış Yap</span>
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             ) : (
-                                <Link href="/login" className="flex items-center gap-3 px-6 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-2xl transition-all group border-2 border-transparent hover:border-zinc-100 dark:hover:border-zinc-800">
-                                    <User className="w-5 h-5 text-zinc-400 group-hover:text-blue-600 transition-colors" />
-                                    <span className="text-xs font-black uppercase tracking-[0.15em] text-zinc-900 dark:text-white">Giriş Yap</span>
+                                <Link href="/login">
+                                    <Button variant="primary" size="md" className="hidden sm:flex">
+                                        Giriş Yap
+                                    </Button>
+                                    <Button variant="ghost" size="md" className="sm:hidden">
+                                        <User className="w-5 h-5 text-foreground" />
+                                    </Button>
                                 </Link>
                             )}
 
-                            <Link href="/cart" className="flex items-center gap-3 px-5 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-2xl hover:scale-105 transition-all shadow-xl shadow-zinc-900/20 relative group">
-                                <ShoppingCart className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                                <span className="text-xs font-black uppercase tracking-[0.15em]">Sepetim</span>
-                                <CartCount />
+                            <Link href="/cart">
+                                <Button variant="ghost" size="md" className="relative px-3">
+                                    <ShoppingCart className="w-5 h-5 text-foreground" />
+                                    <CartCount />
+                                </Button>
                             </Link>
                         </div>
                     </div>
-                </div>
 
-                {/* Categories Bar - Trendyol Style */}
-                <div className="max-w-7xl mx-auto px-6 overflow-x-auto no-scrollbar py-2">
-                    <nav className="flex items-center justify-center gap-8 min-w-max">
-                        <Link href="/products" className="py-2 text-[11px] font-black text-zinc-900 dark:text-white uppercase tracking-[0.2em] border-b-2 border-transparent hover:border-blue-600 transition-all hover:text-blue-600">
+                    {/* Navigation Row */}
+                    <nav className="h-12 flex items-center justify-center gap-8 border-t border-border-subtle/50 overflow-x-auto no-scrollbar">
+                        <Link href="/products" className="text-xs font-bold text-foreground hover:text-primary transition-colors whitespace-nowrap">
                             TÜM ÜRÜNLER
                         </Link>
                         {categories.map((cat: any) => (
                             <Link 
                                 key={cat.id} 
                                 href={`/products?category=${cat.slug}`}
-                                className="py-2 text-[11px] font-black text-zinc-600 dark:text-zinc-400 uppercase tracking-[0.2em] border-b-2 border-transparent hover:border-blue-600 transition-all hover:text-blue-600 whitespace-nowrap"
+                                className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
                             >
                                 {cat.name}
                             </Link>
                         ))}
-                        <Link href="/categories" className="py-2 text-[11px] font-black text-blue-600 uppercase tracking-[0.2em] border-b-2 border-transparent hover:border-blue-600 transition-all flex items-center gap-1">
-                            HEPSİ <ChevronDown className="w-3 h-3" />
+                        <Link href="/categories" className="text-xs font-bold text-primary flex items-center gap-1">
+                            TÜM KATEGORİLER <ChevronDown className="w-3 h-3" />
                         </Link>
                     </nav>
                 </div>
@@ -111,61 +126,70 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
 
             {/* Main Content */}
             <main className="flex-1">
-                <div className="max-w-7xl mx-auto py-12 px-6">
+                <div className="max-w-7xl mx-auto py-12 px-4 lg:px-8">
                     {children}
                 </div>
             </main>
 
             {/* Footer */}
-            <footer className="bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900 py-20 px-6">
+            <footer className="bg-white dark:bg-zinc-950 border-t border-border-subtle py-24 px-4 lg:px-8">
                 <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-16">
-                        <div className="space-y-8">
-                            <Link href="/" className="flex items-center gap-3 group">
-                                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-blue-500/20 italic">E</div>
-                                <span className="font-black text-2xl tracking-tighter text-zinc-900 dark:text-white uppercase italic">{siteConfig.name}</span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                        <div className="space-y-6">
+                            <Link href="/" className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+                                    <Package className="w-5 h-5 text-white" />
+                                </div>
+                                <span className="font-bold text-xl tracking-tight text-foreground">{siteConfig.name}</span>
                             </Link>
-                            <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
+                            <p className="text-sm text-muted-foreground leading-relaxed">
                                 modern alışveriş deneyimini premium tasarımla buluşturuyoruz. En kaliteli ürünler, en uygun fiyatlarla burada.
                             </p>
                             <div className="flex gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800 flex items-center justify-center">
-                                    <Bell className="w-4 h-4 text-zinc-400" />
-                                </div>
-                                <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800 flex items-center justify-center">
-                                    <Heart className="w-4 h-4 text-zinc-400" />
-                                </div>
+                                <a href="#" className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all">
+                                    <Bell className="w-4 h-4" />
+                                </a>
+                                <a href="#" className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all">
+                                    <Heart className="w-4 h-4" />
+                                </a>
                             </div>
                         </div>
+                        
                         <div>
-                            <h4 className="font-black text-xs uppercase tracking-[0.2em] text-zinc-900 dark:text-white mb-8">Kurumsal</h4>
-                            <ul className="space-y-5 text-xs font-black text-zinc-500 hover:text-blue-600 dark:text-zinc-500 uppercase tracking-widest transition-colors">
-                                <li><Link href="/">Hakkımızda</Link></li>
-                                <li><Link href="/">İletişim</Link></li>
-                                <li><Link href="/">Mağazalarımız</Link></li>
-                                <li><Link href="/">Kariyer</Link></li>
+                            <h4 className="font-bold text-sm text-foreground mb-6">Kurumsal</h4>
+                            <ul className="space-y-4 text-sm font-medium text-muted-foreground">
+                                <li><Link href="/" className="hover:text-primary transition-colors">Hakkımızda</Link></li>
+                                <li><Link href="/" className="hover:text-primary transition-colors">İletişim</Link></li>
+                                <li><Link href="/" className="hover:text-primary transition-colors">Mağazalarımız</Link></li>
+                                <li><Link href="/" className="hover:text-primary transition-colors">Kariyer</Link></li>
                             </ul>
                         </div>
+
                         <div>
-                            <h4 className="font-black text-xs uppercase tracking-[0.2em] text-zinc-900 dark:text-white mb-8">Yardım</h4>
-                            <ul className="space-y-5 text-xs font-black text-zinc-500 hover:text-blue-600 dark:text-zinc-500 uppercase tracking-widest transition-colors">
-                                <li><Link href="/">Sıkça Sorulan Sorular</Link></li>
-                                <li><Link href="/">İade ve Değişim</Link></li>
-                                <li><Link href="/">Teslimat Bilgileri</Link></li>
-                                <li><Link href="/">Ödeme Seçenekleri</Link></li>
+                            <h4 className="font-bold text-sm text-foreground mb-6">Yardım</h4>
+                            <ul className="space-y-4 text-sm font-medium text-muted-foreground">
+                                <li><Link href="/" className="hover:text-primary transition-colors">Sıkça Sorulan Sorular</Link></li>
+                                <li><Link href="/" className="hover:text-primary transition-colors">İade ve Değişim</Link></li>
+                                <li><Link href="/" className="hover:text-primary transition-colors">Teslimat Bilgileri</Link></li>
+                                <li><Link href="/" className="hover:text-primary transition-colors">Ödeme Seçenekleri</Link></li>
                             </ul>
                         </div>
+
                         <div>
-                            <h4 className="font-black text-xs uppercase tracking-[0.2em] text-zinc-900 dark:text-white mb-8">Bülten</h4>
-                            <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-6">Yeni gelişmeleri takip edin</p>
-                            <div className="flex flex-col gap-3">
-                                <input type="email" placeholder="E-posta adresi" className="w-full bg-white dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl px-5 py-4 text-xs font-bold outline-none focus:border-blue-600 transition-all shadow-sm" />
-                                <button className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-colors">Abone Ol</button>
+                            <h4 className="font-bold text-sm text-foreground mb-6">Bülten</h4>
+                            <p className="text-sm text-muted-foreground mb-6">Yeni kampanya ve gelişmelerden haberdar olun.</p>
+                            <div className="space-y-3">
+                                <input 
+                                    type="email" 
+                                    placeholder="E-posta adresi" 
+                                    className="w-full bg-zinc-100 dark:bg-zinc-900 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none transition-all"
+                                />
+                                <Button className="w-full">Abone Ol</Button>
                             </div>
                         </div>
                     </div>
-                    <div className="pt-12 border-t border-zinc-100 dark:border-zinc-900 text-center">
-                        <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em]">
+                    <div className="pt-12 border-t border-border-subtle text-center">
+                        <p className="text-xs font-semibold text-muted-foreground italic">
                             © 2026 {siteConfig.name} - Premium Shopping Experience
                         </p>
                     </div>
