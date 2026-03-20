@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WishlistButton } from "@/components/wishlist/WishlistButton";
 
+import { ProductFilters } from "./ProductFilters";
+
 interface ProductListProps {
     categorySlug?: string;
     searchQuery?: string;
@@ -83,35 +85,12 @@ export async function ProductList({ categorySlug, searchQuery, sort, isSale, tit
                 </div>
             </div>
 
-            {/* Filter & Search Bar - Functional */}
-            <div className="sticky top-24 z-20 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl border border-border-subtle p-4 md:p-6 rounded-[2rem] shadow-xl flex flex-col md:flex-row gap-4 items-center">
-                <form action="/products" className="relative flex-1 w-full group">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                    <input 
-                        name="q"
-                        defaultValue={searchQuery}
-                        type="text" 
-                        placeholder="Aradığınız ürünü yazın..." 
-                        className="w-full pl-14 pr-6 h-14 bg-zinc-100 dark:bg-zinc-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-primary transition-all outline-none font-medium"
-                    />
-                    {categorySlug && <input type="hidden" name="category" value={categorySlug} />}
-                </form>
-                <div className="flex gap-3 w-full md:w-auto">
-                    <select 
-                        onChange={(e) => {
-                            const url = new URL(window.location.href);
-                            url.searchParams.set("sort", (e.target as HTMLSelectElement).value);
-                            window.location.href = url.toString();
-                        }}
-                        defaultValue={sort || "newest"}
-                        className="h-14 px-8 bg-zinc-100 dark:bg-zinc-900 border-none rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-primary transition-all cursor-pointer min-w-[200px] text-foreground appearance-none shadow-sm"
-                    >
-                        <option value="newest">En Yeniler</option>
-                        <option value="price-asc">Fiyat: Düşükten Yükseğe</option>
-                        <option value="price-desc">Fiyat: Yüksekten Düşüğe</option>
-                    </select>
-                </div>
-            </div>
+            {/* Filter & Search Bar - Replaced with Client Component */}
+            <ProductFilters 
+                searchQuery={searchQuery} 
+                categorySlug={categorySlug} 
+                sort={sort} 
+            />
 
             {/* Products Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
