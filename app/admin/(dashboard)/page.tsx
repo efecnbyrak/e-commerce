@@ -22,28 +22,30 @@ async function StatsSection() {
     ]);
 
     const stats = [
-        { title: "Toplam Satış", value: `₺${(salesTotal._sum.totalAmount || 0).toLocaleString()}`, icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
-        { title: "Siparişler", value: orderCount.toString(), icon: ShoppingBag, color: "text-primary", bg: "bg-primary/10", border: "border-primary/20" },
-        { title: "Ürünler", value: productCount.toString(), icon: Package, color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/20" },
-        { title: "Müşteriler", value: userCount.toString(), icon: Users, color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/20" },
+        { title: "Toplam Satış", value: `₺${(salesTotal._sum.totalAmount || 0).toLocaleString()}`, icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20", href: "/admin/orders" },
+        { title: "Siparişler", value: orderCount.toString(), icon: ShoppingBag, color: "text-primary", bg: "bg-primary/10", border: "border-primary/20", href: "/admin/orders" },
+        { title: "Ürünler", value: productCount.toString(), icon: Package, color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/20", href: "/admin/products" },
+        { title: "Müşteriler", value: userCount.toString(), icon: Users, color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/20", href: "/admin/users" },
     ];
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat) => (
-                <Card key={stat.title} className={`p-8 bg-zinc-900/40 border-white/5 backdrop-blur-xl hover:bg-zinc-900/60 transition-all group overflow-hidden relative`}>
-                    <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-primary/5 transition-colors" />
-                    <div className="flex items-center justify-between mb-8 relative z-10">
-                        <div className={`w-14 h-14 rounded-2xl ${stat.bg} ${stat.border} border flex items-center justify-center transition-transform group-hover:scale-110 duration-500`}>
-                            <stat.icon className={`w-7 h-7 ${stat.color}`} />
+                <Link key={stat.title} href={stat.href}>
+                    <Card className={`p-8 bg-zinc-900/40 border-white/5 backdrop-blur-xl hover:bg-zinc-900/60 transition-all group overflow-hidden relative cursor-pointer active:scale-95`}>
+                        <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-primary/5 transition-colors" />
+                        <div className="flex items-center justify-between mb-8 relative z-10">
+                            <div className={`w-14 h-14 rounded-2xl ${stat.bg} ${stat.border} border flex items-center justify-center transition-transform group-hover:scale-110 duration-500`}>
+                                <stat.icon className={`w-7 h-7 ${stat.color}`} />
+                            </div>
+                            <Badge variant="outline" className="text-[10px] font-bold border-white/10 text-zinc-400">+12%</Badge>
                         </div>
-                        <Badge variant="outline" className="text-[10px] font-bold border-white/10 text-zinc-400">+12%</Badge>
-                    </div>
-                    <div className="space-y-2 relative z-10">
-                        <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em]">{stat.title}</p>
-                        <p className="text-4xl font-bold text-white tracking-tighter">{stat.value}</p>
-                    </div>
-                </Card>
+                        <div className="space-y-2 relative z-10">
+                            <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em]">{stat.title}</p>
+                            <p className="text-4xl font-bold text-white tracking-tighter">{stat.value}</p>
+                        </div>
+                    </Card>
+                </Link>
             ))}
         </div>
     );

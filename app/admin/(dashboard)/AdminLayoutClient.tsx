@@ -137,7 +137,19 @@ export function AdminLayoutClient({ children, role, imageUrl }: AdminLayoutClien
                              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                              <span className="text-[10px] font-bold text-emerald-500/80 uppercase tracking-widest">Sistem Aktif</span>
                         </div>
-                        <Button variant="ghost" size="md" className="relative p-3 h-12 w-12 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all">
+                        <Button 
+                            variant="ghost" 
+                            size="md" 
+                            onClick={() => {
+                                import("react-hot-toast").then(({ toast }) => {
+                                    toast.success("Tüm sistemler çalışıyor. Henüz yeni bildirim yok.", {
+                                        icon: "🔔",
+                                        style: { background: "#18181b", color: "#fff", border: "1px solid rgba(255,255,255,0.1)" }
+                                    });
+                                });
+                            }}
+                            className="relative p-3 h-12 w-12 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all active:scale-95"
+                        >
                             <Bell className="w-5 h-5 text-zinc-400" />
                             <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-primary rounded-full ring-4 ring-[#09090b]" />
                         </Button>
