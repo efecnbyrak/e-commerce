@@ -62,12 +62,12 @@ export default async function StoreHomePage() {
                     { icon: Headphones, title: "7/24 Destek", desc: "Müşteri hizmetlerimiz her zaman yanınızda." }
                 ].map((feature, i) => (
                     <div key={i} className="flex items-center gap-6 p-8 rounded-card border border-border-subtle bg-surface shadow-sm hover:shadow-card-hover transition-all group">
-                        <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                        <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
                             <feature.icon className="w-7 h-7" />
                         </div>
                         <div>
-                            <h4 className="font-bold text-foreground">{feature.title}</h4>
-                            <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                            <h4 className="font-bold text-zinc-900 group-hover:text-primary transition-colors">{feature.title}</h4>
+                            <p className="text-sm text-zinc-500 font-medium">{feature.desc}</p>
                         </div>
                     </div>
                 ))}

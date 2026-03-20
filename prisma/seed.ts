@@ -1,90 +1,32 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
-
-const prisma = new PrismaClient();
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
 async function main() {
-    console.log('🌱 Seeding database for E-Shop...');
+  const categories = [
+    { name: 'Erkek Giyim', slug: 'erkek-giyim', description: 'Modern ve şık erkek koleksiyonu.' },
+    { name: 'Kadın Giyim', slug: 'kadin-giyim', description: 'Zarif ve trend kadın koleksiyonu.' },
+    { name: 'Ayakkabı', slug: 'ayakkabi', description: 'Her adıma konfor katan ayakkabılar.' },
+    { name: 'Aksesuar', slug: 'aksesuar', description: 'Stilinizi tamamlayan özel aksesuarlar.' },
+    { name: 'Çanta', slug: 'canta', description: 'Günlük ve şık çanta modelleri.' },
+    { name: 'Dış Giyim', slug: 'dis-giyim', description: 'Soğuk havalara karşı koruyucu ve şık parçalar.' },
+  ]
 
-    // 1. Create Admin User
-    const adminEmail = 'admin@example.com';
-    const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
+  for (const category of categories) {
+    await (prisma as any).category.upsert({
+      where: { slug: category.slug },
+      update: category,
+      create: category,
+    })
+  }
 
-    if (!existingAdmin) {
-        const hashedPassword = await bcrypt.hash('admin123', 10);
-        await prisma.user.create({
-            data: {
-                email: adminEmail,
-                password: hashedPassword,
-                role: 'ADMIN',
-                firstName: 'System',
-                lastName: 'Admin',
-                isActive: true
-            }
-        });
-        console.log('✅ Admin user created: admin@example.com / admin123');
-    }
-
-    // 2. Create Categories
-    const categories = [
-        { name: 'Ayakkabı', slug: 'ayakkabi' },
-        { name: 'Giyim', slug: 'giyim' },
-        { name: 'Elektronik', slug: 'elektronik' },
-        { name: 'Aksesuar', slug: 'aksesuar' }
-    ];
-
-    for (const cat of categories) {
-        await prisma.category.upsert({
-            where: { slug: cat.slug },
-            update: {},
-            create: { name: cat.name, slug: cat.slug }
-        });
-    }
-    console.log('✅ Categories created');
-
-    // 3. Create Featured Products
-    const category = await prisma.category.findUniqueOrThrow({ where: { slug: 'ayakkabi' } });
-    
-    const products = [
-        {
-            name: 'Premium Spor Ayakkabı',
-            slug: 'premium-spor-ayakkabi',
-            description: 'Yüksek kaliteli, konforlu ve şık spor ayakkabı.',
-            price: 1299.99,
-            stock: 50,
-            categoryId: category.id,
-            isFeatured: true,
-            images: JSON.stringify(['https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop'])
-        },
-        {
-            name: 'Klasik Beyaz Sneaker',
-            slug: 'klasik-beyaz-sneaker',
-            description: 'Her tarza uygun klasik tasarım.',
-            price: 899.99,
-            stock: 100,
-            categoryId: category.id,
-            isFeatured: true,
-            images: JSON.stringify(['https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop'])
-        }
-    ];
-
-    for (const prod of products) {
-        await prisma.product.upsert({
-            where: { slug: prod.slug },
-            update: {},
-            create: prod
-        });
-    }
-    console.log('✅ Featured products created');
-
-    console.log('🎉 Seeding completed!');
+  console.log('Categories seeded successfully!')
 }
 
 main()
-    .catch((e) => {
-        console.error('❌ Seeding failed:', e);
-        process.exit(1);
-    })
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
