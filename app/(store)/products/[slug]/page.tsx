@@ -41,7 +41,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                     {product.category.name}
                 </Link>
                 <ChevronRight className="w-4 h-4 opacity-40" />
-                <span className="text-foreground font-bold truncate max-w-[200px]">{product.name}</span>
+                <span className="text-zinc-900 font-bold truncate max-w-[200px]">{product.name}</span>
             </nav>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
@@ -91,7 +91,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                                     <Share2 className="w-5 h-5" />
                                 </button>
                             </div>
-                            <h1 className="text-5xl md:text-6xl font-bold text-foreground tracking-tight leading-[1.1]">
+                            <h1 className="text-5xl md:text-6xl font-bold text-zinc-900 tracking-tight leading-[1.1]">
                                 {product.name}
                             </h1>
                         </div>
@@ -110,9 +110,9 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
 
                     <div className="space-y-8">
                         <div className="flex items-baseline gap-6">
-                            <span className="text-6xl font-bold text-foreground tracking-tight">₺{product.price.toLocaleString()}</span>
+                            <span className="text-6xl font-bold text-zinc-900 tracking-tight">₺{product.price.toLocaleString()}</span>
                             {product.salePrice && (
-                                <span className="text-2xl font-medium text-muted-foreground line-through">₺{product.salePrice.toLocaleString()}</span>
+                                <span className="text-2xl font-medium text-zinc-400 line-through">₺{product.salePrice.toLocaleString()}</span>
                             )}
                         </div>
                         
@@ -121,7 +121,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                             <span className="text-sm font-bold text-emerald-600 uppercase tracking-widest">Stokta Var ({product.stock} Adet)</span>
                         </div>
 
-                        <p className="text-muted-foreground text-lg leading-relaxed font-medium">
+                        <p className="text-zinc-600 text-lg leading-relaxed font-medium">
                             {product.description}
                         </p>
                     </div>

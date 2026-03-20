@@ -77,8 +77,8 @@ export default async function StoreHomePage() {
             <section className="space-y-12">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-4xl font-bold text-foreground tracking-tight">Trend Kategoriler</h2>
-                        <p className="text-sm text-muted-foreground font-medium mt-1">İhtiyacın olan her şey burada</p>
+                        <h2 className="text-4xl font-bold text-zinc-900 tracking-tight">Trend Kategoriler</h2>
+                        <p className="text-sm text-zinc-500 font-medium mt-1">İhtiyacın olan her şey burada</p>
                     </div>
                     <Link href="/categories">
                         <Button variant="ghost" size="md" className="gap-2 group">
@@ -93,7 +93,7 @@ export default async function StoreHomePage() {
                                 <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-5 transition-opacity" />
                                 <span className="text-5xl group-hover:scale-110 transition-transform duration-500">🏷️</span>
                             </div>
-                            <h3 className="font-bold text-sm text-muted-foreground group-hover:text-primary transition-colors">{category.name}</h3>
+                            <h3 className="font-bold text-sm text-zinc-500 group-hover:text-primary transition-colors">{category.name}</h3>
                         </Link>
                     ))}
                 </div>
@@ -103,8 +103,8 @@ export default async function StoreHomePage() {
             <section className="space-y-12">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-4xl font-bold text-foreground tracking-tight">Öne Çıkan Ürünler</h2>
-                        <p className="text-sm text-muted-foreground font-medium mt-1">Haftanın en çok tercih edilenleri</p>
+                        <h2 className="text-4xl font-bold text-zinc-900 tracking-tight">Öne Çıkan Ürünler</h2>
+                        <p className="text-sm text-zinc-500 font-medium mt-1">Haftanın en çok tercih edilenleri</p>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -139,11 +139,11 @@ export default async function StoreHomePage() {
                                             <span className="text-xs font-bold text-muted-foreground">4.9</span>
                                         </div>
                                     </div>
-                                    <h3 className="font-bold text-foreground text-lg truncate group-hover:text-primary transition-colors tracking-tight">{product.name}</h3>
+                                    <h3 className="font-bold text-zinc-900 text-lg truncate group-hover:text-primary transition-colors tracking-tight">{product.name}</h3>
                                     <div className="flex items-baseline gap-2">
-                                        <span className="text-xl font-bold text-foreground">₺{product.price.toLocaleString()}</span>
+                                        <span className="text-xl font-bold text-zinc-900">₺{product.price.toLocaleString()}</span>
                                         {product.salePrice && (
-                                            <span className="text-sm font-medium text-muted-foreground line-through">₺{product.salePrice.toLocaleString()}</span>
+                                            <span className="text-sm font-medium text-zinc-400 line-through">₺{product.salePrice.toLocaleString()}</span>
                                         )}
                                     </div>
                                 </div>
