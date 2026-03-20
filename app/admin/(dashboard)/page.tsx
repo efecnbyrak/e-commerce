@@ -1,189 +1,147 @@
-import Link from "next/link";
 import { Suspense } from "react";
-import { StatsGrid } from "./components/StatsGrid";
-import { RecentRegistrations } from "./components/RecentRegistrations";
-import { BarChart3, Users } from "lucide-react";
-import { DashboardChartsWrapper } from "@/components/admin/DashboardChartsWrapper";
+import { LayoutDashboard, ShoppingBag, Package, Users, TrendingUp } from "lucide-react";
 import { db } from "@/lib/db";
 import { verifySession } from "@/lib/session";
-import { getAvailabilityWindow } from "@/lib/availability-utils";
-import { formatClassification } from "@/lib/format-utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Assuming these exist or I'll create them
 
 export const revalidate = 60;
 
-
 async function StatsSection() {
-    const { startDate } = await getAvailabilityWindow();
-    const [refereesCount, officialsCount, formsThisWeek] = await Promise.all([
-        db.referee.count(),
-        (db as any).generalOfficial.count(),
-        db.availabilityForm.count({ where: { weekStartDate: startDate } }),
-    ]);
-
-    return <StatsGrid
-        totalReferees={Number(refereesCount)}
-        totalOfficials={Number(officialsCount)}
-        formsThisWeek={formsThisWeek}
-    />;
-}
-
-async function RegistrationsSection() {
-    const latestRegistrations = await db.$queryRaw<Array<any>>`
-        (SELECT id::text, "firstName", "lastName", 'REFEREE' as "officialType", email, "createdAt" 
-        FROM referees)
-        UNION ALL
-        (SELECT id::text, "firstName", "lastName", "officialType", email, "createdAt" 
-        FROM general_officials)
-        ORDER BY "createdAt" DESC 
-        LIMIT 5
-    `;
-    return <RecentRegistrations latestRegistrations={latestRegistrations} />;
-}
-
-async function ChartsSection() {
-    const [monthlyRegistrations, classificationDistribution] = await Promise.all([
-        db.$queryRaw<Array<{ month: string; count: bigint }>>`
-            SELECT 
-                TO_CHAR("createdAt", 'MM') as month,
-                COUNT(*) as count
-            FROM (
-                SELECT "createdAt" FROM referees
-                UNION ALL
-                SELECT "createdAt" FROM general_officials
-            ) combined
-            WHERE "createdAt" > NOW() - INTERVAL '6 months'
-            GROUP BY month
-            ORDER BY month ASC
-        `,
-        db.referee.groupBy({
-            by: ['classification'],
-            _count: { id: true }
+    const [productCount, orderCount, userCount, salesTotal] = await Promise.all([
+        db.product.count(),
+        db.order.count(),
+        db.user.count(),
+        db.order.aggregate({
+            _sum: { totalAmount: true },
+            where: { status: "PAID" }
         })
     ]);
 
-    const MONTH_TR: Record<string, string> = {
-        '01': 'Ocak', '02': 'Şubat', '03': 'Mart', '04': 'Nisan',
-        '05': 'Mayıs', '06': 'Haziran', '07': 'Temmuz', '08': 'Ağustos',
-        '09': 'Eylül', '10': 'Ekim', '11': 'Kasım', '12': 'Aralık'
-    };
-
-    const registrationChartData = monthlyRegistrations.map((r: any) => ({
-        month: MONTH_TR[r.month] || r.month,
-        count: Number(r.count)
-    }));
-
-    const classificationChartData = classificationDistribution
-        .map((c: any) => ({
-            name: formatClassification(c.classification),
-            value: Number(c._count.id)
-        }))
-        .filter((item: any) => item.value > 0);
+    const stats = [
+        { title: "Toplam Satış", value: `₺${(salesTotal._sum.totalAmount || 0).toLocaleString()}`, icon: TrendingUp, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+        { title: "Siparişler", value: orderCount.toString(), icon: ShoppingBag, color: "text-blue-500", bg: "bg-blue-500/10" },
+        { title: "Ürünler", value: productCount.toString(), icon: Package, color: "text-indigo-500", bg: "bg-indigo-500/10" },
+        { title: "Müşteriler", value: userCount.toString(), icon: Users, color: "text-orange-500", bg: "bg-orange-500/10" },
+    ];
 
     return (
-        <DashboardChartsWrapper
-            registrationData={registrationChartData}
-            classificationData={classificationChartData}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {stats.map((stat) => (
+                <div key={stat.title} className="bg-white dark:bg-zinc-900 p-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className={`p-3 rounded-2xl ${stat.bg}`}>
+                            <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                        </div>
+                    </div>
+                    <div className="space-y-1">
+                        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">{stat.title}</p>
+                        <p className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight">{stat.value}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
     );
 }
 
-function SectionLoading({ height = "h-32" }: { height?: string }) {
-    return <div className={`w-full ${height} bg-zinc-100 dark:bg-zinc-800 animate-pulse rounded-xl`} />;
-}
-
-import AdminHub from "./components/AdminHub";
-
-export default async function AdminDashboard() {
-    const session = await verifySession();
-    const role = session.role;
-
-    // --- TEMPORARY FIX FOR ALTAN RENKSOY ---
-    try {
-        const altan = await db.generalOfficial.findFirst({
-            where: { firstName: { contains: "Altan", mode: "insensitive" }, lastName: { contains: "Renksoy", mode: "insensitive" } },
-            include: { regions: true }
-        });
-        if (altan && !altan.regions.some((r: any) => r.name === "Anadolu")) {
-            const anadolu = await db.region.findUnique({ where: { name: "Anadolu" } });
-            if (anadolu) {
-                await db.generalOfficial.update({
-                    where: { id: altan.id },
-                    data: { regions: { set: [{ id: anadolu.id }] } }
-                });
-                console.log("[FIX] Updated Altan Renksoy's region to Anadolu.");
-            }
-        }
-
-        // Also check if referee just in case
-        const altanRef = await db.referee.findFirst({
-            where: { firstName: { contains: "Altan", mode: "insensitive" }, lastName: { contains: "Renksoy", mode: "insensitive" } },
-            include: { regions: true }
-        });
-        if (altanRef && !altanRef.regions.some((r: any) => r.name === "Anadolu")) {
-            const anadolu = await db.region.findUnique({ where: { name: "Anadolu" } });
-            if (anadolu) {
-                await db.referee.update({
-                    where: { id: altanRef.id },
-                    data: { regions: { set: [{ id: anadolu.id }] } }
-                });
-                console.log("[FIX] Updated Altan Renksoy's (Referee) region to Anadolu.");
-            }
-        }
-    } catch (e) {
-        console.error("Failed to run Altan Renksoy fix:", e);
-    }
-    // --- END TEMPORARY FIX ---
+async function RecentOrdersSection() {
+    const latestOrders = await db.order.findMany({
+        take: 5,
+        orderBy: { createdAt: "desc" },
+        include: { user: true }
+    });
 
     return (
-        <div className="pb-24">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-12 gap-4">
+        <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+                <h2 className="text-xl font-black text-zinc-900 dark:text-white uppercase tracking-tight italic">Son Siparişler</h2>
+                <Link href="/admin/orders" className="text-sm font-bold text-blue-600 hover:text-blue-700 uppercase tracking-wider">Tümünü Gör</Link>
+            </div>
+            <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                    <thead>
+                        <tr className="bg-zinc-50 dark:bg-zinc-800/50">
+                            <th className="px-6 py-4 text-xs font-black text-zinc-500 uppercase tracking-widest">Sipariş No</th>
+                            <th className="px-6 py-4 text-xs font-black text-zinc-500 uppercase tracking-widest">Müşteri</th>
+                            <th className="px-6 py-4 text-xs font-black text-zinc-500 uppercase tracking-widest">Tutar</th>
+                            <th className="px-6 py-4 text-xs font-black text-zinc-500 uppercase tracking-widest">Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                        {latestOrders.map((order) => (
+                            <tr key={order.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
+                                <td className="px-6 py-4 font-bold text-zinc-900 dark:text-white">#{order.id}</td>
+                                <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400">{order.user?.email || "Misafir"}</td>
+                                <td className="px-6 py-4 font-bold text-zinc-900 dark:text-white">₺{order.totalAmount.toLocaleString()}</td>
+                                <td className="px-6 py-4">
+                                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                                        order.status === "PAID" ? "bg-emerald-100 text-emerald-700" :
+                                        order.status === "PENDING" ? "bg-amber-100 text-amber-700" :
+                                        "bg-red-100 text-red-700"
+                                    }`}>
+                                        {order.status}
+                                    </span>
+                                </td>
+                            </tr>
+                        ))}
+                        {latestOrders.length === 0 && (
+                            <tr>
+                                <td colSpan={4} className="px-6 py-12 text-center text-zinc-500 font-medium">Henüz sipariş bulunmuyor.</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
+import Link from "next/link";
+
+export default async function AdminDashboard() {
+    await verifySession();
+
+    return (
+        <div className="space-y-12 pb-24">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tighter uppercase italic">
-                        Yönetici Paneli
+                    <h1 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white tracking-tighter uppercase italic">
+                        Mağaza Özeti
                     </h1>
-                    <div className="flex items-center gap-2 mt-1">
-                        <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse" />
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.2em]">Sistem Durumu: Çevrimiçi</p>
+                    <div className="flex items-center gap-2 mt-2">
+                        <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
+                        <p className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em]">Veriler gerçek zamanlı güncelleniyor</p>
                     </div>
+                </div>
+                <div className="flex gap-3">
+                    <Link href="/admin/products/new" className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-6 py-3 rounded-2xl font-bold text-sm uppercase tracking-wider hover:scale-[1.02] transition-transform shadow-lg">
+                        Yeni Ürün Ekle
+                    </Link>
                 </div>
             </div>
 
-            <Suspense fallback={<SectionLoading height="h-32 md:h-24" />}>
+            <Suspense fallback={<div className="grid grid-cols-4 gap-6 animate-pulse"><div className="h-32 bg-zinc-100 rounded-3xl"/><div className="h-32 bg-zinc-100 rounded-3xl"/><div className="h-32 bg-zinc-100 rounded-3xl"/><div className="h-32 bg-zinc-100 rounded-3xl"/></div>}>
                 <StatsSection />
             </Suspense>
 
-            {/* Hub Section */}
-            <AdminHub role={role} />
-
-            {/* Charts Section */}
-            <div className="mt-16">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-zinc-900 dark:bg-white rounded-xl flex items-center justify-center shadow-lg">
-                        <BarChart3 className="w-5 h-5 text-white dark:text-zinc-900" />
-                    </div>
-                    <div>
-                        <h2 className="text-xl font-black text-zinc-900 dark:text-white uppercase italic tracking-tight">Performans Verileri</h2>
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase italic">İstatistiksel Görselleştirme</p>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
+                <div className="lg:col-span-2">
+                    <Suspense fallback={<div className="h-96 bg-zinc-100 rounded-3xl animate-pulse"/>}>
+                        <RecentOrdersSection />
+                    </Suspense>
+                </div>
+                <div className="space-y-8">
+                    <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 rounded-3xl text-white shadow-xl shadow-blue-500/20 relative overflow-hidden group">
+                        <div className="relative z-10">
+                            <h3 className="text-2xl font-black uppercase italic tracking-tight mb-2">Hızlı Erişim</h3>
+                            <p className="text-blue-100 text-sm mb-6 font-medium">Kategori ve stok yönetimini buradan hızlıca yapabilirsiniz.</p>
+                            <div className="grid grid-cols-2 gap-3">
+                                <Link href="/admin/categories" className="bg-white/10 hover:bg-white/20 p-4 rounded-2xl backdrop-blur-md transition-colors text-center font-bold text-xs uppercase tracking-widest">Kategoriler</Link>
+                                <Link href="/admin/users" className="bg-white/10 hover:bg-white/20 p-4 rounded-2xl backdrop-blur-md transition-colors text-center font-bold text-xs uppercase tracking-widest">Kullanıcılar</Link>
+                            </div>
+                        </div>
+                        <ShoppingBag className="absolute -right-8 -bottom-8 w-48 h-48 text-white/10 -rotate-12 group-hover:scale-110 transition-transform duration-500" />
                     </div>
                 </div>
-                <Suspense fallback={<SectionLoading height="h-[400px] !rounded-[2.5rem]" />}>
-                    <ChartsSection />
-                </Suspense>
-            </div>
-
-            <div className="mt-16">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center">
-                        <Users className="w-5 h-5 text-zinc-500" />
-                    </div>
-                    <div>
-                        <h2 className="text-xl font-black text-zinc-900 dark:text-white uppercase italic tracking-tight">Son Kayıtlar</h2>
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase italic">Yeni katılan üyeler</p>
-                    </div>
-                </div>
-                <Suspense fallback={<SectionLoading height="h-64" />}>
-                    <RegistrationsSection />
-                </Suspense>
             </div>
         </div>
     );

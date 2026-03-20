@@ -61,7 +61,7 @@ export function RecentRegistrations({ latestRegistrations }: RecentRegistrations
                                         className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer group"
                                     >
                                         <td className="px-6 py-3 font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-red-600 transition-colors">
-                                            {user.firstName} {user.lastName}
+                                            {`${user.firstName} ${user.lastName}`.toLocaleUpperCase('tr-TR')}
                                         </td>
                                         <td className="px-6 py-3">
                                             <span className={`px-2 py-1 rounded text-xs font-semibold ${user.officialType === 'REFEREE'
@@ -122,7 +122,7 @@ export function RecentRegistrations({ latestRegistrations }: RecentRegistrations
                             >
                                 <div className="flex justify-between items-start">
                                     <div className="font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-red-600 transition-colors">
-                                        {user.firstName} {user.lastName}
+                                        {`${user.firstName} ${user.lastName}`.toLocaleUpperCase('tr-TR')}
                                     </div>
                                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${user.officialType === 'REFEREE'
                                         ? 'bg-red-100 text-red-700'

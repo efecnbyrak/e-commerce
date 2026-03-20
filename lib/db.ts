@@ -1,13 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
-
-export const db =
-  globalForPrisma.prisma ||
-  new PrismaClient({
+const createPrismaClient = () => {
+  return new PrismaClient({
     log: process.env.NODE_ENV === "production" ? [] : ["query"],
   });
+};
+
+const globalForPrisma = global as unknown as { prisma: ReturnType<typeof createPrismaClient> };
+
+export const db = globalForPrisma.prisma || createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
-
-// 10/10 Tip: Prisma handles connections lazily, so this won't throw until the first query.

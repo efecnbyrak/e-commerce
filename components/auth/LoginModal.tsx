@@ -1,10 +1,11 @@
 "use client";
 
-import { useActionState, useEffect, useState, useTransition } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/components/ui/modal";
-import { login, verify2FA, requestPasswordReset, ActionState } from "@/app/actions/auth";
+import { login, verify2FA, ActionState } from "@/app/actions/auth";
 import { Loader2, User, Lock, ChevronRight, X, AlertCircle, CheckCircle2, ShieldQuestion } from "lucide-react";
+import Link from "next/link";
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -24,11 +25,6 @@ export function LoginModal({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
     const [verifyCode, setVerifyCode] = useState("");
     const [verifying, setVerifying] = useState(false);
     const [verifyError, setVerifyError] = useState("");
-
-    const [showReset, setShowReset] = useState(false);
-    const [resetError, setResetError] = useState<string | null>(null);
-    const [resetSuccess, setResetSuccess] = useState<string | null>(null);
-    const [isResetPending, startTransition] = useTransition();
 
     // Derived state for showing verification step
     const showVerify = loginState.requireVerification && loginState.userId;
@@ -59,89 +55,15 @@ export function LoginModal({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
         }
     };
 
-    const handleResetRequest = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setResetError(null);
-        setResetSuccess(null);
-
-        const formData = new FormData(e.currentTarget as HTMLFormElement);
-        startTransition(async () => {
-            const res = await requestPasswordReset({ success: false }, formData);
-            if (res.success) {
-                setResetSuccess(res.message || "E-posta gönderildi.");
-            } else {
-                setResetError(res.error || "Bir hata oluştu.");
-            }
-        });
-    };
-
     return (
         <Modal
             isOpen={isOpen}
             onClose={() => {
                 onClose();
-                setShowReset(false);
-                setResetSuccess(null);
-                setResetError(null);
             }}
-            title={showReset ? "Şifre Sıfırlama" : (showVerify ? "Doğrulama Kodu" : "Giriş Yap")}
+            title={showVerify ? "Doğrulama Kodu" : "Giriş Yap"}
         >
-            {showReset ? (
-                <div className="space-y-6">
-                    <div className="text-center mb-8">
-                        <div className="w-16 h-16 bg-red-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                            <ShieldQuestion className="w-8 h-8 text-red-600" />
-                        </div>
-                        <h2 className="text-2xl font-black uppercase tracking-tighter">Şifre Sıfırlama</h2>
-                        <p className="text-zinc-500 text-xs mt-1">Lütfen E-posta adresinizi girin.</p>
-                    </div>
-
-                    {resetSuccess ? (
-                        <div className="bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/50 p-4 rounded-xl flex items-center gap-3 text-emerald-600 text-xs font-bold animate-in slide-in-from-top-2">
-                            <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-                            {resetSuccess}
-                        </div>
-                    ) : (
-                        <form onSubmit={handleResetRequest} className="space-y-4">
-                            {resetError && (
-                                <div className="bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/50 p-4 rounded-xl flex items-center gap-3 text-red-600 text-xs font-bold animate-in slide-in-from-top-2">
-                                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                                    {resetError}
-                                </div>
-                            )}
-
-                            <div className="space-y-1">
-                                <label className="text-[10px] font-black text-zinc-600 dark:text-zinc-400 uppercase tracking-widest ml-1">Kullanıcı Bilgisi</label>
-                                <div className="relative">
-                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
-                                    <input
-                                        name="identifier"
-                                        required
-                                        className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 rounded-2xl border-2 border-zinc-200 dark:border-transparent focus:border-red-600 outline-none transition-all text-sm font-bold placeholder:text-zinc-400 text-zinc-900 dark:text-white"
-                                        placeholder="E-posta"
-                                    />
-                                </div>
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={isResetPending}
-                                className="w-full bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:opacity-90 transition-all shadow-xl disabled:opacity-50"
-                            >
-                                {isResetPending ? "GÖNDERİLİYOR..." : "SIFIRLAMA BAĞLANTISI GÖNDER"}
-                            </button>
-                        </form>
-                    )}
-
-                    <button
-                        type="button"
-                        onClick={() => setShowReset(false)}
-                        className="w-full text-center text-xs font-bold text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                    >
-                        Giriş Sayfasına Dön
-                    </button>
-                </div>
-            ) : !showVerify ? (
+            {!showVerify ? (
                 <div className="space-y-6">
                     <div className="text-center mb-4">
                         <div className="w-16 h-16 bg-red-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -223,13 +145,13 @@ export function LoginModal({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
                             >
                                 Hesabınız yok mu? <span className="text-red-600">Hemen Kayıt Ol</span>
                             </button>
-                            <button
-                                type="button"
-                                onClick={() => setShowReset(true)}
+                            <Link
+                                href="/forgot-password"
+                                onClick={onClose}
                                 className="text-zinc-400 hover:text-red-600 text-[10px] font-black uppercase tracking-wider transition-colors"
                             >
                                 Şifremi Unuttum
-                            </button>
+                            </Link>
                         </div>
                     </form>
                 </div>

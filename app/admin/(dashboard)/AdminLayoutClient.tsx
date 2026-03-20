@@ -1,11 +1,12 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logout } from "@/app/actions/auth";
-import { Users, Calendar, LayoutDashboard, Settings, LogOut, Menu, X, Briefcase, History as LucideHistory, Megaphone, ClipboardList, CheckCircle, User, PlayCircle, BookOpen, Trophy } from "lucide-react";
+import { Users, ShoppingBag, LayoutDashboard, Settings, LogOut, Menu, X, Package, ListTree, User, Bell } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { siteConfig } from "@/config/site";
 
 interface AdminLayoutClientProps {
     children: React.ReactNode;
@@ -24,13 +25,22 @@ export function AdminLayoutClient({ children, role, imageUrl }: AdminLayoutClien
         return pathname.startsWith(path);
     };
 
+    const navItems = [
+        { title: "Genel Bakış", href: "/admin", icon: LayoutDashboard },
+        { title: "Ürünler", href: "/admin/products", icon: Package },
+        { title: "Kategoriler", href: "/admin/categories", icon: ListTree },
+        { title: "Siparişler", href: "/admin/orders", icon: ShoppingBag },
+        { title: "Kullanıcılar", href: "/admin/users", icon: Users },
+        { title: "Ayarlar", href: "/admin/settings", icon: Settings },
+    ];
+
     return (
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex flex-col md:flex-row">
             {/* Mobile Header */}
             <div className="md:hidden bg-zinc-900 text-white border-b border-zinc-800 p-4 flex items-center justify-between sticky top-0 z-50 h-16 shadow-lg">
                 <div className="flex items-center gap-2">
-                    <Image src={imageUrl || "/hakem/defaultHakem.png"} alt="BKS Logo" width={32} height={32} className="rounded-full object-cover aspect-square" priority />
-                    <span className="font-bold text-lg tracking-tight">BKS Panel</span>
+                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold">E</div>
+                    <span className="font-bold text-lg tracking-tight">{siteConfig.name}</span>
                 </div>
                 <button
                     onClick={() => setIsOpen(!isOpen)}
@@ -47,190 +57,49 @@ export function AdminLayoutClient({ children, role, imageUrl }: AdminLayoutClien
                 md:translate-x-0 md:block shadow-xl md:shadow-none
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
-                <div className="flex flex-col h-full p-4">
+                <div className="flex flex-col h-full p-6">
                     {/* Desktop Logo */}
-                    <div className="hidden md:flex items-center gap-2 mb-6 h-8">
-                        <Image src={imageUrl || "/hakem/defaultHakem.png"} alt="BKS Logo" width={32} height={32} className="rounded-full object-cover aspect-square" priority />
-                        <span className="font-bold text-xl tracking-tight">BKS Panel</span>
+                    <div className="hidden md:flex items-center gap-3 mb-10">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-bold text-xl shadow-lg ring-4 ring-blue-900/20">E</div>
+                        <span className="font-bold text-2xl tracking-tight">{siteConfig.name}</span>
                     </div>
 
-                    <nav className="flex-1 space-y-1 overflow-y-auto pr-2 modern-scrollbar pb-10">
-                        <Link
-                            href="/admin"
-                            onClick={() => setIsOpen(false)}
-                            prefetch={false}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[16px] ${isActive("/admin")
-                                ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                }`}
-                        >
-                            <LayoutDashboard className="w-4 h-4" />
-                            Genel Bakış
-                        </Link>
-
-                        <Link
-                            href="/admin/profile"
-                            onClick={() => setIsOpen(false)}
-                            prefetch={false}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[16px] ${isActive("/admin/profile")
-                                ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                }`}
-                        >
-                            <User className="w-4 h-4" />
-                            Profilim & Ayarlar
-                        </Link>
-
-                        <div className="pt-3 pb-1 px-4">
+                    <nav className="flex-1 space-y-2 overflow-y-auto pr-2 modern-scrollbar">
+                        <div className="pb-2 px-2">
                             <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Yönetim</span>
                         </div>
-
-                        <Link
-                            href="/admin/referees"
-                            onClick={() => setIsOpen(false)}
-                            prefetch={false}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[16px] ${isActive("/admin/referees")
-                                ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                }`}
-                        >
-                            <Users className="w-4 h-4" />
-                            Hakemler
-                        </Link>
-
-                        <Link
-                            href="/admin/officials"
-                            onClick={() => setIsOpen(false)}
-                            prefetch={false}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[16px] ${isActive("/admin/officials")
-                                ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                }`}
-                        >
-                            <Briefcase className="w-4 h-4" />
-                            Genel Görevliler
-                        </Link>
-
-                        <Link
-                            href="/admin/all-availabilities"
-                            onClick={() => setIsOpen(false)}
-                            prefetch={false}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[16px] ${isActive("/admin/all-availabilities")
-                                ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                }`}
-                        >
-                            <Calendar className="w-4 h-4" />
-                            Uygunluklar
-                        </Link>
-
-                        {(role === "OBSERVER" || role === "ADMIN") && (
+                        {navItems.map((item) => (
                             <Link
-                                href="/referee/reports/new"
+                                key={item.href}
+                                href={item.href}
                                 onClick={() => setIsOpen(false)}
                                 prefetch={false}
-                                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[16px] ${pathname === "/referee/reports/new"
-                                    ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${isActive(item.href)
+                                    ? "bg-blue-600 text-white shadow-lg shadow-blue-900/20 scale-[1.02]"
                                     : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
                                     }`}
                             >
-                                <ClipboardList className="w-4 h-4 text-orange-400" />
-                                Rapor Girişi
+                                <item.icon className={`w-5 h-5 ${isActive(item.href) ? "text-white" : "text-zinc-500"}`} />
+                                {item.title}
                             </Link>
-                        )}
-
-                        <Link
-                            href="/admin/observer-reports"
-                            onClick={() => setIsOpen(false)}
-                            prefetch={false}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[16px] ${isActive("/admin/observer-reports")
-                                ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                }`}
-                        >
-                            <ClipboardList className="w-4 h-4 text-orange-400" />
-                            Gözlemci Raporları
-                        </Link>
-
-                        <Link
-                            href="/admin/announcements"
-                            onClick={() => setIsOpen(false)}
-                            prefetch={false}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[16px] ${isActive("/admin/announcements")
-                                ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                }`}
-                        >
-                            <Megaphone className="w-4 h-4" />
-                            Duyurular
-                        </Link>
-
-                        <Link
-                            href="/admin/approvals"
-                            onClick={() => setIsOpen(false)}
-                            prefetch={false}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[16px] ${isActive("/admin/approvals")
-                                ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                }`}
-                        >
-                            <CheckCircle className="w-4 h-4" />
-                            Onaylar
-                        </Link>
-
-                        <Link
-                            href="/admin/bag"
-                            onClick={() => setIsOpen(false)}
-                            prefetch={false}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[16px] ${isActive("/admin/bag")
-                                ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                }`}
-                        >
-                            <Briefcase className="w-4 h-4 text-red-500" />
-                            Hakem Çantası
-                        </Link>
-
-
-                        <div className="pt-3 pb-1 px-4">
-                            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Sistem</span>
-                        </div>
-
-                        {role === "SUPER_ADMIN" && (
-                            <Link
-                                href="/admin/logs"
-                                onClick={() => setIsOpen(false)}
-                                prefetch={false}
-                                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[15px] ${isActive("/admin/logs")
-                                    ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                    : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                    }`}
-                            >
-                                <LucideHistory className="w-4 h-4" />
-                                İşlem Günlükleri
-                            </Link>
-                        )}
-
-                        <Link
-                            href="/admin/settings"
-                            onClick={() => setIsOpen(false)}
-                            prefetch={false}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all text-[15px] ${isActive("/admin/settings")
-                                ? "bg-red-700 text-white shadow-md border-l-4 border-red-900"
-                                : "hover:bg-zinc-800/50 text-zinc-400 hover:text-white"
-                                }`}
-                        >
-                            <Settings className="w-4 h-4" />
-                            Ayarlar
-                        </Link>
+                        ))}
                     </nav>
 
-                    <div className="mt-auto pt-2 border-t border-zinc-800 shrink-0 px-2 lg:px-0">
+                    <div className="mt-auto pt-6 border-t border-zinc-800">
+                        <div className="flex items-center gap-3 px-4 py-4 mb-4 rounded-xl bg-zinc-800/30">
+                            <div className="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center overflow-hidden">
+                                {imageUrl ? <Image src={imageUrl} alt="Profile" width={40} height={40} /> : <User className="w-6 h-6 text-zinc-400" />}
+                            </div>
+                            <div className="flex flex-col min-w-0">
+                                <span className="text-sm font-semibold truncate">Yönetici</span>
+                                <span className="text-xs text-zinc-500 truncate">{role}</span>
+                            </div>
+                        </div>
                         <button
                             onClick={async () => await logout()}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-zinc-800 text-red-500 transition-colors text-[15px]"
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-800 text-red-500 font-medium transition-all group"
                         >
-                            <LogOut className="w-4 h-4" />
+                            <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                             Çıkış Yap
                         </button>
                     </div>
@@ -239,21 +108,19 @@ export function AdminLayoutClient({ children, role, imageUrl }: AdminLayoutClien
 
             {/* Overlay for mobile */}
             {isOpen && (
-                <div className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm" onClick={() => setIsOpen(false)} />
+                <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsOpen(false)} />
             )}
 
             {/* Main Content */}
-            <main className="flex-1 md:pl-80 min-h-screen flex flex-col relative">
-                <div className="flex-1 p-4 sm:p-6 md:p-10 lg:p-16 xl:p-24 pt-24 md:pt-16 w-full transition-all duration-500">
-                    <div className="max-w-[1400px] mx-auto w-full">
-                        {children}
-                    </div>
+            <main className="flex-1 md:pl-72 min-h-screen flex flex-col relative min-w-0 overflow-x-hidden">
+                <div className="flex-1 p-6 sm:p-8 md:p-12 lg:p-16 w-full max-w-[1600px] mx-auto transition-all duration-500 overflow-y-auto">
+                    {children}
                 </div>
 
                 {/* Dashboard Footer */}
-                <footer className="p-6 border-t border-zinc-200 dark:border-zinc-800 text-center text-zinc-500 text-xs mt-auto">
-                    <div className="flex items-center justify-center gap-4 italic font-bold">
-                        <span>© 2026 Basketbol Koordinasyon Sistemi - Tüm Hakları Saklıdır</span>
+                <footer className="p-8 border-t border-zinc-200 dark:border-zinc-800 text-center text-zinc-500 text-sm mt-auto">
+                    <div className="flex items-center justify-center gap-4 italic font-medium opacity-60">
+                        <span>© 2026 {siteConfig.name} - Tüm Hakları Saklıdır</span>
                     </div>
                 </footer>
             </main>

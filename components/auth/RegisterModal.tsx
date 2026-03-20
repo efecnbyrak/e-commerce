@@ -2,7 +2,7 @@ import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { Modal } from "@/components/ui/modal";
 import { register, ActionState } from "@/app/actions/auth";
-import { TURKEY_CITIES, ISTANBUL_DISTRICTS } from "@/lib/constants";
+import { TURKEY_CITIES, ISTANBUL_DISTRICTS, SECURITY_QUESTIONS } from "@/lib/constants";
 import { getPasswordStrength, filterOnlyLetters, validateIBAN } from "@/lib/validation-utils";
 import { formatIBAN } from "@/lib/format-utils";
 
@@ -30,6 +30,8 @@ export function RegisterModal({ isOpen, onClose, onSwitchToLogin }: RegisterModa
     const [district, setDistrict] = useState("");
     const [details, setDetails] = useState("");
     const [password, setPassword] = useState("");
+    const [securityQuestion, setSecurityQuestion] = useState("");
+    const [securityAnswer, setSecurityAnswer] = useState("");
     const [strengthData, setStrengthData] = useState(getPasswordStrength(""));
 
     // Derived address string for the hidden input
@@ -261,6 +263,39 @@ export function RegisterModal({ isOpen, onClose, onSwitchToLogin }: RegisterModa
                     />
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
+                            Güvenlik Sorusu
+                        </label>
+                        <select
+                            name="securityQuestion"
+                            required
+                            value={securityQuestion}
+                            onChange={(e) => setSecurityQuestion(e.target.value)}
+                            className={`w-full px-4 py-3 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all appearance-none cursor-pointer ${state.errors?.securityQuestion ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
+                        >
+                            <option value="" disabled>Soru Seçiniz</option>
+                            {SECURITY_QUESTIONS.map(q => <option key={q} value={q}>{q}</option>)}
+                        </select>
+                        {state.errors?.securityQuestion && <p className="text-red-500 text-[10px] font-bold mt-1 ml-1 uppercase">{state.errors.securityQuestion}</p>}
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
+                            Güvenlik Cevabı
+                        </label>
+                        <input
+                            type="text"
+                            name="securityAnswer"
+                            required
+                            value={securityAnswer}
+                            onChange={(e) => setSecurityAnswer(e.target.value)}
+                            className={`w-full px-4 py-3 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all ${state.errors?.securityAnswer ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
+                            placeholder="Cevabınız"
+                        />
+                        {state.errors?.securityAnswer && <p className="text-red-500 text-[10px] font-bold mt-1 ml-1 uppercase">{state.errors.securityAnswer}</p>}
+                    </div>
+                </div>
 
                 <input type="hidden" name="address" value={fullAddress} />
                 <input type="hidden" name="selectedCity" value={city} />

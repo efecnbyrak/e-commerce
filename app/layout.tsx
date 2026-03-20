@@ -15,14 +15,19 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Basketbol Koordinasyon Sistemi",
-    template: "%s | BKS"
+    default: "E-Shop | Premium Alışveriş Deneyimi",
+    template: "%s | E-Shop"
   },
-  description: "Basketbol Hakem ve Genel Görevli Koordinasyon ve Atama Platformu",
-  keywords: ["basketbol", "hakem", "görevli", "tbf", "koordinasyon", "atama", "BKS"],
-  authors: [{ name: "BKS Team" }],
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+  description: "Modern ve premium e-ticaret platformu. En kaliteli ürünler, en uygun fiyatlarla.",
+  keywords: ["e-ticaret", "alışveriş", "ayakkabı", "giyim", "elektronik", "premium"],
+  authors: [{ name: "E-Shop Team" }],
   robots: "index, follow",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 import { Toaster } from "react-hot-toast";

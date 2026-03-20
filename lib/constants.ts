@@ -36,3 +36,11 @@ export const CLASSIFICATIONS = [
     { id: "ADAY_HAKEM", label: "Aday Hakem" },
     { id: "BELIRLENMEMIS", label: "Belirlenmemiş" }
 ];
+
+export const SECURITY_QUESTIONS = [
+    "En sevdiğiniz meyve nedir?",
+    "En sevdiğiniz yemek nedir?",
+    "En sevdiğiniz film nedir?",
+    "En sevdiğiniz kitap nedir?",
+    "En sevdiğiniz spor takımı nedir?"
+];

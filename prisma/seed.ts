@@ -74,6 +74,26 @@ async function main() {
 
     console.log(`✅ Fixed Admin Users: ${adminUsername} and "admin"`);
 
+    // Fix Talat Mustafa Özdemir phone number
+    const talatReferees = await prisma.referee.findMany({
+        where: {
+            OR: [
+                { firstName: { contains: "TALAT", mode: "insensitive" } },
+                { lastName: { contains: "ÖZDEMİR", mode: "insensitive" } }
+            ]
+        }
+    });
+
+    for (const r of talatReferees) {
+        if (r.firstName && r.firstName.toUpperCase().includes("TALAT")) {
+            await prisma.referee.update({
+                where: { id: r.id },
+                data: { phone: "535 624 27 86" }
+            });
+            console.log(`✅ Updated phone for ${r.firstName} ${r.lastName} to 535 624 27 86`);
+        }
+    }
+
     console.log('🎉 Seeding completed!');
 }
 

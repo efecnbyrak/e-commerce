@@ -1,10 +1,9 @@
 import { z } from "zod";
-import { isValidTurkishIBAN } from "@/lib/iban-validator";
 
 export const LoginSchema = z.object({
-    identifier: z.string().min(1, "E-posta veya Kullanıcı Adı gereklidir."),
+    email: z.string().email("Geçerli bir e-posta adresi giriniz."),
     password: z.string().min(1, "Şifre gereklidir."),
-    adminLogin: z.boolean().optional(),
+    rememberMe: z.boolean().optional(),
 });
 
 export const RegisterSchema = z.object({
@@ -15,34 +14,31 @@ export const RegisterSchema = z.object({
         .min(2, "Soyad en az 2 karakter olmalıdır.")
         .regex(/^[a-zA-ZğüşıöçĞÜŞİÖÇ\s]+$/, "Soyad sadece harflerden oluşmalıdır."),
     email: z.string().email("Geçerli bir e-posta adresi giriniz."),
-    phone: z.string().min(10, "Geçerli bir telefon numarası giriniz."),
     password: z.string()
         .min(8, "Şifre en az 8 karakter olmalıdır.")
         .regex(/[a-z]/, "Şifre en az bir küçük harf içermelidir.")
         .regex(/[A-Z]/, "Şifre en az bir büyük harf içermelidir.")
         .regex(/[0-9]/, "Şifre en az bir rakam içermelidir."),
-    roleType: z.string().min(1, "Görev seçimi gereklidir."),
-    job: z.string().optional(),
-    address: z.string().optional(),
-    city: z.string().optional(),
-    iban: z.string()
-        .optional()
-        .refine((val) => {
-            if (!val) return true; // Optional during registration
-            return val.length === 26 && isValidTurkishIBAN(val);
-        }, "Geçersiz IBAN formatı (TR ile başlayan 26 karakter olmalıdır)."),
-    kvkk: z.boolean().refine(val => val === true, "KVKK onayı zorunludur."),
-});
-
-export const PasswordResetRequestSchema = z.object({
-    identifier: z.string().min(1, "E-posta Adresi gereklidir.").email("Geçerli bir E-posta adresi giriniz."),
-});
-
-export const PasswordResetSchema = z.object({
-    token: z.string().min(1, "Geçersiz token."),
-    password: z.string().min(6, "Şifre en az 6 karakter olmalıdır."),
     passwordConfirm: z.string()
 }).refine((data) => data.password === data.passwordConfirm, {
     message: "Şifreler eşleşmiyor.",
     path: ["passwordConfirm"],
+});
+
+export const ProductSchema = z.object({
+    name: z.string().min(3, "Ürün adı en az 3 karakter olmalıdır."),
+    description: z.string().min(10, "Açıklama en az 10 karakter olmalıdır."),
+    price: z.coerce.number().positive("Fiyat pozitif bir sayı olmalıdır."),
+    salePrice: z.coerce.number().positive().optional(),
+    stock: z.coerce.number().int().nonnegative("Stok negatif olamaz."),
+    categoryId: z.coerce.number().int().positive("Geçerli bir kategori seçiniz."),
+    images: z.array(z.string().url()).min(1, "En az bir resim gereklidir."),
+    isFeatured: z.boolean().default(false),
+    isActive: z.boolean().default(true),
+});
+
+export const CategorySchema = z.object({
+    name: z.string().min(2, "Kategori adı en az 2 karakter olmalıdır."),
+    description: z.string().optional(),
+    parentId: z.coerce.number().int().positive().optional().nullable(),
 });
