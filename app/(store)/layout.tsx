@@ -158,20 +158,20 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
                         <div>
                             <h4 className="font-bold text-sm text-foreground mb-6">Kurumsal</h4>
                             <ul className="space-y-4 text-sm font-medium text-muted-foreground">
-                                <li><Link href="/" className="hover:text-primary transition-colors">Hakkımızda</Link></li>
-                                <li><Link href="/" className="hover:text-primary transition-colors">İletişim</Link></li>
-                                <li><Link href="/" className="hover:text-primary transition-colors">Mağazalarımız</Link></li>
-                                <li><Link href="/" className="hover:text-primary transition-colors">Kariyer</Link></li>
+                                <li><Link href="/info/hakkimizda" className="hover:text-primary transition-colors">Hakkımızda</Link></li>
+                                <li><Link href="/info/iletisim" className="hover:text-primary transition-colors">İletişim</Link></li>
+                                <li><Link href="/info/magazalarimiz" className="hover:text-primary transition-colors">Mağazalarımız</Link></li>
+                                <li><Link href="/info/kariyer" className="hover:text-primary transition-colors">Kariyer</Link></li>
                             </ul>
                         </div>
 
                         <div>
                             <h4 className="font-bold text-sm text-foreground mb-6">Yardım</h4>
                             <ul className="space-y-4 text-sm font-medium text-muted-foreground">
-                                <li><Link href="/" className="hover:text-primary transition-colors">Sıkça Sorulan Sorular</Link></li>
-                                <li><Link href="/" className="hover:text-primary transition-colors">İade ve Değişim</Link></li>
-                                <li><Link href="/" className="hover:text-primary transition-colors">Teslimat Bilgileri</Link></li>
-                                <li><Link href="/" className="hover:text-primary transition-colors">Ödeme Seçenekleri</Link></li>
+                                <li><Link href="/info/sss" className="hover:text-primary transition-colors">Sıkça Sorulan Sorular</Link></li>
+                                <li><Link href="/info/iade-ve-degisim" className="hover:text-primary transition-colors">İade ve Değişim</Link></li>
+                                <li><Link href="/info/teslimat-bilgileri" className="hover:text-primary transition-colors">Teslimat Bilgileri</Link></li>
+                                <li><Link href="/info/odeme-secenekleri" className="hover:text-primary transition-colors">Ödeme Seçenekleri</Link></li>
                             </ul>
                         </div>
 

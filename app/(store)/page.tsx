@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ShoppingBag, Star, Zap, ShieldCheck, Truck, Headphones } from "lucide-react";
+import { ArrowRight, ShoppingBag, Star, Zap, ShieldCheck, Truck, Headphones, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -109,9 +109,9 @@ export default async function StoreHomePage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {featuredProducts.map((product) => (
-                        <Link key={product.id} href={`/products/${product.slug}`} className="group block h-full">
-                            <Card className="h-full border-none shadow-none group-hover:shadow-none bg-transparent">
-                                <div className="relative aspect-[4/5] rounded-card overflow-hidden bg-zinc-100 border border-border-subtle shadow-sm group-hover:shadow-xl transition-all duration-500">
+                        <Link key={product.id} href={`/products/${product.slug}`} className="group h-full">
+                            <Card className="h-full bg-surface border border-border-subtle rounded-[2rem] p-4 group-hover:shadow-shadow-card-hover group-hover:-translate-y-2 transition-all duration-500 overflow-hidden relative">
+                                <div className="relative aspect-[4/5] rounded-[1.5rem] overflow-hidden bg-zinc-100 dark:bg-zinc-900 shadow-inner group-hover:shadow-none transition-all duration-500">
                                     {product.images && (
                                         <Image 
                                             src={JSON.parse(product.images)[0] || "/placeholder.png"} 
@@ -120,31 +120,36 @@ export default async function StoreHomePage() {
                                             className="object-cover group-hover:scale-110 transition-transform duration-700"
                                         />
                                     )}
-                                    <div className="absolute top-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                                        <Button variant="primary" size="md" className="h-12 w-12 p-0 rounded-xl shadow-xl">
+                                    <div className="absolute top-4 right-4 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500">
+                                        <Button variant="primary" size="md" className="h-12 w-12 p-0 rounded-xl shadow-2xl">
                                             <ShoppingBag className="w-5 h-5" />
                                         </Button>
                                     </div>
                                     {product.salePrice && (
                                         <div className="absolute top-4 left-4">
-                                            <Badge variant="danger">İNDİRİM</Badge>
+                                            <Badge variant="danger" className="rounded-lg px-3 py-1 text-[10px] font-bold shadow-lg">İNDİRİM</Badge>
                                         </div>
                                     )}
                                 </div>
-                                <div className="mt-6 space-y-2">
+                                <div className="mt-6 px-2 space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-xs font-bold text-primary uppercase tracking-wider">{product.category.name}</span>
-                                        <div className="flex items-center gap-1">
+                                        <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">{product.category.name}</span>
+                                        <div className="flex items-center gap-1.5 px-2 py-1 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
                                             <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                                            <span className="text-xs font-bold text-muted-foreground">4.9</span>
+                                            <span className="text-[10px] font-bold text-muted-foreground">4.9</span>
                                         </div>
                                     </div>
                                     <h3 className="font-bold text-foreground text-lg truncate group-hover:text-primary transition-colors tracking-tight">{product.name}</h3>
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-xl font-bold text-foreground">₺{product.price.toLocaleString()}</span>
-                                        {product.salePrice && (
-                                            <span className="text-sm font-medium text-muted-foreground line-through">₺{product.salePrice.toLocaleString()}</span>
-                                        )}
+                                    <div className="flex items-baseline justify-between pt-2 border-t border-border-subtle/50">
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-xl font-bold text-foreground">₺{product.price.toLocaleString()}</span>
+                                            {product.salePrice && (
+                                                <span className="text-xs font-medium text-muted-foreground line-through">₺{product.salePrice.toLocaleString()}</span>
+                                            )}
+                                        </div>
+                                        <div className="w-8 h-8 rounded-full border border-border-subtle flex items-center justify-center text-muted-foreground group-hover:border-primary group-hover:text-primary transition-colors">
+                                            <ChevronRight className="w-4 h-4" />
+                                        </div>
                                     </div>
                                 </div>
                             </Card>
