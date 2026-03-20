@@ -6,6 +6,7 @@ import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { WishlistButton } from "@/components/wishlist/WishlistButton";
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
@@ -132,9 +133,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                         <div className="flex-1">
                             <AddToCartButton product={product} />
                         </div>
-                        <Button variant="outline" className="h-20 rounded-2xl px-8 border-border-subtle text-foreground bg-surface hover:bg-muted/50">
-                            <Heart className="w-6 h-6" />
-                        </Button>
+                        <WishlistButton productId={product.id} variant="full" />
                     </div>
 
                     {/* Features List - Premium Cards */}

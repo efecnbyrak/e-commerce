@@ -10,6 +10,8 @@ import { logout } from "@/app/actions/auth";
 
 import { Navbar } from "@/components/layout/Navbar";
 
+import { SearchBar } from "@/components/layout/SearchBar";
+
 interface StoreLayoutProps {
     children: React.ReactNode;
 }
@@ -36,17 +38,8 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
                             <span className="font-bold text-xl tracking-tight text-foreground">{siteConfig.name}</span>
                         </Link>
 
-                        {/* Search Bar - Centered & Modern */}
-                        <div className="flex-1 max-w-2xl hidden md:block">
-                            <div className="relative group">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                                <input 
-                                    type="text" 
-                                    placeholder="Ürün, kategori veya marka ara..." 
-                                    className="w-full pl-12 pr-4 h-12 bg-zinc-100 dark:bg-zinc-900 border-transparent focus:border-primary focus:bg-white dark:focus:bg-zinc-800 rounded-xl text-sm font-medium transition-all outline-none border-2"
-                                />
-                            </div>
-                        </div>
+                        {/* Search Bar - Functional */}
+                        <SearchBar />
 
                         {/* Actions */}
                         <div className="flex items-center gap-2">
@@ -95,6 +88,12 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
                                     </Button>
                                 </Link>
                             )}
+
+                            <Link href="/favorites">
+                                <Button variant="ghost" size="md" className="px-3">
+                                    <Heart className="w-5 h-5 text-foreground" />
+                                </Button>
+                            </Link>
 
                             <Link href="/cart">
                                 <Button variant="ghost" size="md" className="relative px-3">

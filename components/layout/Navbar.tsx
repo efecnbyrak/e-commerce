@@ -55,7 +55,7 @@ export function Navbar({ categories }: NavbarProps) {
                             transition={{ duration: 0.2, ease: "easeOut" }}
                             className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-[100] w-[600px]"
                         >
-                            <div className="bg-white/80 dark:bg-zinc-950/90 backdrop-blur-2xl border border-border-subtle rounded-[2rem] shadow-2xl overflow-hidden p-8 grid grid-cols-2 gap-8">
+                            <div className="bg-white dark:bg-zinc-950 border border-border-subtle rounded-[2rem] shadow-2xl overflow-hidden p-8 grid grid-cols-2 gap-8">
                                 {/* Left Side: Category List */}
                                 <div className="space-y-6">
                                     <div className="flex items-center gap-2 text-primary">

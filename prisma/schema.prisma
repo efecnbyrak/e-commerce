@@ -39,11 +39,24 @@ model User {
   refreshToken  String?  
   
   orders        Order[]
+  wishlist      Wishlist[]
   auditLogs     AuditLog[]
 
   @@index([email])
   @@index([isActive])
   @@map("users")
+}
+
+model Wishlist {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
 }
 
 model Category {
@@ -77,6 +90,7 @@ model Product {
   isActive    Boolean   @default(true)
   
   orderItems  OrderItem[]
+  wishlist    Wishlist[]
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
