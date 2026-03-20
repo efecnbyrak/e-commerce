@@ -1,12 +1,24 @@
 import { db } from "@/lib/db";
-import { notFound } from "next/navigation";
-import { ShoppingBag, User, MapPin, CreditCard, ChevronLeft } from "lucide-react";
+import { ShoppingBag, User, MapPin, CreditCard, ChevronLeft, Package } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export default async function OrderDetailPage({ params }: { params: { id: string } }) {
     const id = parseInt(params.id);
-    if (isNaN(id)) notFound();
+    if (isNaN(id)) {
+        return (
+            <div className="py-12 max-w-2xl mx-auto">
+                <EmptyState 
+                    title="Geçersiz ID"
+                    description="Geçersiz sipariş kimliği sağlandı."
+                    icon={Package}
+                    actionLabel="Siparişlere Dön"
+                    actionHref="/admin/orders"
+                />
+            </div>
+        );
+    }
 
     const order = await db.order.findUnique({
         where: { id },
@@ -18,7 +30,19 @@ export default async function OrderDetailPage({ params }: { params: { id: string
         }
     });
 
-    if (!order) notFound();
+    if (!order) {
+        return (
+            <div className="py-12 max-w-2xl mx-auto">
+                <EmptyState 
+                    title="Sipariş Bulunamadı"
+                    description="Görüntülemek istediğiniz sipariş mevcut değil."
+                    icon={Package}
+                    actionLabel="Siparişlere Dön"
+                    actionHref="/admin/orders"
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-8 pb-24">

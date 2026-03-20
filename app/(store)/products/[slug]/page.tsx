@@ -1,8 +1,9 @@
 import { db } from "@/lib/db";
-import { notFound } from "next/navigation";
 import Image from "next/image";
-import { ShoppingBag, Star, ShieldCheck, Truck, RotateCcw, ChevronRight } from "lucide-react";
+import { ShoppingBag, Star, ShieldCheck, Truck, RotateCcw, ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
     const product = await db.product.findUnique({
@@ -10,7 +11,19 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
         include: { category: true }
     });
 
-    if (!product || !product.isActive) notFound();
+    if (!product || !product.isActive) {
+        return (
+            <div className="py-24 max-w-2xl mx-auto">
+                <EmptyState 
+                    title="Ürün Bulunamadı"
+                    description="Aradığınız ürün stokta yok veya yayından kaldırılmış olabilir."
+                    icon={Search}
+                    actionLabel="Tüm Ürünlere Dön"
+                    actionHref="/products"
+                />
+            </div>
+        );
+    }
 
     const images = product.images ? JSON.parse(product.images) : ["/placeholder.png"];
 
@@ -85,10 +98,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
 
                     {/* Action Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4">
-                        <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-12 py-6 rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-blue-500/30 transition-all flex items-center justify-center gap-3 active:scale-95">
-                            <ShoppingBag className="w-5 h-5" />
-                            Sepete Ekle
-                        </button>
+                        <AddToCartButton product={product} />
                         <button className="p-6 rounded-[2rem] bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all shadow-sm">
                             <Star className="w-6 h-6" />
                         </button>

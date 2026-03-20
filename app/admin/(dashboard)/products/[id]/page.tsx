@@ -1,17 +1,42 @@
 import { db } from "@/lib/db";
-import { notFound } from "next/navigation";
 import { ProductForm } from "../components/ProductForm";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Package } from "lucide-react";
 
 export default async function EditProductPage({ params }: { params: { id: string } }) {
     const id = parseInt(params.id);
-    if (isNaN(id)) notFound();
+    if (isNaN(id)) {
+        return (
+            <div className="py-12 max-w-2xl mx-auto">
+                <EmptyState 
+                    title="Geçersiz ID"
+                    description="Geçersiz ürün kimliği sağlandı."
+                    icon={Package}
+                    actionLabel="Ürünlere Dön"
+                    actionHref="/admin/products"
+                />
+            </div>
+        );
+    }
 
     const [product, categories] = await Promise.all([
         db.product.findUnique({ where: { id } }),
         db.category.findMany()
     ]);
 
-    if (!product) notFound();
+    if (!product) {
+        return (
+            <div className="py-12 max-w-2xl mx-auto">
+                <EmptyState 
+                    title="Ürün Bulunamadı"
+                    description="Düzenlemek istediğiniz ürün mevcut değil."
+                    icon={Package}
+                    actionLabel="Ürünlere Dön"
+                    actionHref="/admin/products"
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-8 pb-24 max-w-4xl">

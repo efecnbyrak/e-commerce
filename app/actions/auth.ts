@@ -40,19 +40,24 @@ export async function login(prevState: ActionState, formData: FormData): Promise
             return { error: "Hesabınız pasif durumdadır.", success: false };
         }
 
-        await createSession(user.id, (user as any).role, !!rememberMe);
+        const userRole = (user as any).role;
+        await createSession(user.id, userRole, !!rememberMe);
 
         await db.user.update({
             where: { id: user.id },
             data: { lastLoginAt: new Date() }
         });
 
-    } catch (error) {
+        if (userRole === "ADMIN") {
+            redirect("/admin");
+        } else {
+            redirect("/");
+        }
+    } catch (error: any) {
+        if (error.digest?.startsWith('NEXT_REDIRECT')) throw error;
         console.error("Login error:", error);
         return { error: "Giriş yapılırken bir hata oluştu.", success: false };
     }
-
-    redirect("/admin");
 }
 
 export async function register(prevState: ActionState, formData: FormData): Promise<ActionState> {

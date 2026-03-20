@@ -54,14 +54,20 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
                         </Link>
                         
                         {session ? (
-                            <Link href={session.role === 'ADMIN' ? '/admin' : '/profile'} className="flex items-center gap-3 pl-2 border-l border-zinc-100 dark:border-zinc-800">
-                                <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
-                                    <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                </div>
-                                <div className="hidden lg:flex flex-col">
-                                    <span className="text-xs font-black uppercase tracking-widest text-zinc-900 dark:text-white">Profil</span>
-                                </div>
-                            </Link>
+                            <div className="flex items-center gap-6 pl-2 border-l border-zinc-100 dark:border-zinc-800">
+                                <Link href="/orders" className="hidden lg:flex flex-col items-center group/nav">
+                                    <Package className="w-5 h-5 text-zinc-400 group-hover/nav:text-blue-600 transition-colors" />
+                                    <span className="text-[8px] font-black uppercase tracking-widest text-zinc-400 group-hover/nav:text-zinc-900 dark:group-hover/nav:text-white mt-1">Siparişler</span>
+                                </Link>
+                                <Link href={session.role === 'ADMIN' ? '/admin' : '/profile'} className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center group/profile overflow-hidden">
+                                        <User className="w-5 h-5 text-blue-600 dark:text-blue-400 group-hover/profile:scale-110 transition-transform" />
+                                    </div>
+                                    <div className="hidden lg:flex flex-col">
+                                        <span className="text-xs font-black uppercase tracking-widest text-zinc-900 dark:text-white">Profil</span>
+                                    </div>
+                                </Link>
+                            </div>
                         ) : (
                             <Link href="/login" className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-zinc-900/20 hover:scale-[1.02] transition-transform">
                                 Giriş Yap

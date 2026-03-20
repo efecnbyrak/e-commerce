@@ -1,17 +1,42 @@
 import { db } from "@/lib/db";
-import { notFound } from "next/navigation";
 import { CategoryForm } from "../components/CategoryForm";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ListTree } from "lucide-react";
 
 export default async function EditCategoryPage({ params }: { params: { id: string } }) {
     const id = parseInt(params.id);
-    if (isNaN(id)) notFound();
+    if (isNaN(id)) {
+        return (
+            <div className="py-12 max-w-2xl mx-auto">
+                <EmptyState 
+                    title="Geçersiz ID"
+                    description="Geçersiz kategori kimliği sağlandı."
+                    icon={ListTree}
+                    actionLabel="Kategorilere Dön"
+                    actionHref="/admin/categories"
+                />
+            </div>
+        );
+    }
 
     const [category, categories] = await Promise.all([
         db.category.findUnique({ where: { id } }),
         db.category.findMany()
     ]);
 
-    if (!category) notFound();
+    if (!category) {
+        return (
+            <div className="py-12 max-w-2xl mx-auto">
+                <EmptyState 
+                    title="Kategori Bulunamadı"
+                    description="Düzenlemek istediğiniz kategori mevcut değil."
+                    icon={ListTree}
+                    actionLabel="Kategorilere Dön"
+                    actionHref="/admin/categories"
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-8 pb-24 max-w-4xl">

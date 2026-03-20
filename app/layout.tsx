@@ -31,6 +31,7 @@ export const viewport = {
 };
 
 import { Toaster } from "react-hot-toast";
+import { CartProvider } from "@/context/CartContext";
 
 export default function RootLayout({
   children,
@@ -58,9 +59,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Toaster position="top-center" />
-        <Analytics />
+        <CartProvider>
+            {children}
+            <Toaster position="top-center" />
+            <Analytics />
+        </CartProvider>
       </body>
     </html>
   );
