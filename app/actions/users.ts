@@ -4,7 +4,14 @@ import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
-export async function createUser(prevState: any, formData: FormData) {
+export interface UserActionState {
+    error?: string;
+    success: boolean;
+    message?: string;
+    id?: any;
+}
+
+export async function createUser(prevState: UserActionState, formData: FormData): Promise<UserActionState> {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const firstName = formData.get("firstName") as string;

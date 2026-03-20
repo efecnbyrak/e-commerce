@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { createProduct, updateProduct } from "@/app/actions/products";
+import { ActionState } from "@/app/actions/auth";
 import { Package, Image as ImageIcon, Tag, Hash, FileText, Check, AlertCircle, ChevronDown, Coins, Percent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,8 @@ interface ProductFormProps {
 
 export function ProductForm({ product, categories }: ProductFormProps) {
     const action = product ? updateProduct.bind(null, product.id) : createProduct;
-    const [state, formAction, isPending] = useActionState(action, { success: false });
+    const initialState: ActionState = { success: false };
+    const [state, formAction, isPending] = useActionState(action, initialState);
 
     return (
         <form action={formAction} className="space-y-12">

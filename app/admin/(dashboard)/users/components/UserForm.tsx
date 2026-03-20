@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
-import { createUser } from "@/app/actions/users";
+import { createUser, UserActionState } from "@/app/actions/users";
 import { User, Mail, Lock, Shield, Check, AlertCircle, ChevronDown, UserCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,8 @@ import { useRouter } from "next/navigation";
 
 export function UserForm() {
     const router = useRouter();
-    const [state, formAction, isPending] = useActionState(createUser, { success: false });
+    const initialState: UserActionState = { success: false };
+    const [state, formAction, isPending] = useActionState(createUser, initialState);
 
     useEffect(() => {
         if (state?.success) {
