@@ -17,26 +17,6 @@ export const ISTANBUL_DISTRICTS = [
     "Üsküdar", "Zeytinburnu"
 ].sort((a, b) => a.localeCompare(b, 'tr'));
 
-export const OFFICIAL_TYPES = [
-    { id: "REFEREE", label: "Hakem" },
-    { id: "OBSERVER", label: "Gözlemci" },
-    { id: "TABLE", label: "Masa Görevlisi" },
-    { id: "STATISTICIAN", label: "İstatistik Görevlisi" },
-    { id: "HEALTH", label: "Sağlık Görevlisi" },
-    { id: "TABLE_STATISTICIAN", label: "Masa & İstatistikçi" },
-    { id: "TABLE_HEALTH", label: "Masa & Sağlıkçı" },
-    { id: "FIELD_COMMISSIONER", label: "Saha Komiseri" }
-];
-
-export const CLASSIFICATIONS = [
-    { id: "A", label: "A Klasmanı" },
-    { id: "B", label: "B Klasmanı" },
-    { id: "C", label: "C Klasmanı" },
-    { id: "IL_HAKEMI", label: "İl Hakemi" },
-    { id: "ADAY_HAKEM", label: "Aday Hakem" },
-    { id: "BELIRLENMEMIS", label: "Belirlenmemiş" }
-];
-
 export const SECURITY_QUESTIONS = [
     "En sevdiğiniz meyve nedir?",
     "En sevdiğiniz yemek nedir?",

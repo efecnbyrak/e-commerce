@@ -4,95 +4,78 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-    console.log('🌱 Seeding database...');
+    console.log('🌱 Seeding database for E-Shop...');
 
-    // 1. Create Roles
-    const roles = ['SUPER_ADMIN', 'ADMIN_IHK', 'REFEREE', 'GENERAL_OFFICIAL'];
-    for (const roleName of roles) {
-        await prisma.role.upsert({
-            where: { name: roleName },
-            create: { name: roleName },
-            update: {}
+    // 1. Create Admin User
+    const adminEmail = 'admin@example.com';
+    const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
+
+    if (!existingAdmin) {
+        const hashedPassword = await bcrypt.hash('admin123', 10);
+        await prisma.user.create({
+            data: {
+                email: adminEmail,
+                password: hashedPassword,
+                role: 'ADMIN',
+                firstName: 'System',
+                lastName: 'Admin',
+                isActive: true
+            }
+        });
+        console.log('✅ Admin user created: admin@example.com / admin123');
+    }
+
+    // 2. Create Categories
+    const categories = [
+        { name: 'Ayakkabı', slug: 'ayakkabi' },
+        { name: 'Giyim', slug: 'giyim' },
+        { name: 'Elektronik', slug: 'elektronik' },
+        { name: 'Aksesuar', slug: 'aksesuar' }
+    ];
+
+    for (const cat of categories) {
+        await prisma.category.upsert({
+            where: { slug: cat.slug },
+            update: {},
+            create: { name: cat.name, slug: cat.slug }
         });
     }
-    console.log('✅ Synchronized Roles: SUPER_ADMIN, ADMIN_IHK, REFEREE, GENERAL_OFFICIAL');
+    console.log('✅ Categories created');
 
-    const adminRole = await prisma.role.findUniqueOrThrow({ where: { name: 'SUPER_ADMIN' } });
-    const refereeRole = await prisma.role.findUniqueOrThrow({ where: { name: 'REFEREE' } });
+    // 3. Create Featured Products
+    const category = await prisma.category.findUniqueOrThrow({ where: { slug: 'ayakkabi' } });
+    
+    const products = [
+        {
+            name: 'Premium Spor Ayakkabı',
+            slug: 'premium-spor-ayakkabi',
+            description: 'Yüksek kaliteli, konforlu ve şık spor ayakkabı.',
+            price: 1299.99,
+            stock: 50,
+            categoryId: category.id,
+            isFeatured: true,
+            images: JSON.stringify(['https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop'])
+        },
+        {
+            name: 'Klasik Beyaz Sneaker',
+            slug: 'klasik-beyaz-sneaker',
+            description: 'Her tarza uygun klasik tasarım.',
+            price: 899.99,
+            stock: 100,
+            categoryId: category.id,
+            isFeatured: true,
+            images: JSON.stringify(['https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop'])
+        }
+    ];
 
-    // 2.5 Create Default Regions
-    const regions = ["Avrupa", "Anadolu", "BGM"];
-    for (const name of regions) {
-        await prisma.region.upsert({
-            where: { name },
-            create: { name },
-            update: {}
+    for (const prod of products) {
+        await prisma.product.upsert({
+            where: { slug: prod.slug },
+            update: {},
+            create: prod
         });
     }
-    console.log('✅ Created Regions: Avrupa, Anadolu, BGM');
-
-    // 3. Create or Update Permanent Admin User
-    const adminPassword = 'talat!56742';
-    const adminUsername = 'talat.mustafa.ozdemir50';
-    const hashedAdminPassword = await bcrypt.hash(adminPassword, 10);
-
-    await prisma.user.upsert({
-        where: { username: adminUsername },
-        update: {
-            password: hashedAdminPassword,
-            roleId: adminRole.id,
-            isApproved: true,
-            isVerified: true
-        },
-        create: {
-            username: adminUsername,
-            password: hashedAdminPassword,
-            roleId: adminRole.id,
-            isApproved: true,
-            isVerified: true
-        }
-    });
-
-    // Also ensure a simpler "admin" fallback exists
-    const simpleAdminPass = await bcrypt.hash('admin123', 10);
-    await prisma.user.upsert({
-        where: { username: 'admin' },
-        update: {
-            password: simpleAdminPass,
-            roleId: adminRole.id,
-            isApproved: true,
-            isVerified: true
-        },
-        create: {
-            username: 'admin',
-            password: simpleAdminPass,
-            roleId: adminRole.id,
-            isApproved: true,
-            isVerified: true
-        }
-    });
-
-    console.log(`✅ Fixed Admin Users: ${adminUsername} and "admin"`);
-
-    // Fix Talat Mustafa Özdemir phone number
-    const talatReferees = await prisma.referee.findMany({
-        where: {
-            OR: [
-                { firstName: { contains: "TALAT", mode: "insensitive" } },
-                { lastName: { contains: "ÖZDEMİR", mode: "insensitive" } }
-            ]
-        }
-    });
-
-    for (const r of talatReferees) {
-        if (r.firstName && r.firstName.toUpperCase().includes("TALAT")) {
-            await prisma.referee.update({
-                where: { id: r.id },
-                data: { phone: "535 624 27 86" }
-            });
-            console.log(`✅ Updated phone for ${r.firstName} ${r.lastName} to 535 624 27 86`);
-        }
-    }
+    console.log('✅ Featured products created');
 
     console.log('🎉 Seeding completed!');
 }

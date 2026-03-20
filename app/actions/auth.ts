@@ -4,12 +4,14 @@ import { db } from "@/lib/db";
 import { createSession, deleteSession } from "@/lib/session";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { LoginSchema, RegisterSchema } from "@/lib/schemas";
 
 export interface ActionState {
     error?: string;
     success: boolean;
     message?: string;
+    id?: number | string;
 }
 
 export async function login(prevState: ActionState, formData: FormData): Promise<ActionState> {
@@ -38,7 +40,7 @@ export async function login(prevState: ActionState, formData: FormData): Promise
             return { error: "Hesabınız pasif durumdadır.", success: false };
         }
 
-        await createSession(user.id, user.role, !!rememberMe);
+        await createSession(user.id, (user as any).role, !!rememberMe);
 
         await db.user.update({
             where: { id: user.id },
@@ -71,7 +73,7 @@ export async function register(prevState: ActionState, formData: FormData): Prom
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await db.user.create({
+        const newUser = await db.user.create({
             data: {
                 email,
                 password: hashedPassword,
@@ -81,7 +83,7 @@ export async function register(prevState: ActionState, formData: FormData): Prom
             }
         });
 
-        return { success: true, message: "Kayıt başarıyla tamamlandı. Giriş yapabilirsiniz." };
+        return { success: true, message: "Kayıt başarıyla tamamlandı. Giriş yapabilirsiniz.", id: newUser.id };
     } catch (error) {
         console.error("Register error:", error);
         return { error: "Kayıt olurken bir hata oluştu.", success: false };

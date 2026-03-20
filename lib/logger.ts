@@ -37,16 +37,15 @@ export async function logAction(userId: number | null, action: string, details?:
                     userId,
                     action,
                     details,
-                    targetId,
                     ipAddress
                 }
             });
         } catch (prismaError) {
             // Fallback to raw SQL if table exists but Prisma model is stale
             await db.$executeRawUnsafe(`
-                INSERT INTO audit_logs ("userId", action, details, "targetId", "ipAddress", "createdAt")
-                VALUES ($1, $2, $3, $4, $5, NOW())
-            `, userId, action, details || null, targetId || null, ipAddress);
+                INSERT INTO audit_logs ("userId", action, details, "ipAddress", "createdAt")
+                VALUES ($1, $2, $3, $4, NOW())
+            `, userId, action, details || null, ipAddress);
         }
     } catch (error) {
         console.error("[LOGGER ERROR] Failed to create audit log:", error);

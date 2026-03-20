@@ -1,10 +1,10 @@
+"use client";
+
 import { useActionState, useEffect, useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Modal } from "@/components/ui/modal";
 import { register, ActionState } from "@/app/actions/auth";
-import { TURKEY_CITIES, ISTANBUL_DISTRICTS, SECURITY_QUESTIONS } from "@/lib/constants";
-import { getPasswordStrength, filterOnlyLetters, validateIBAN } from "@/lib/validation-utils";
-import { formatIBAN } from "@/lib/format-utils";
+import { Loader2, User, Lock, Mail, ChevronRight, AlertCircle } from "lucide-react";
 
 interface RegisterModalProps {
     isOpen: boolean;
@@ -15,344 +15,112 @@ interface RegisterModalProps {
 const initialState: ActionState = {
     error: undefined,
     success: false,
-    username: undefined,
-    message: undefined,
-    errors: {}
 };
 
 export function RegisterModal({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps) {
     const [state, formAction, isPending] = useActionState(register, initialState);
-
-    // Form State
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [city, setCity] = useState("İstanbul");
-    const [district, setDistrict] = useState("");
-    const [details, setDetails] = useState("");
-    const [password, setPassword] = useState("");
-    const [securityQuestion, setSecurityQuestion] = useState("");
-    const [securityAnswer, setSecurityAnswer] = useState("");
-    const [strengthData, setStrengthData] = useState(getPasswordStrength(""));
-
-    // Derived address string for the hidden input
-    const fullAddress = `${city} / ${district} - ${details}`;
+    const router = useRouter();
 
     useEffect(() => {
-        if (state.success && isOpen) {
-            const msg = state.message || `Kayıt başarılı! Kullanıcı Adınız: ${state.username}\nLütfen giriş yapınız.`;
-            alert(msg);
+        if (state.success) {
+            alert("Kayıt başarılı! Lütfen giriş yapınız.");
             onClose();
             onSwitchToLogin();
         }
-    }, [state, isOpen, onClose, onSwitchToLogin]);
+    }, [state.success, onClose, onSwitchToLogin]);
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Kayıt Ol">
-            <form action={formAction} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            Ad
-                        </label>
-                        <input
-                            type="text"
-                            name="firstName"
-                            required
-                            value={firstName}
-                            onChange={(e) => setFirstName(filterOnlyLetters(e.target.value))}
-                            className={`w-full px-4 py-3 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all ${state.errors?.firstName ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
-                            placeholder="Ahmet"
-                        />
-                        {state.errors?.firstName && <p className="text-red-500 text-[10px] font-bold mt-1 ml-1 uppercase">{state.errors.firstName}</p>}
+        <Modal isOpen={isOpen} onClose={onClose} title="Hesap Oluştur">
+            <div className="space-y-6">
+                <div className="text-center mb-4">
+                    <div className="w-16 h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <User className="w-8 h-8 text-blue-600" />
                     </div>
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            Soyad
-                        </label>
-                        <input
-                            type="text"
-                            name="lastName"
-                            required
-                            value={lastName}
-                            onChange={(e) => setLastName(filterOnlyLetters(e.target.value))}
-                            className={`w-full px-4 py-3 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all ${state.errors?.lastName ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
-                            placeholder="Yılmaz"
-                        />
-                        {state.errors?.lastName && <p className="text-red-500 text-[10px] font-bold mt-1 ml-1 uppercase">{state.errors.lastName}</p>}
-                    </div>
+                    <h2 className="text-2xl font-black uppercase tracking-tighter text-zinc-900 dark:text-white">Aramıza Katılın</h2>
+                    <p className="text-zinc-500 text-xs mt-1">E-Shop fırsatlarından yararlanmak için kaydolun.</p>
                 </div>
 
-
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            Telefon
-                        </label>
-                        <input
-                            type="tel"
-                            name="phone"
-                            required
-                            className={`w-full px-4 py-3 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all ${state.errors?.phone ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
-                            placeholder="05XXXXXXXXX"
-                            maxLength={11}
-                        />
-                        {state.errors?.phone && <p className="text-red-500 text-[10px] font-bold mt-1 ml-1 uppercase">{state.errors.phone}</p>}
-                    </div>
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            E-posta
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
-                            required
-                            className={`w-full px-4 py-3 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all ${state.errors?.email ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
-                            placeholder="ornek@mail.com"
-                        />
-                        {state.errors?.email && <p className="text-red-500 text-[10px] font-bold mt-1 ml-1 uppercase">{state.errors.email}</p>}
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            Şifre
-                        </label>
-                        <input
-                            type="password"
-                            name="password"
-                            required
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                setPassword(val);
-                                setStrengthData(getPasswordStrength(val));
-                            }}
-                            className={`w-full px-4 py-4 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all ${state.errors?.password ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
-                            placeholder="Şifre"
-                        />
-                        {/* Password Strength Indicator */}
-                        {password && (
-                            <div className="mt-2 space-y-1">
-                                <div className="flex h-1 gap-1">
-                                    {[1, 2, 3, 4].map((step) => (
-                                        <div
-                                            key={step}
-                                            className={`h-full flex-1 rounded-full transition-all duration-500 ${strengthData.score >= step
-                                                ? strengthData.color
-                                                : "bg-zinc-200 dark:bg-zinc-800"
-                                                }`}
-                                        />
-                                    ))}
-                                </div>
-                                <p className={`text-[10px] font-bold uppercase italic ${strengthData.score <= 1 ? "text-red-500" : strengthData.score <= 3 ? "text-yellow-600" : "text-emerald-500"
-                                    }`}>
-                                    {strengthData.label}
-                                </p>
-                            </div>
-                        )}
-                        {state.errors?.password && <p className="text-red-500 text-xs mt-1">{state.errors.password}</p>}
-                    </div>
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            Şifre Tekrar
-                        </label>
-                        <input
-                            type="password"
-                            name="passwordConfirm"
-                            required
-                            className="w-full px-4 py-4 border-2 border-transparent focus:border-red-600 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all"
-                            placeholder="Tekrar"
-                        />
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            Göreviniz
-                        </label>
-                        <select
-                            name="roleType"
-                            required
-                            defaultValue=""
-                            className={`w-full px-4 py-3 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all appearance-none cursor-pointer ${state.errors?.roleType ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
-                        >
-                            <option value="" disabled>Seçiniz</option>
-                            <option value="REFEREE">Hakem</option>
-                            <option value="TABLE">Masa Görevlisi</option>
-                            <option value="OBSERVER">Gözlemci</option>
-                            <option value="STATISTICIAN">İstatistik Görevlisi</option>
-                            <option value="HEALTH">Sağlık Görevlisi</option>
-                            <option value="FIELD_COMMISSIONER">Saha Komiseri</option>
-                            <option value="TABLE_HEALTH">Masa & Sağlık</option>
-                            <option value="TABLE_STATISTICIAN">Masa & İstatistik</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            Meslek
-                        </label>
-                        <input
-                            type="text"
-                            name="job"
-                            className="w-full px-4 py-3 border-2 border-transparent focus:border-red-600 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all"
-                            placeholder="Mühendis vb."
-                        />
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            İl (Şehir)
-                        </label>
-                        <div className="relative">
+                <form action={formAction} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-black text-zinc-600 dark:text-zinc-500 uppercase tracking-widest ml-1">Ad</label>
                             <input
                                 type="text"
-                                name="city"
-                                value="İstanbul"
-                                readOnly
-                                className="w-full px-4 py-3 border-2 border-transparent bg-zinc-100 dark:bg-zinc-900/50 text-zinc-500 dark:text-zinc-400 rounded-2xl outline-none cursor-not-allowed italic"
+                                name="firstName"
+                                required
+                                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 rounded-2xl border-2 border-transparent focus:border-blue-600 outline-none transition-all text-sm font-bold text-zinc-900 dark:text-white"
+                                placeholder="Ahmet"
                             />
-                            <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                                <span className="text-[10px] font-bold text-zinc-400 uppercase">Sabit</span>
-                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-black text-zinc-600 dark:text-zinc-500 uppercase tracking-widest ml-1">Soyad</label>
+                            <input
+                                type="text"
+                                name="lastName"
+                                required
+                                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 rounded-2xl border-2 border-transparent focus:border-blue-600 outline-none transition-all text-sm font-bold text-zinc-900 dark:text-white"
+                                placeholder="Yılmaz"
+                            />
                         </div>
                     </div>
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            İlçe / Bölge
-                        </label>
-                        {city === "İstanbul" ? (
-                            <select
-                                value={district}
-                                onChange={(e) => setDistrict(e.target.value)}
-                                required
-                                className="w-full px-4 py-3 border-2 border-transparent focus:border-red-600 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all appearance-none cursor-pointer"
-                            >
-                                <option value="">Seçiniz</option>
-                                {ISTANBUL_DISTRICTS.map(d => (
-                                    <option key={d} value={d}>{d}</option>
-                                ))}
-                            </select>
-                        ) : (
+
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-black text-zinc-600 dark:text-zinc-500 uppercase tracking-widest ml-1">E-posta</label>
+                        <div className="relative">
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                             <input
-                                type="text"
-                                name="district"
-                                value={district}
-                                onChange={(e) => setDistrict(e.target.value)}
-                                placeholder="İlçe giriniz"
+                                type="email"
+                                name="email"
                                 required
-                                className="w-full px-4 py-3 border-2 border-transparent focus:border-red-600 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all"
+                                className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 rounded-2xl border-2 border-transparent focus:border-blue-600 outline-none transition-all text-sm font-bold text-zinc-900 dark:text-white"
+                                placeholder="ornek@mail.com"
                             />
-                        )}
-                    </div>
-                </div>
-
-                <div>
-                    <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                        Açık Adres Detayı
-                    </label>
-                    <textarea
-                        value={details}
-                        onChange={(e) => setDetails(e.target.value)}
-                        placeholder="Mahalle, Sokak, No..."
-                        rows={3}
-                        className="w-full px-4 py-3 border-2 border-transparent focus:border-red-600 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all resize-none"
-                    />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            Güvenlik Sorusu
-                        </label>
-                        <select
-                            name="securityQuestion"
-                            required
-                            value={securityQuestion}
-                            onChange={(e) => setSecurityQuestion(e.target.value)}
-                            className={`w-full px-4 py-3 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all appearance-none cursor-pointer ${state.errors?.securityQuestion ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
-                        >
-                            <option value="" disabled>Soru Seçiniz</option>
-                            {SECURITY_QUESTIONS.map(q => <option key={q} value={q}>{q}</option>)}
-                        </select>
-                        {state.errors?.securityQuestion && <p className="text-red-500 text-[10px] font-bold mt-1 ml-1 uppercase">{state.errors.securityQuestion}</p>}
-                    </div>
-                    <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 ml-1">
-                            Güvenlik Cevabı
-                        </label>
-                        <input
-                            type="text"
-                            name="securityAnswer"
-                            required
-                            value={securityAnswer}
-                            onChange={(e) => setSecurityAnswer(e.target.value)}
-                            className={`w-full px-4 py-3 border-2 rounded-2xl outline-none bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-all ${state.errors?.securityAnswer ? 'border-red-500' : 'border-transparent focus:border-red-600'}`}
-                            placeholder="Cevabınız"
-                        />
-                        {state.errors?.securityAnswer && <p className="text-red-500 text-[10px] font-bold mt-1 ml-1 uppercase">{state.errors.securityAnswer}</p>}
-                    </div>
-                </div>
-
-                <input type="hidden" name="address" value={fullAddress} />
-                <input type="hidden" name="selectedCity" value={city} />
-
-                <div className="space-y-3">
-                    <div className="flex items-start gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                        <input
-                            type="checkbox"
-                            name="kvkk"
-                            required
-                            id="kvkk"
-                            className="mt-1 w-4 h-4 text-red-600 rounded focus:ring-red-600"
-                        />
-                        <label htmlFor="kvkk" className="text-xs text-zinc-600 dark:text-zinc-400 cursor-pointer">
-                            <Link href="/kvkk" target="_blank" className="font-semibold text-zinc-900 dark:text-zinc-100 hover:underline">KVKK Aydınlatma Metni</Link>'ni okudum ve anladım.
-                        </label>
+                        </div>
                     </div>
 
-                    <div className="flex items-start gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                        <input
-                            type="checkbox"
-                            name="consent"
-                            required
-                            id="consent"
-                            className="mt-1 w-4 h-4 text-red-600 rounded focus:ring-red-600"
-                        />
-                        <label htmlFor="consent" className="text-xs text-zinc-600 dark:text-zinc-400 cursor-pointer">
-                            <Link href="/kvkk" target="_blank" className="font-semibold text-zinc-900 dark:text-zinc-100 hover:underline">Açık Rıza Metni</Link> kapsamında kişisel verilerimin işlenmesini kabul ediyorum.
-                        </label>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-black text-zinc-600 dark:text-zinc-500 uppercase tracking-widest ml-1">Şifre</label>
+                        <div className="relative">
+                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                            <input
+                                type="password"
+                                name="password"
+                                required
+                                className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 rounded-2xl border-2 border-transparent focus:border-blue-600 outline-none transition-all text-sm font-bold text-zinc-900 dark:text-white"
+                                placeholder="••••••••"
+                            />
+                        </div>
                     </div>
-                </div>
 
-                {state?.error && (
-                    <div className="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm border border-red-200 dark:border-red-800">
-                        {state.error}
-                    </div>
-                )}
+                    {state?.error && (
+                        <div className="bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/50 p-3 rounded-xl flex items-center gap-2 text-red-600 text-[10px] font-bold">
+                            <AlertCircle className="w-4 h-4" />
+                            {state.error}
+                        </div>
+                    )}
 
-                <button
-                    type="submit"
-                    disabled={isPending}
-                    className="w-full bg-zinc-900 dark:bg-red-600 text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-all disabled:opacity-50 mt-4 h-12 flex items-center justify-center"
-                >
-                    {isPending ? "KAYDEDİLİYOR..." : "KAYIT OL"}
-                </button>
-
-                <div className="text-center text-sm text-zinc-500 mt-4">
-                    Zaten hesabınız var mı?{" "}
                     <button
-                        type="button"
-                        onClick={onSwitchToLogin}
-                        className="text-red-700 dark:text-red-500 font-bold hover:underline"
+                        type="submit"
+                        disabled={isPending}
+                        className="group relative w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl disabled:opacity-50 overflow-hidden"
                     >
-                        Giriş Yap
+                        <div className="relative z-10 flex items-center justify-center gap-2">
+                            {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "KAYIT OL"}
+                            {!isPending && <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
+                        </div>
                     </button>
-                </div>
-            </form>
-        </Modal >
+
+                    <div className="text-center pt-2">
+                        <button
+                            type="button"
+                            onClick={onSwitchToLogin}
+                            className="text-zinc-500 hover:text-zinc-900 dark:hover:text-white text-[10px] font-black uppercase tracking-wider transition-colors"
+                        >
+                            Zaten hesabınız var mı? <span className="text-blue-600">Giriş Yap</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </Modal>
     );
 }

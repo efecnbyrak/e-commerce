@@ -11,7 +11,7 @@ const envSchema = z.object({
   IYZICO_API_KEY: z.string().optional(),
   IYZICO_SECRET_KEY: z.string().optional(),
   IYZICO_BASE_URL: z.string().optional(),
-  PAYMENT_ENABLED: z.string().transform((v) => v === "true").default("false"),
+  PAYMENT_ENABLED: z.string().optional().default("false").transform((v) => v === "true"),
 });
 
 const envResult = envSchema.safeParse(process.env);

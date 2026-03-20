@@ -31,7 +31,6 @@ export const viewport = {
 };
 
 import { Toaster } from "react-hot-toast";
-import { SessionRefreshHandler } from "@/components/auth/SessionRefreshHandler";
 
 export default function RootLayout({
   children,
@@ -59,7 +58,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionRefreshHandler />
         {children}
         <Toaster position="top-center" />
         <Analytics />

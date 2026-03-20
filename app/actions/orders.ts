@@ -51,7 +51,7 @@ export async function createOrder(prevState: ActionState, formData: FormData): P
         });
 
         revalidatePath("/admin/orders");
-        return { success: true, message: "Siparişiniz başarıyla oluşturuldu.", userId: order.id }; // Overloading userId to return orderId for redirect
+        return { success: true, message: "Siparişiniz başarıyla oluşturuldu.", id: order.id };
     } catch (error) {
         console.error("Create Order error:", error);
         return { error: "Sipariş oluşturulurken bir hata oluştu.", success: false };

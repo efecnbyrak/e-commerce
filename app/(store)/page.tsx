@@ -143,7 +143,7 @@ export default async function StoreHomePage() {
                         </div>
                     </div>
                     <div className="relative w-64 h-64 md:w-80 md:h-80 opacity-20 md:opacity-100 group-hover:scale-110 group-hover:rotate-12 transition-all duration-700">
-                        <ShoppingCart className="w-full h-full text-blue-500" />
+                        <ShoppingBag className="w-full h-full text-blue-500" />
                     </div>
                 </div>
                 <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />

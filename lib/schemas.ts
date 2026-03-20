@@ -19,10 +19,6 @@ export const RegisterSchema = z.object({
         .regex(/[a-z]/, "Şifre en az bir küçük harf içermelidir.")
         .regex(/[A-Z]/, "Şifre en az bir büyük harf içermelidir.")
         .regex(/[0-9]/, "Şifre en az bir rakam içermelidir."),
-    passwordConfirm: z.string()
-}).refine((data) => data.password === data.passwordConfirm, {
-    message: "Şifreler eşleşmiyor.",
-    path: ["passwordConfirm"],
 });
 
 export const ProductSchema = z.object({

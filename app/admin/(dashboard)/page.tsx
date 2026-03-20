@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { LayoutDashboard, ShoppingBag, Package, Users, TrendingUp } from "lucide-react";
 import { db } from "@/lib/db";
 import { verifySession } from "@/lib/session";
@@ -94,8 +95,6 @@ async function RecentOrdersSection() {
         </div>
     );
 }
-
-import Link from "next/link";
 
 export default async function AdminDashboard() {
     await verifySession();
