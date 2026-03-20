@@ -106,10 +106,7 @@ export function AdminLayoutClient({ children, role, imageUrl }: AdminLayoutClien
                                 <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.1em]">{role || "Yönetici"}</span>
                             </div>
                         </div>
-                        <form action={async () => {
-                            "use server";
-                            await logout();
-                        }}>
+                        <form action={logout}>
                             <button
                                 className="w-full flex items-center justify-center gap-3 px-6 h-14 rounded-2xl bg-danger/10 hover:bg-danger text-danger hover:text-white font-bold transition-all duration-300 group shadow-lg shadow-danger/5"
                             >
