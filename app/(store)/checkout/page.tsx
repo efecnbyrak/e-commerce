@@ -1,3 +1,5 @@
+"use client";
+
 import { useCart } from "@/context/CartContext";
 import { CreditCard, MapPin, ShieldCheck, ChevronRight, Lock, Wallet, ShoppingBag } from "lucide-react";
 import Link from "next/link";

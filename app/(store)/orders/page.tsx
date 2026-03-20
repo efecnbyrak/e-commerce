@@ -1,9 +1,12 @@
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
-import { Package, Clock, ChevronRight, ShoppingBag } from "lucide-react";
+import { Package, Clock, ChevronRight, ShoppingBag, Calendar, CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export default async function OrdersPage() {
     const session = await getSession();
@@ -15,58 +18,77 @@ export default async function OrdersPage() {
         orderBy: { createdAt: "desc" }
     });
 
+    const statusConfig = {
+        PAID: { label: "Ödendi", color: "secondary" },
+        PENDING: { label: "Bekliyor", color: "warning" },
+        CANCELLED: { label: "İptal Edildi", color: "danger" }
+    };
+
     return (
-        <div className="space-y-12 pb-24">
+        <div className="space-y-12 pb-32">
             <div className="space-y-2">
-                <h1 className="text-5xl font-black text-zinc-900 dark:text-white tracking-tighter uppercase italic">Siparişlerim</h1>
-                <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">Tüm sipariş geçmişinizi buradan takip edebilirsiniz</p>
+                <h1 className="text-5xl font-bold text-foreground tracking-tight">Siparişlerim</h1>
+                <p className="text-sm text-muted-foreground font-medium uppercase tracking-[0.2em]">Geçmiş alışverişlerinizi ve sipariş durumlarınızı takip edin.</p>
             </div>
 
             {orders.length === 0 ? (
-                <EmptyState 
-                    title="Henüz Siparişiniz Yok"
-                    description="Görünüşe göre henüz bir sipariş vermemişsiniz. Harika ürünlerimize göz atmaya ne dersiniz?"
-                    icon={ShoppingBag}
-                    actionLabel="Alışverişe Başla"
-                    actionHref="/products"
-                />
+                <div className="py-20 max-w-2xl mx-auto px-6">
+                    <EmptyState 
+                        title="Henüz Siparişiniz Yok"
+                        description="Görünüşe göre henüz bir sipariş vermemişsiniz. Harika ürünlerimize göz atmaya ne dersiniz?"
+                        icon={ShoppingBag}
+                        actionLabel="Alışverişe Başla"
+                        actionHref="/products"
+                    />
+                </div>
             ) : (
-                <div className="grid gap-6">
-                    {orders.map((order) => (
-                        <Link 
-                            key={order.id} 
-                            href={`/orders/${order.id}`}
-                            className="group bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 hover:shadow-2xl transition-all flex flex-col md:flex-row md:items-center justify-between gap-8"
-                        >
-                            <div className="flex items-center gap-6">
-                                <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center text-zinc-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                    <Package className="w-8 h-8" />
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-3 mb-1">
-                                        <span className="font-black text-zinc-900 dark:text-white uppercase italic text-lg shadow-blue-500">#{order.id}</span>
-                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                                            order.status === 'PAID' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
-                                        }`}>
-                                            {order.status}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-zinc-500 text-xs font-bold uppercase tracking-widest">
-                                        <Clock className="w-3 h-3" />
-                                        {new Date(order.createdAt).toLocaleDateString('tr-TR')}
-                                    </div>
-                                </div>
-                            </div>
+                <div className="grid gap-8">
+                    {orders.map((order: any) => {
+                        const status = (statusConfig as any)[order.status] || statusConfig.PENDING;
+                        return (
+                            <Link 
+                                key={order.id} 
+                                href={`/orders/${order.id}`}
+                                className="group block"
+                            >
+                                <Card className="p-8 border-border-subtle hover:border-primary/20 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 bg-white">
+                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                                        <div className="flex items-center gap-6">
+                                            <div className="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
+                                                <Package className="w-8 h-8" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <div className="flex items-center gap-4">
+                                                    <span className="font-bold text-foreground text-xl tracking-tight">Order #{order.id}</span>
+                                                    <Badge variant={status.color} className="rounded-lg px-3 py-1 text-[10px] font-bold">
+                                                        {status.label}
+                                                    </Badge>
+                                                </div>
+                                                <div className="flex items-center gap-4 text-xs font-medium text-muted-foreground">
+                                                    <div className="flex items-center gap-1.5 uppercase tracking-wider">
+                                                        <Calendar className="w-3.5 h-3.5 opacity-40" />
+                                                        {new Date(order.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                    </div>
+                                                    <div className="w-1 h-1 rounded-full bg-border-subtle" />
+                                                    <span className="uppercase tracking-wider">{order.items.length} Ürün</span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                            <div className="flex items-center justify-between md:justify-end gap-12 border-t md:border-t-0 pt-6 md:pt-0">
-                                <div className="text-right">
-                                    <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1">Toplam Tutar</p>
-                                    <p className="text-2xl font-black text-zinc-900 dark:text-white">₺{order.totalAmount.toLocaleString()}</p>
-                                </div>
-                                <ChevronRight className="w-6 h-6 text-zinc-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-                            </div>
-                        </Link>
-                    ))}
+                                        <div className="flex items-center justify-between md:justify-end gap-12 border-t md:border-t-0 pt-6 md:pt-0">
+                                            <div className="text-left md:text-right space-y-1">
+                                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Toplam Tutar</p>
+                                                <p className="text-3xl font-bold text-foreground tracking-tighter">₺{order.totalAmount.toLocaleString()}</p>
+                                            </div>
+                                            <Button variant="ghost" size="md" className="h-12 w-12 p-0 rounded-xl group-hover:bg-primary/10 group-hover:text-primary transition-all">
+                                                <ChevronRight className="w-6 h-6" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </Card>
+                            </Link>
+                        );
+                    })}
                 </div>
             )}
         </div>
