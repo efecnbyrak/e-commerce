@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { env } from "./env";
 import { db } from "./db";
+import { verifyAccessToken, verifyRefreshToken } from "./auth-edge";
 
 const ACCESS_TOKEN_NAME = "access_token";
 const REFRESH_TOKEN_NAME = "refresh_token";
@@ -28,27 +29,7 @@ export async function signRefreshToken(payload: any, rememberMe: boolean = false
         .sign(getRefreshKey());
 }
 
-export async function verifyAccessToken(token: string) {
-    try {
-        const { payload } = await jwtVerify(token, getAccessKey(), {
-            algorithms: ["HS256"],
-        });
-        return payload;
-    } catch (err) {
-        return null;
-    }
-}
-
-export async function verifyRefreshToken(token: string) {
-    try {
-        const { payload } = await jwtVerify(token, getRefreshKey(), {
-            algorithms: ["HS256"],
-        });
-        return payload;
-    } catch (err) {
-        return null;
-    }
-}
+// JWT Verification functions moved to lib/auth-edge.ts
 
 export async function createSession(userId: number, role: string, rememberMe: boolean = false) {
     const accessToken = await signAccessToken({ userId, role });
