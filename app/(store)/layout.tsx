@@ -19,11 +19,16 @@ interface StoreLayoutProps {
 }
 
 export default async function StoreLayout({ children }: StoreLayoutProps) {
-    const session = await getSession();
-    const categories = await (db as any).category.findMany({
-        take: 8,
-        orderBy: { name: 'asc' }
-    });
+    const session = await getSession().catch(() => null);
+    let categories: any[] = [];
+    try {
+        categories = await (db as any).category.findMany({
+            take: 8,
+            orderBy: { name: 'asc' }
+        });
+    } catch (error) {
+        console.error("Store Layout Categories Fetch Error:", error);
+    }
 
     return (
         <div className="min-h-screen bg-background flex flex-col font-sans">

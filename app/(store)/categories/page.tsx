@@ -7,9 +7,14 @@ import { Card } from "@/components/ui/card";
 export const dynamic = "force-dynamic";
 
 export default async function CategoriesPage() {
-    const categories = await (db as any).category.findMany({
-        include: { _count: { select: { products: true } } }
-    });
+    let categories: any[] = [];
+    try {
+        categories = await (db as any).category.findMany({
+            include: { _count: { select: { products: true } } }
+        });
+    } catch (error) {
+        console.error("Categories Page Fetch Error:", error);
+    }
 
     return (
         <div className="space-y-16 pb-32">

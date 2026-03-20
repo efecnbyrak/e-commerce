@@ -15,15 +15,20 @@ export default async function AdminLayout({
         redirect("/login");
     }
 
-    const user = await db.user.findUnique({
-        where: { id: session.userId },
-        select: { firstName: true, lastName: true, imageUrl: true }
-    });
+    let user = null;
+    try {
+        user = await db.user.findUnique({
+            where: { id: session.userId },
+            select: { firstName: true, lastName: true, imageUrl: true }
+        });
+    } catch (error) {
+        console.error("Admin Layout User Fetch Error:", error);
+    }
 
-    const fullName = user ? `${user.firstName} ${user.lastName}` : "Yönetici";
+    const fullName = user ? `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Yönetici" : "Yönetici";
 
     return (
-        <AdminLayoutClient role={session.role} imageUrl={user?.imageUrl}>
+        <AdminLayoutClient role={session.role} imageUrl={user?.imageUrl} fullName={fullName}>
             {children}
         </AdminLayoutClient>
     );

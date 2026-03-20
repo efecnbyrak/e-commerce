@@ -11,18 +11,31 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 export const revalidate = 60;
 
 async function StatsSection() {
-    const [productCount, orderCount, userCount, salesTotal] = await Promise.all([
-        (db as any).product.count(),
-        (db as any).order.count(),
-        (db as any).user.count(),
-        (db as any).order.aggregate({
-            _sum: { totalAmount: true },
-            where: { status: "PAID" }
-        })
-    ]);
+    let productCount = 0;
+    let orderCount = 0;
+    let userCount = 0;
+    let salesTotalAmount = 0;
+
+    try {
+        const [pCount, oCount, uCount, sTotal] = await Promise.all([
+            (db as any).product.count().catch(() => 0),
+            (db as any).order.count().catch(() => 0),
+            (db as any).user.count().catch(() => 0),
+            (db as any).order.aggregate({
+                _sum: { totalAmount: true },
+                where: { status: "PAID" }
+            }).catch(() => ({ _sum: { totalAmount: 0 } }))
+        ]);
+        productCount = pCount;
+        orderCount = oCount;
+        userCount = uCount;
+        salesTotalAmount = sTotal._sum.totalAmount || 0;
+    } catch (error) {
+        console.error("Dashboard Stats Fetch Error:", error);
+    }
 
     const stats = [
-        { title: "Toplam Satış", value: `₺${(salesTotal._sum.totalAmount || 0).toLocaleString()}`, icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20", href: "/admin/orders" },
+        { title: "Toplam Satış", value: `₺${salesTotalAmount.toLocaleString()}`, icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20", href: "/admin/orders" },
         { title: "Siparişler", value: orderCount.toString(), icon: ShoppingBag, color: "text-primary", bg: "bg-primary/10", border: "border-primary/20", href: "/admin/orders" },
         { title: "Ürünler", value: productCount.toString(), icon: Package, color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/20", href: "/admin/products" },
         { title: "Müşteriler", value: userCount.toString(), icon: Users, color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/20", href: "/admin/users" },
@@ -52,11 +65,16 @@ async function StatsSection() {
 }
 
 async function RecentOrdersSection() {
-    const latestOrders = await (db as any).order.findMany({
-        take: 5,
-        orderBy: { createdAt: "desc" },
-        include: { user: true }
-    });
+    let latestOrders: any[] = [];
+    try {
+        latestOrders = await (db as any).order.findMany({
+            take: 5,
+            orderBy: { createdAt: "desc" },
+            include: { user: true }
+        });
+    } catch (error) {
+        console.error("Dashboard Recent Orders Error:", error);
+    }
 
     return (
         <Card className="overflow-hidden border-white/5 bg-zinc-900/40 backdrop-blur-xl shadow-2xl">

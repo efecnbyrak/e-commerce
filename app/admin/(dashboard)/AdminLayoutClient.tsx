@@ -13,9 +13,10 @@ interface AdminLayoutClientProps {
     children: React.ReactNode;
     role?: string;
     imageUrl?: string | null;
+    fullName?: string;
 }
 
-export function AdminLayoutClient({ children, role, imageUrl }: AdminLayoutClientProps) {
+export function AdminLayoutClient({ children, role, imageUrl, fullName = "Yönetici" }: AdminLayoutClientProps) {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
 
@@ -102,7 +103,7 @@ export function AdminLayoutClient({ children, role, imageUrl }: AdminLayoutClien
                                 {imageUrl ? <Image src={imageUrl} alt="Profile" width={48} height={48} className="object-cover" /> : <User className="w-6 h-6 text-zinc-500" />}
                             </div>
                             <div className="flex flex-col min-w-0">
-                                <span className="text-sm font-bold truncate text-white">Phy Berk</span>
+                                <span className="text-sm font-bold truncate text-white">{fullName}</span>
                                 <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.1em]">{role || "Yönetici"}</span>
                             </div>
                         </div>

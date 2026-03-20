@@ -9,15 +9,25 @@ import { Badge } from "@/components/ui/badge";
 export const dynamic = "force-dynamic";
 
 export default async function StoreHomePage() {
-    const featuredProducts = await (db as any).product.findMany({
-        where: { isFeatured: true, isActive: true },
-        take: 4,
-        include: { category: true }
-    });
+    let featuredProducts: any[] = [];
+    let categories: any[] = [];
 
-    const categories = await (db as any).category.findMany({
-        take: 6
-    });
+    try {
+        const [fProducts, cats] = await Promise.all([
+            (db as any).product.findMany({
+                where: { isFeatured: true, isActive: true },
+                take: 4,
+                include: { category: true }
+            }).catch(() => []),
+            (db as any).category.findMany({
+                take: 6
+            }).catch(() => [])
+        ]);
+        featuredProducts = fProducts;
+        categories = cats;
+    } catch (error) {
+        console.error("Store Home Page Fetch Error:", error);
+    }
 
     return (
         <div className="space-y-32 pb-32">

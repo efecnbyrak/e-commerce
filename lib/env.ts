@@ -17,8 +17,10 @@ const envSchema = z.object({
 const envResult = envSchema.safeParse(process.env);
 
 if (!envResult.success) {
-  console.error("❌ Invalid environment variables:", envResult.error.format());
-  throw new Error("Invalid environment variables");
+  const errors = envResult.error.flatten().fieldErrors;
+  const missingVars = Object.keys(errors).join(", ");
+  console.error("❌ Invalid environment variables:", errors);
+  throw new Error(`Kritik sistem değişkenleri eksik veya geçersiz: ${missingVars}. Lütfen Vercel panelinden DATABASE_URL ve JWT_ACCESS_SECRET değişkenlerini kontrol edin.`);
 }
 
 export const env = envResult.data;
