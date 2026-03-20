@@ -4,7 +4,7 @@ import { Plus, Search, Filter, Edit, Trash2, MoreVertical, Package } from "lucid
 import Image from "next/image";
 
 export default async function ProductsPage() {
-    const products = await db.product.findMany({
+    const products = await (db as any).product.findMany({
         include: { category: true },
         orderBy: { createdAt: "desc" }
     });

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Plus, ListTree, Edit, Trash2, ChevronRight } from "lucide-react";
 
 export default async function CategoriesPage() {
-    const categories = await db.category.findMany({
+    const categories = await (db as any).category.findMany({
         include: { _count: { select: { products: true } }, parent: true },
         orderBy: { name: "asc" }
     });

@@ -9,10 +9,10 @@ export const revalidate = 60;
 
 async function StatsSection() {
     const [productCount, orderCount, userCount, salesTotal] = await Promise.all([
-        db.product.count(),
-        db.order.count(),
-        db.user.count(),
-        db.order.aggregate({
+        (db as any).product.count(),
+        (db as any).order.count(),
+        (db as any).user.count(),
+        (db as any).order.aggregate({
             _sum: { totalAmount: true },
             where: { status: "PAID" }
         })
@@ -45,7 +45,7 @@ async function StatsSection() {
 }
 
 async function RecentOrdersSection() {
-    const latestOrders = await db.order.findMany({
+    const latestOrders = await (db as any).order.findMany({
         take: 5,
         orderBy: { createdAt: "desc" },
         include: { user: true }

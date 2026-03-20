@@ -22,7 +22,7 @@ export async function createOrder(prevState: ActionState, formData: FormData): P
         
         const totalAmount = cartItems.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0);
 
-        const order = await db.$transaction(async (tx: any) => {
+        const order = await (db as any).$transaction(async (tx: any) => {
             const newOrder = await tx.order.create({
                 data: {
                     userId: session.userId,
@@ -60,7 +60,7 @@ export async function createOrder(prevState: ActionState, formData: FormData): P
 
 export async function updateOrderStatus(id: number, status: string): Promise<ActionState> {
     try {
-        await db.order.update({
+        await (db as any).order.update({
             where: { id },
             data: { status: status as any }
         });

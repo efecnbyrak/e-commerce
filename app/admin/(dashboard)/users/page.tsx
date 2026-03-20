@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { Users, Mail, Shield, ShieldCheck, User as UserIcon } from "lucide-react";
 
 export default async function UsersPage() {
-    const users = await db.user.findMany({
+    const users = await (db as any).user.findMany({
         orderBy: { createdAt: "desc" }
     });
 
@@ -36,8 +36,8 @@ export default async function UsersPage() {
                                                 <UserIcon className="w-5 h-5 text-zinc-500" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="font-bold text-zinc-900 dark:text-white">{user.firstName} {user.lastName}</span>
-                                                <span className="text-[10px] text-zinc-500 uppercase tracking-widest">#{user.id}</span>
+                                                <span className="font-bold text-zinc-900 dark:text-white">{(user as any).firstName} {(user as any).lastName}</span>
+                                                <span className="text-[10px] text-zinc-500 uppercase tracking-widest">#{(user as any).id}</span>
                                             </div>
                                         </div>
                                     </td>

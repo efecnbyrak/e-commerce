@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Search, Filter, ShoppingBag, Eye, Printer, MoreVertical } from "lucide-react";
 
 export default async function OrdersPage() {
-    const orders = await db.order.findMany({
+    const orders = await (db as any).order.findMany({
         include: { user: true },
         orderBy: { createdAt: "desc" }
     });
@@ -59,8 +59,8 @@ export default async function OrdersPage() {
                                     </td>
                                     <td className="px-8 py-6">
                                         <div className="flex flex-col">
-                                            <span className="font-bold text-zinc-900 dark:text-white">{order.user?.firstName} {order.user?.lastName}</span>
-                                            <span className="text-[10px] text-zinc-500 uppercase tracking-widest">{order.user?.email || "Misafir"}</span>
+                                            <span className="font-bold text-zinc-900 dark:text-white">{(order as any).user?.firstName} {(order as any).user?.lastName}</span>
+                                            <span className="text-[10px] text-zinc-500 uppercase tracking-widest">{(order as any).user?.email || "Misafir"}</span>
                                         </div>
                                     </td>
                                     <td className="px-8 py-6 text-zinc-500">
