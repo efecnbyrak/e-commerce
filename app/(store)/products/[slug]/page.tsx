@@ -7,9 +7,10 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
+export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
     const product = await (db as any).product.findUnique({
-        where: { slug: params.slug },
+        where: { slug },
         include: { category: true }
     });
 

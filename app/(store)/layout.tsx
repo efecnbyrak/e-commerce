@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 
 import { logout } from "@/app/actions/auth";
 
+import { Navbar } from "@/components/layout/Navbar";
+
 interface StoreLayoutProps {
     children: React.ReactNode;
 }
@@ -104,23 +106,7 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
                     </div>
 
                     {/* Navigation Row */}
-                    <nav className="h-12 flex items-center justify-center gap-8 border-t border-border-subtle/50 overflow-x-auto no-scrollbar">
-                        <Link href="/products" className="text-xs font-bold text-foreground hover:text-primary transition-colors whitespace-nowrap">
-                            TÜM ÜRÜNLER
-                        </Link>
-                        {categories.map((cat: any) => (
-                            <Link 
-                                key={cat.id} 
-                                href={`/products?category=${cat.slug}`}
-                                className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                            >
-                                {cat.name}
-                            </Link>
-                        ))}
-                        <Link href="/categories" className="text-xs font-bold text-primary flex items-center gap-1">
-                            TÜM KATEGORİLER <ChevronDown className="w-3 h-3" />
-                        </Link>
-                    </nav>
+                    <Navbar categories={categories} />
                 </div>
             </header>
 
