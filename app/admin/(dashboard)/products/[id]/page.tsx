@@ -20,8 +20,8 @@ export default async function EditProductPage({ params }: { params: { id: string
     }
 
     const [product, categories] = await Promise.all([
-        db.product.findUnique({ where: { id } }),
-        db.category.findMany()
+        (db as any).product.findUnique({ where: { id } }),
+        (db as any).category.findMany()
     ]);
 
     if (!product) {

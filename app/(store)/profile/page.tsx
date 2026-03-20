@@ -3,6 +3,7 @@ import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { User, Mail, Shield, Calendar, LogOut } from "lucide-react";
 import { SignOutButton } from "@/components/auth/SignOutButton";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export default async function ProfilePage() {
     const session = await getSession();

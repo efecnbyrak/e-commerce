@@ -20,8 +20,8 @@ export default async function EditCategoryPage({ params }: { params: { id: strin
     }
 
     const [category, categories] = await Promise.all([
-        db.category.findUnique({ where: { id } }),
-        db.category.findMany()
+        (db as any).category.findUnique({ where: { id } }),
+        (db as any).category.findMany()
     ]);
 
     if (!category) {

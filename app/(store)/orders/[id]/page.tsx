@@ -25,7 +25,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
         );
     }
 
-    const order = await db.order.findUnique({
+    const order = await (db as any).order.findUnique({
         where: { id },
         include: { 
             items: {
@@ -34,7 +34,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
         }
     });
 
-    if (!order || order.userId !== session.userId) {
+    if (!order || (order as any).userId !== (session as any).userId) {
         return (
             <div className="py-24 max-w-2xl mx-auto">
                 <EmptyState 

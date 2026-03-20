@@ -20,7 +20,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
         );
     }
 
-    const order = await db.order.findUnique({
+    const order = await (db as any).order.findUnique({
         where: { id },
         include: { 
             user: true,
@@ -99,8 +99,8 @@ export default async function OrderDetailPage({ params }: { params: { id: string
                                 <h3 className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-[0.2em]">Müşteri Bilgisi</h3>
                             </div>
                             <div className="space-y-1">
-                                <p className="font-bold text-zinc-900 dark:text-white">{order.user?.firstName} {order.user?.lastName}</p>
-                                <p className="text-sm text-zinc-500 font-medium">{order.user?.email || "Misafir"}</p>
+                                <p className="font-bold text-zinc-900 dark:text-white">{(order as any).user?.firstName} {(order as any).user?.lastName}</p>
+                                <p className="text-sm text-zinc-500 font-medium">{(order as any).user?.email || "Misafir"}</p>
                             </div>
                         </div>
 

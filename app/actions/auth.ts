@@ -28,7 +28,7 @@ export async function login(prevState: ActionState, formData: FormData): Promise
     const { email, password, rememberMe } = validatedFields.data;
 
     try {
-        const user = await db.user.findUnique({
+        const user = await (db.user as any).findUnique({
             where: { email }
         });
 
@@ -43,7 +43,7 @@ export async function login(prevState: ActionState, formData: FormData): Promise
         const userRole = (user as any).role;
         await createSession(user.id, userRole, !!rememberMe);
 
-        await db.user.update({
+        await (db.user as any).update({
             where: { id: user.id },
             data: { lastLoginAt: new Date() }
         });
@@ -71,14 +71,14 @@ export async function register(prevState: ActionState, formData: FormData): Prom
     const { email, password, firstName, lastName } = validatedFields.data;
 
     try {
-        const existingUser = await db.user.findUnique({ where: { email } });
+        const existingUser = await (db.user as any).findUnique({ where: { email } });
         if (existingUser) {
             return { error: "Bu e-posta adresi zaten kullanımda.", success: false };
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await db.user.create({
+        const newUser = await (db.user as any).create({
             data: {
                 email,
                 password: hashedPassword,
@@ -102,11 +102,11 @@ export async function logout() {
 
 export async function seedAdmin() {
     const adminEmail = "admin@example.com";
-    const existingAdmin = await db.user.findUnique({ where: { email: adminEmail } });
+    const existingAdmin = await (db.user as any).findUnique({ where: { email: adminEmail } });
 
     if (!existingAdmin) {
         const hashedPassword = await bcrypt.hash("admin123", 10);
-        await db.user.create({
+        await (db.user as any).create({
             data: {
                 email: adminEmail,
                 password: hashedPassword,

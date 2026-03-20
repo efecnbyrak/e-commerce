@@ -9,8 +9,8 @@ export default async function OrdersPage() {
     const session = await getSession();
     if (!session) redirect("/login");
 
-    const orders = await db.order.findMany({
-        where: { userId: session.userId },
+    const orders = await (db as any).order.findMany({
+        where: { userId: (session as any).userId },
         include: { items: true },
         orderBy: { createdAt: "desc" }
     });

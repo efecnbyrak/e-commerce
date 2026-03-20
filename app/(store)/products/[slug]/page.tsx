@@ -6,12 +6,12 @@ import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { EmptyState } from "@/components/ui/empty-state";
 
 export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
-    const product = await db.product.findUnique({
+    const product = await (db as any).product.findUnique({
         where: { slug: params.slug },
         include: { category: true }
     });
 
-    if (!product || !product.isActive) {
+    if (!product || !(product as any).isActive) {
         return (
             <div className="py-24 max-w-2xl mx-auto">
                 <EmptyState 
