@@ -83,8 +83,6 @@ export async function ProductList({ categorySlug, searchQuery, sort, isSale, tit
                     </p>
                 </div>
             </div>
-     </div>
-            </div>
 
             {/* Filter & Search Bar - Replaced with Client Component */}
             <ProductFilters 
